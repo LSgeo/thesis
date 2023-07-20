@@ -31,7 +31,7 @@ The increased density of pixels in the high-resolution \SI{20}{\metre} grid allo
 These frequencies are irretrievably lost when the high-resolution grid is downsampled to \SI{80}{\metre}.
 
 \begin{figure}[hbt]
-    \includegraphics[width=\textwidth]{fig/p1/fig1.jpg}
+    \includegraphics[width=\textwidth]{fig/p1/image1.png}
     \caption[Comparison of different resolution grids]{Low resolution \SI{80}{\metre} cell size (a), and high-resolution \SI{20}{\metre} cell size (b) TMI grids over the same extent.
     Each tile is \SI{2560}{\metre} \texttimes\ \SI{2560}{\metre}.
     The additional detail shown in the high-resolution grid is made available by the finer cell size, which can convey higher frequency detail, if present in the sampled data.}
@@ -83,7 +83,7 @@ This will be further discussed in \cref{sec:nnsr}.
 For a review on super-resolution networks, the reader is referred to \cite{anwarDeepJourneySuperresolution2020}.
 
 Neural network based super-resolution has seen recent success across many scientific disciplines on data other than natural images.
-It is popular in satellite remote sensing \parencite[e.g.][]{lanarasSuperresolutionSentinel2Images2018b,wangUltradenseGANSatellite2019}, and has been applied to astrophysics \parencite[e.g.][]{jungbluthSingleframeSuperresolutionSolar2019,salvatelliUsingUNetsCreate2019}, fluid dynamics \parencite{bodeUsingPhysicsinformedEnhanced2021}, elevation models \parencite{leongDeepBedMapDeepNeural2020}, hyperspectral data \parencite[e.g.][]{arunCNNBasedSuperResolutionHyperspectral2020}, and seismic geophysics data \parencite[e.g.][]{liDeepLearningSimultaneous2021,wangDeeplearningbasedSeismicData2018,wangAdaptingResidualDense2022,yuDeepLearningDenoising2019}.
+It is popular in satellite remote sensing \parencite[e.g.][]{lanarasSuperresolutionSentinel2Images2018,wangUltradenseGANSatellite2019}, and has been applied to astrophysics \parencite[e.g.][]{jungbluthSingleframeSuperresolutionSolar2019,salvatelliUsingUNetsCreate2019}, fluid dynamics \parencite{bodeUsingPhysicsinformedEnhanced2021}, elevation models \parencite{leongDeepBedMapDeepNeural2020}, hyperspectral data \parencite[e.g.][]{arunCNNBasedSuperResolutionHyperspectral2020}, and seismic geophysics data \parencite[e.g.][]{liDeepLearningSimultaneous2021,wangDeeplearningbasedSeismicData2018,wangAdaptingResidualDense2022,yuDeepLearningDenoising2019}.
 These authors typically report a lower error between the super-resolution upsampled product and ground truth data when compared to a bicubic upsampled product and the ground truth data, as well as improved perceptual quality.
 Critically, super-resolution for these applications was able to create realistic high frequency information during upsampling, which could be validated against existing high-resolution surveys of the same extent.
 While there are pre-trained models to super-resolve image data (such as ImageNet), the smooth and continuously differentiable nature of potential field data makes it difficult to directly apply such pre-trained models.
@@ -91,7 +91,7 @@ For example, it may enhance the appearance of gridding artifacts, instead of sup
 While several of the aforementioned works investigate deep learning super-resolution for geospatial data, low resolution in potential field geophysics is a result of under sampling and naïve best-effort interpolation of the potential field, distinct from low-resolution data previously studied in those works.
 
 \begin{figure}
-    % \includegraphics[width=\textwidth]{fig/p1/}
+    \includegraphics[width=\textwidth]{fig/p1/image2.png}
     \caption[The RDN architecture]{The RDN architecture, which acts as the ESRGAN generator.
     Twenty-three Basic Blocks are stacked sequentially to form the main convolution path.
     Upsampling to the target output size is performed after the main convolution sequence.
@@ -107,7 +107,7 @@ This maintains true for data from published grids, which are regularised onto a 
 To the best of our knowledge, detailed studies on applying and comparing deep learning approaches for geophysical potential field super-resolution has not been previously reported.
 
 \begin{figure}[hbt]
-    % \includegraphics[width=\textwidth]{fig/p1/}
+    \includegraphics[width=\textwidth]{fig/p1/image3.png}
     \caption[Basic Blocks]{Each Basic Block (\cref{fig:rdn}, orange) comprises three weighted Residual Dense Blocks (\cref{fig:convs}).
     ESRGAN+ extends ESRGAN with the addition of Gaussian Noise after each basic RDB block (black vectors).
     Weight factors are indicated by $\beta$ and $\gamma$.
@@ -118,7 +118,7 @@ To the best of our knowledge, detailed studies on applying and comparing deep le
 \end{figure}
 
 \begin{figure}[hbt]
-    % \includegraphics[width=\textwidth]{fig/p1/}
+    \includegraphics[width=\textwidth]{fig/p1/image4.png}
     \caption[RDB convolutional layers]{Each Residual Dense Block (\cref{fig:rdb}, purple) comprises four convolutional layers, with additional learning pathways present as residual connections (black), and dense connections (green).
     LReLU refers to the Leaky-ReLU activation function.
     Adapted from \cite{rakotonirinaESRGANFurtherImproving2020}.
@@ -202,8 +202,8 @@ In summary, the single channel high- and low-resolution state TMI grids were fil
 These data were normalised according to the statistics of the HR training set, and split into small patches suitable for the hardware limitations.
 After application of the architecture under investigation, the data are returned to predicted TMI values, and recompiled into a contiguous spatial extent.
 
-\begin{figure}[hbt]
-    % \includegraphics[width=\textwidth]{fig/p1/}
+\begin{figure}[]
+    \includegraphics[width=\textwidth]{fig/p1/image5.png}
     \caption[Dataset context]{Reserved training/validation and test areas of Eastern Goldfields Superterrane magnetic grid, and their tectonic context.
     Background: \SI{20}{\metre} merged magnetic grid of Western Australia, \parencite{brett40MagneticMerged2020}.
 }
@@ -248,8 +248,8 @@ The result of bicubic interpolation (\cref{fig:resultsvis} c) demonstrates the s
 The two neural network methods more closely match the ground truth \SI{20}{\metre} tile than the bicubic upsampled image does, when observing feature edges and textural detail.
 
 
-\begin{figure}[hbt]
-    % \includegraphics[width=\textwidth]{fig/p1/}
+\begin{figure}
+    \includegraphics[width=\textwidth]{fig/p1/image6.png}
     \caption[Visual inference results]{Visual comparisons of a selected tile from the reserved test region.
     The \SI{80}{\metre} low-resolution input (a) is shown at equivalent size to the \SI{20}{\metre} high-resolution ground truth (b) using nearest neighbour interpolation.
     The colourmap is shared between subfigures.
@@ -261,8 +261,8 @@ The two neural network methods more closely match the ground truth \SI{20}{\metr
 For the selected tile, the RMSE is best minimised using RDN\textdaggerdbl{}, which also shows the best structural metric performance.
 ESRGAN+ outperforms the bicubic method in RMSE and MSSIM\@.
 
-\begin{figure}[hbt]
-    % \includegraphics[width=\textwidth]{fig/p1/}
+\begin{figure}
+    \includegraphics[width=\textwidth]{fig/p1/image7.png}
     \caption[Error residuals map for a selected tile]{Error residuals map for the selected test tile, for each upsampling method; Bicubic (a), RDN\textdaggerdbl{} (b), and ESRGAN+ (c).
     Image quality metrics are reported for each upsampled tile, calculated against the groundtruth HR\@.}
     \label{fig:residuals}
@@ -273,8 +273,10 @@ In the Fourier domain, the amplitudes of an array's component frequencies are ma
 The Radially Averaged Power Spectral Density (RAPSD) \parencite{ulichneyDitheringBlueNoise1988} is a one-dimensional representation of the cumulative power of each frequency component, in any orientation within the image.
 \cref{fig:rapsd} shows the RAPSD for the different methods over the test extent shown in \cref{fig:trainvaldata}. The deep learning methods have consistently superior power in predicted wavelengths between approximately \SI{640}{\metre} and \SI{120}{\metre}, with RDN\textdaggerdbl{} closely matching the groundtruth spectra, while ESRGAN+ tends to exaggerate.
 
-\begin{figure}[hbt]
-    % \includegraphics[width=\textwidth]{fig/p1/}
+% TODO USE REVISED MANUSCRIPT FIGURES 
+
+\begin{figure}
+    \includegraphics[width=\textwidth]{fig/p1/image8.png}
     \caption[short]{Radially Averaged Power Spectra for the complete test extent shown in \cref{fig:trainvaldata}.
     The Nyquist wavelengths for the high-resolution (and upsampled) rasters and low-resolution raster are also shown.
     The frequency axis has been transformed to wavelength, and the spectra have been normalised for direct comparison.
@@ -297,7 +299,7 @@ Predictions from ESRGAN+ commonly show a ripple-like texture (\cref{fig:jhillvis
 The effect of this texture occasionally reveals features matching the high-resolution groundtruth that are not predicted by the bicubic or RDN\textdaggerdbl{} upsampling, but the excess of “noisy” features present in ESRGAN+ predictions will likely limit its applicability when interpreting low-resolution grids with no corresponding groundtruth.
 
 \begin{figure}[hbt]
-    % \includegraphics[width=\textwidth]{fig/p1/}
+    \includegraphics[width=\textwidth]{fig/p1/image9.png}
     \caption[High Pass filtered results]{High Pass filtered test tile and its upsampled counterparts.
     The cut-off for the high pass Butterworth filter was selected with wavelength equal to the Nyquist wavelength of the LR grid, i.e. four times the HR Nyquist wavelength
     }
@@ -305,19 +307,26 @@ The effect of this texture occasionally reveals features matching the high-resol
 \end{figure}
 
 \begin{table}
-    \begin{tabularray}
-    \end{tabularray}
-    % \begin{tabularray}{l|ll|ll|ll}
-    %             & Bicubic        &                          & RDN\textdaggerdbl{}     &                          & ESRGAN+       &                    \\
-    %             & Mean           & Standard Deviation       & Mean                    & StandardDeviation       & Mean          & Standard Deviation \\
-    %     \hline{}
-    %     RMSE       & \num{13.545}   & \num{26.576}             & \num{7.265}             & \num{13.741}             & \num{11.120}  & \num{21.670}             \\
-    %     SISM       &  \num{0.924}   &  \num{0.047}             & \num{0.959}             &  \num{0.037}             &  \num{0.922}  &  \num{0.054}             \\
-    %     MS-SSIM    &  \num{0.971}   &  \num{0.018}             & \num{0.988}             &  \num{0.012}             &  \num{0.976}  &  \num{0.020}             \\
-    %     \noalign{}
+    \begin{tblr}{
+        colspec={
+            r
+            Q[si={table-format=2.3},r]
+            Q[si={table-format=2.3},l]
+            Q[si={table-format=2.3},r]
+            Q[si={table-format=2.3},l]
+            Q[si={table-format=2.3},r]
+            Q[si={table-format=2.3},l]
+            },
+        row{1-2} = {guard}
+    }
+    & Bicubic & & RDN\textdaggerdbl{} & & ESRGAN+ & \\
+    \hline{}
+    & Mean & {Standard \\ Deviation} & Mean & {Standard \\ Deviation} & Mean & {Standard \\ Deviation} \\
+    RMSE   & 13.545 & 26.576 & 7.265 & 13.741 & 11.120 & 21.670 \\
+    SISM    & 0.924 &  0.047 & 0.959 &  0.037 &  0.922 &  0.054 \\
+    MS-SSIM & 0.971 &  0.018 & 0.988 &  0.012 &  0.976 &  0.020 \\
+    \end{tblr}
 
-        
-    % \end{tabularray}
     \caption[Accuracy Metrics]{
         Accuracy metrics for each upsampling method.
         The best performing method for each metric is bolded.
@@ -336,7 +345,7 @@ This can be seen in the line profile (\cref{fig:jhilldykes}, f), where a series 
 The ESRGAN+ prediction profile shows two distinct low TMI features, but they are poorly located and incoherent in the TMI grid (\cref{fig:jhilldykes} e), which shows an example of the ripple-mark artefact previously noted.
 
 \begin{figure}[hbt]
-    % \includegraphics[width=\textwidth]{fig/p1/}
+    \includegraphics[width=\textwidth]{fig/p1/image10.png}
     \caption[First Vertical Derivative SR TMI over the Mt Mason resource project]{First Vertical Derivative TMI over the Mt Mason resource project, with the super-resolution predictions (d, e) showing a variety of inference artefacts.
     Red asterisks (*) show a vertical tile boundary present as a 3--4 pixel-wide error in predicted TMI value.
     Red caret (\^{ }) indicates a region of subtle ripple-mark textural artefact, only present in ESRGAN+ predictions.
@@ -345,7 +354,8 @@ The ESRGAN+ prediction profile shows two distinct low TMI features, but they are
 \end{figure}
 
 \begin{figure}[hbt]
-    % \includegraphics[width=\textwidth]{fig/p1/}
+    \includegraphics[width=\textwidth]{fig/p1/image11.png}
+    \includegraphics[width=\textwidth]{fig/p1/image12.png}
     \caption[Jasper Hills Project TMI grids and line profile]{Jasper Hills Project TMI grids (a--e) and line profile (f).
     Bicubic interpolation of the low-resolution grid closely matches the low-resolution grid, while both super-resolution methods better approximate the magnitude of the features present in the HR profile, between \SI{650}{\metre} and \SI{1020}{\metre}.
     }
