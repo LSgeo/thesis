@@ -7,13 +7,13 @@
 \maketitle{}
 
 \begin{abstract}
-    The recent use of spatial coordinate features in multilayer perceptron neural networks provides exigient opportunities for potential field geophysics.
+    The recent use of spatial coordinate features in multilayer perceptron (MLP) neural networks provides exigient opportunities for potential field geophysics.
     So called coordinate MLP networks allow for implicit learning of potential field samples as a function of their recorded sample locations.
     Using this new paradigm of encoding spatial information within a neural network enables new methods for working with high-resolution potential field survey data.
     We demonstrate the quality of the learnt implicit potential field function by encoding real airborne geophysical survey line data, and predicting constant level grids of arbitrary cell size.
-    We further demonstrate the potential for additional processing of the learnt function in the continuous domain using automatic differentiation, with the same tool used to train the neural network.
-    For example, directional gradients and subsequent filters are calculated prior grid quantisation, and therefore without the associated loss of high-resolution content during gridding.
-    The training process requires only the sample coordinates and recorded potential field for a single survey extent, and can be applied to various geophysical techniqes including magnetics and gravity, as well as radiometric or other grids.
+    We further demonstrate the potential for additional processing of the learnt function in the continuous domain using automatic differentiation, with the same framework used to train the neural network.
+    For example, directional gradients and subsequent filters are calculated prior grid quantisation, and therefore without the associated loss of high-resolution content imposed by gridding.
+    The training process requires only the sample coordinates and recorded potential field for a single survey extent, and can be applied to various geophysical techniqes including magnetics and gravity. %, as well as radiometric or other grids.
 \end{abstract}
 
 \section{Introduction}
@@ -76,6 +76,7 @@ Or in three dimensions \( \phi\left(x,y,z\right) \):
 % \( F = \nabla\phi \) for the gravity potential, \(F = - \nabla \phi\) for the Magnetic potential.
 % \( \phi(x,y,z) = constant \) is an equipotential surface.
 
+Numerical methods for potential field continuation are unstable, recognised in the geophysical community by solution divergence and noise in predictions.
 
 \subsection{Implicit neural representation}
 \label{sec:inr}
@@ -104,6 +105,7 @@ Resolution in these tasks is not limited by quantisation of the representation, 
 Increasing this capacity is currently the subject of very high interest in the machine learning research community, for example by leveraging new activation functions \parencite{saragadamWIREWaveletImplicit2023}, transforming the input space \parencite[e.g.][]{benbarkaSeeingImplicitNeural2022}, or using additional constraints on the search space such as physics-informed neural networks \parencite{raissiPhysicsinformedNeuralNetworks2019}.
 
 \subsection{Physics-informed neural networks}
+\label{sec:pinn}
 Physics-informed neural networks (PINNs) recognise that if the inputs to a neural network are samples of a function which follows some physical law, outputs from the model should similarly be constrained by that law.
 By regularising the network with an objective function which penalises solutions that don't fit the partial differential equations describing the law, it is possible to vastly reduce the physically valid solution search space.
 Examples of physics-informed constraints include enforcing initial or boundary conditions, or adherence to known properties of the modelled signal.
@@ -129,63 +131,80 @@ However, only the approach of \textcite{benbarkaSeeingImplicitNeural2022} is imp
 Automatic differentiation (AD) refers to one of several methods for computing derivatives, specifically to the accumulation of derivatives during function evaluation \parencite{baydin2018automatic}.
 This method underpins modern machine learning frameworks such as Pytorch \parencite{paszkePyTorchImperativeStyle2019}, which the framework used to construct the network architecture and perform training in this work.
 In these frameworks, training is performed by evaluating the result of a set of inputs using the current model weight parameters during a forward pass, accumulating the partial derivatives with respect to the parameters, and minimising an objective (loss) function using those gradients.
-These gradients inform weight updates in the direction of the negative gradient, toward a minima in the objective function. 
+These gradients inform weight updates in the direction of the negative gradient, toward a minima in the objective function.
 However, automatic differentiation can also evaluate the derivatives with respect to the inputs, using the same high-performance AD framework (e.g. Pytorch).
 This can provide the partial derivatives \(\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}, \frac{\partial f}{\partial z}\), as well as higher order derivatives.
 
 \section{Method}
-\subsection{Notation}
-\(\mathbb{R}^n\) Real n-dimensional vectors, named using lower-case letters, e.g. \boldmath{u}.
-
-\(\mathbb{R}^{m\times{}n}\) \(m*n\) dimensional matrices, named using upper-case letters, e.g. \boldmath{A}.
-
-\subsection{Differentiation}
-A Numerical Differentiation approach to gradient calculation here would be to evaluate \(\frac{\partial{U}}{\partial{(x, y, z)}}\) at a set of randomly sampled coordinates \({(x, y, z)}_1 \dots {(x,y,z)}_n\).
-However, using Automatic Differentiation within Pytorch, the continuous implicit represenation can be differentiated to provide gradients without being constrained by numerical precision or quantisation.
-These are also unstable, recognised in the geophysical community by divergence and noise in predictions depending on numerical methods.
-
-
-
-\subsection{SIREN}
-\begin{enumerate}
-    \item{SIREN (or WIRE, if it improves)}
-    \item{Regularisation loss}
-    \item{Parameter opt}
-\end{enumerate}
+% \subsection{Notation}
+% Real n-dimensional vectors, named using lower-case letters are noted \(\mathbb{R}^n\), e.g. \boldmath{u}.
+% \(\mathbb{R}^{m\times{}n}\) \(m*n\) dimensional matrices, named using upper-case letters, e.g. \boldmath{A}.
 
 \subsection{Data}
-The case study dataset used here is the 2002 Wolfe Creek meteorite impact magnetic survey (Geophysical Acquisition \& Processing Section \cite*{wolfecreek2019}).
-The high-resolution survey contains 402 line-kilometres of data at 50m line spacing with a nominal terrain clearance of 40 m.
-Both line data netCDF and grid raster products were downloaded from the Geoscience Australia Geophysical Archive Data Delivery System and used without further processing.
+A case study dataset is made using the 2002 Wolfe Creek meteorite impact magnetic survey (Geophysical Acquisition \& Processing Section \cite*{wolfecreek2019}).
+This high-resolution survey contains \SI{402}{line-kilometres} of data at \SI{50}{\m} line spacing with a nominal terrain clearance of \SI{40}{\m}.
+The data used for implicit representation include the survey tie lines, standard in airborne geophysical surveys to reduce inter-line levelling noise.
+The standard deviation of the drape surface, including tie lines, is \SI{5}{\m}.
+
+Both line data netCDF and grid raster product for the Wolfe Creek survey were downloaded from the Geoscience Australia Geophysical Archive Data Delivery System and used without further processing.
 The line data netCDF contains tie-levelled, micro-levelled, and AWAGS levelled magnetic variables, in respective order of processing levels.
+% Tie-levelling is applied using only line data, while micro-levelling uses parameters calculated on an intermediate grid product of the line data.
+% AWAGS levelling is a final continuation of the microlevelled dataset to an Australian common datum, termed the \emph{AWAGS} datum.
+For the Wolfe Creek survey, the microlevelled magnetic data are used.
+Both geographic and projected coordinate systems can be used, provided the query coordinates for inference match those used during training.
+The three spatial coordinate dimensions are independently linearly min-max normalised between -1 and 1.
+While this means the latent spatial domain may be compressed relative to each other axis, the inverse normalisation process returns proportionality between axes.
+Magnetic field data are min-max normalised across the global values within the survey, and NaN values in any dimension are dropped from the training data.
 
+In order to validate the model performance during training, a random \qty{20}{\percent} of the survey sample points are reserved.
+% Not currently doing this % Testing of the model is performed on a randomly selected \qty{10}{\percent} of the sample points. 
+Inference is performed by querying novel coordinates within the learnt domain, specifically a regularly spaced grid for comparison with typical grid regularisation methods.
 
+\subsection{Network architecture}
+The Coordinate MLP architecture used comprises a simple fully connected network with \(N\) layers, each with \(m\) features.
+High quality implicit represenation has been achieved in contemporary INR research with only several hidden layers, typically between 3 and 8, and these depths are used here.
+The sinusoidal activation of \parencite{sitzmann2019siren} is used and comparison can be made to Gaussian and wavelet activations.
+Figure \cref{fig:arch} shows the structure of the architecture.
 
-Noddyverse
-
+\begin{figure}
+    \label{fig:arch}
+\end{figure}
 
 \subsection{Training Particulars}
 % Performed on an Intel i5-12400 CPU with 32 GB RAM, and an Nvidia 3060 12 GB GPU.
 
 Implicit functions are trained using coordinate-value pairs, and for low-resolution images the entire cell value and cell coordinate dataset fits within GPU memory for batch gradient descent.
-The Wolfe Creek meteorite impact crater case study survey has 76,420 sample points, with the Geoscience Australia provided grid product having a resolution of 446 \(\times\) 445 cells.
+The Wolfe Creek meteorite impact crater case study survey has \SI{76420}{} sample points, with the Geoscience Australia provided grid product having a resolution of 446 \(\times{}\) 445 cells.
 This coordinate dataset easily fits into available graphics memory, and can be trained using batch gradient descent.
 %However, training on large scattered aeromagnetic surveys with more than one million samples, memory becomes a constraint and mini-batch training is required.
 Training was performed on an Intel i9-10900KF workstation with an Nvidia RTX 3090 24 GB GPU\@.
 A highly accurate represenation can be learned in 1000 epochs using the Adam optimiser, for a duration of 90 seconds.
-The OneCycle learning rate scheduler \parencite{smithSuperconvergenceVeryFast2018} is used to provide fine tuning toward the end of training.
+The OneCycle learning rate scheduler \parencite{smithSuperconvergenceVeryFast2018} is used to provide fine tuning at low learning rates toward the end of training.
 
+As described in \cref{sec:pinn}, the objective function comprises \(L^2\) loss between input and predicted field values, summed with weighted Laplace's equation loss, \cref{eqn:cri}.
+\begin{equation}
+    \label{eqn:cri}
+    \mathcal{L}_{Total} = \lVert{}u_{input} - u_{pred}\rVert{}_{2} + \beta{} \lVert{}\frac{\partial^{2}{u_{pred}}}{\partial{}\phi{}_{pred}^{2}}\rVert{}_{2}
+\end{equation}
 
-
-
-
-MSE loss.
+\subsection{Differentiation}
+A naive approach would be to evaluate the implicit represenation \(u = \phi{}(x, y, z)\) at a set of regular coordinates \({(x, y, z)}_1 \dots {(x,y,z)}_n\), and use numerical differentiation methods to calculate derivatives.
+However, using Automatic Differentiation within Pytorch, the implicit represenation can be differentiated with respect to its inputs to provide gradients without being constrained by quantisation.
+This is to directly sample \(\frac{\partial{u}}{\partial{\phi{}{(x,y,z)}}}\) at \({(x, y, z)}_1 \dots {(x,y,z)}_n\).
+Higher order derivatives can be also calculated using AD\@.
 
 
 \section{Results}
 \subsection{Implicit gridding}
+\begin{figure}
+    \label{fig:grid}
+    \caption[]{Constant level grid predicted at the survey nominal terrain clearance \SI{40}{m}}
+\end{figure}
+
+
+
 \begin{enumerate}
-    \item{} Best attempt at recreating grid as gridded by GA.
+    \item{} Best attempt at recreating grid as gridded by GA\@.
     \item{} Demonstration of the range of altitude slices
 \end{enumerate}
 
