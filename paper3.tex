@@ -1,95 +1,146 @@
-\documentclass{article}
-\usepackage{thesisstyle}
+\documentclass[manuscript.tex]{subfiles}
 \begin{document}
-
-\author{\and{Luke Thomas Smith} \and{Tom Horrocks} \and {Eun-Jung Holden} \and{Daniel Wedge} \and{Naveed Akhtar}}
+\setcounter{chapter}{1}
+\author{\and{Luke Thomas Smith} \and{Tom Horrocks} \and{Eun-Jung Holden} \and{Daniel Wedge} \and{Naveed Akhtar}}
 \title{Physics-informed Implicit Neural Representation for Potential Field Geophysics}
 \date{\today}
 \maketitle{}
 
 \begin{abstract}
-
+    The recent use of spatial coordinate features in multilayer perceptron neural networks provides exigient opportunities for potential field geophysics.
+    So called coordinate MLP networks allow for implicit learning of potential field samples as a function of their recorded sample locations.
+    Using this new paradigm of encoding spatial information within a neural network enables new methods for working with high-resolution potential field survey data.
+    We demonstrate the quality of the learnt implicit potential field function by encoding real airborne geophysical survey line data, and predicting constant level grids of arbitrary cell size.
+    We further demonstrate the potential for additional processing of the learnt function in the continuous domain using automatic differentiation, with the same tool used to train the neural network.
+    For example, directional gradients and subsequent filters are calculated prior grid quantisation, and therefore without the associated loss of high-resolution content during gridding.
+    The training process requires only the sample coordinates and recorded potential field for a single survey extent, and can be applied to various geophysical techniqes including magnetics and gravity, as well as radiometric or other grids.
 \end{abstract}
 
 \section{Introduction}
-The advent of periodic activation functions for the well known multilayer perceptron (or fully connected network) has created a new research field, known as Implicit Neural Representation.
-Implicit Neural Representation (INR) is the task of representing a signal as a function of its coordinates.
-Such functions are known as coordinate multilayer perceptrons, or Coordinate MLPs.
-By parameterising the function in coordinate space, novel values of the function can be queried at coordinates within the continuous spatial domain.
-Periodic activation functions differ from standard linear activations, such as ReLU, by comprising the neuron with a function that repeats periodically.
-Such functions include sinusoids \parencite{sitzmann2019siren}, Gaussian \parencite{ramasinghePeriodicityUnifyingFramework2022}, and most recently, wavelets \parencite{saragadamWIREWaveletImplicit2023}.
-
-Geophysical potential fields are continuous functions in three dimensions, and are of importance to mineral exploration and geoscience.
-When surveying these fields for exploration geophysics, sample locations are scattered in x, y, and z, despite best efforts to conform to a regular grid or line sample regime.
-Regularising these samples to a two dimensional grid for interpretation, storage, and further machine processing is a well studied process with many methods available.
-After regularisation, the grid arrays can be subject to a large number of widely used filters, such as horizontal and vertical gradient calculation and their derivatives.
-These filters operate on the grid product, a representation of the potential field quantised by the cell spacing defined during the regularisation process.
-
-If a potential field survey could instead be encoded within an Implicit Neural Network as an INR, filters could be calculated analytically in the continuous three dimensional domain.
-With this representation the extraction of regularised two dimensional slices, namely grids, could be performed \emph{a posteri} of gridding.
+Geophysical potential fields are continuous function in three dimensions, and are of importance to geoscience and mineral exploration.
+When surveying these fields for exploration geophysics, sample locations are scattered in x, y, and z, despite best efforts to conform to a regular grid or line sample structure.
+These scattered data are typically regularised to a quantised grid, which loses high frequency information and gives rise to spurious artefacts that are a product of the survey and gridding, as opposed to the surveyed field.
+If a representation of the potential field could instead be encoded within a neural network, it is possible that high frequency information would be preserved in a continuous domain.
+With this continuous representation, grid resolution would not be constrained by an initial cell size selection, and further processing and filters could be calculated analytically in the continuous spatial domain.
 This would allow the use of all available original sample data in calculation of filters, and reduce the manual intervention required during the gridding process.
-Additionally, due to the continuous representation, grid resolution is not constrained by cell size selection.
+
+Encoding a potential field into a neural network can be performed using the recent technique of implicit neural represenation.
+Implicit neural representation (INR) is the task of representing a signal as a function of its coordinates.
+Networks designed to learn such functions are known as coordinate multilayer perceptrons, or coordinate MLPs.
+By parameterising the neural function in coordinate space, novel values of the function can be queried at arbitrary coordinates within the learnt continuous spatial domain.
+Coordinate MLPs have recently benefit from high frequency representation improvements through the use of periodic activations.
+Periodic activations such as sinusoids are continuously differentiable through the depth of the network, supporting high quality learning of implicit functions.
+
+Furthermore, these cordinate MLP networks can be constrained to obey geophysical laws, using physics-informed neural network regularisation.
+Imposing restrictions such as Laplace's equation on the network reduces the model search space, stabilising and speeding up training and returing inference results that obey these laws.
+
+The proposed method leverages recent approaches in the literature to learn a continuous volume of potential field geophysics, using a novel combination of physics-informed networks and implicit neural representation.
+This implicit represenation is used to generate levelled 2D grids directly from scattered sample data, as well as calculate gradients and further filters.
+These are compared against industry standard grids and filters.
+
+\subsection{Geophysical sampling and regularisation}
+\label{sec:geo_airborne}
+Airborne or ground-based potential field surveys sample a magnetic (or gravitational) scalar field on a three-dimensional drape surface.
+Cultural obstructions or topography within the survey extent cause this drape surface to be irregular, with the sample points scattered.
+The resolvable detail within the sampled field is a function of the sampling density, and the distance from the source.
+% It is common to define a nominally regular drape surface with these parameters in mind, while respecting the cost of acquisition.
+To enable digital processing and storage of the sample data following acquisition, the scattered points are regularised to a quantised grid.
+The Nyquist wavelength inherent to the selected grid cell size during regularisation limits the high-resolution information representable by the grid.
+Because grid regularisation is one of the earliest steps in processing geopysical surveys, this information fails to be utilised in any subsequent processing.
+% Subsequent processes such as frequency filtering or directional gradients are similary constrained by the parameters of the regularisation.
+% Additionally, storing the grid product requires amount of memory, to represent the value with adequate precision at each cell in the resulting grid.
+
+\label{sec:geo_physics}
+Potential fields in geophysics are vector fields, but are typically sampled as a scalar field in one direction.
+A vector field requires three orthogonal components at each coordinate, while a scalar field can be parameterised with a single component \parencite{blakelyPotentialTheoryGravity1996}.
+Therefore, a potential field survey can be parameterised as
+\begin{equation}
+    u = \phi\left(x,y,z\right)
+\end{equation}
 
 
+Potential fields in an airborne sampling context are constrained by a number of physical laws, including \emph{Laplace's equation},
+\[
+    \nabla^2 \phi = 0
+\]
+Or in three dimensions \( \phi\left(x,y,z\right) \):
+\begin{equation}
+    \label{eqn:Laplace}
+    \frac{\partial{}^2\phi}{\partial{}x^2} + \frac{\partial{}^2\phi}{\partial{}y^2} + \frac{\partial{}^2\phi}{\partial{}z^2} = 0
+\end{equation}
+%TODO Confirm logic here: % If Laplace's equation:\( \nabla^2 \phi = 0 \) is satisfied, it is harmonic, and has continuous single valued first derivatives, and has second derivatives.
+% This indicates the function lacks curvature. 
+
+% Blakely:
+% A force field \(F\) is the gradient (or negative gradient) of the potential energy.
+% \( F = \nabla\phi \) for the gravity potential, \(F = - \nabla \phi\) for the Magnetic potential.
+% \( \phi(x,y,z) = constant \) is an equipotential surface.
 
 
-\subsection{Implicit Neural Representation}
+\subsection{Implicit neural representation}
 \label{sec:inr}
-Seminal work by \parencite{mildenhallNeRFRepresentingScenes2020} demonstrated the capacity for learning continuous functions from a set of coordinates.
-However, it was not until they were combined with periodic activation functions \parencite{sitzmann2019siren} that the implicit representations could adequately recreate high frequency signal.
-Following investigation by \parencite{ramasinghePeriodicityUnifyingFramework2022} shows that it is the magnitude of the first and second derivatives that enhance high-frequency capacity, rather than periodicity.
+Multilayer perceptron (MLP) networks are fully connected networks, which have been ubiquitous in machine learning for several decades.
+An MLP comprises a sequence of layers of neurons, densely connected to all neurons in each adjacent layer.
+Each neuron is a discrete trainable function, comprising a weight multiplied by the input vector, an added bias term, and a subsequent scaling function termed the activation function.
+The structure of an MLP can be described by the number of neurons in each layer (features) the number of layers between the input and output (hidden layers), and the class of activation function used.
 
-Realising their power in implicit representation for natural images, many works quicky investigated
-\begin{enumerate}
-    \item MLPs
-    \item Periodic activations
-    \item Storage weights not cells
-\end{enumerate}
+A classic example MLP is an input vector of image pixel intensities \(u\), and an output vector of class labels \(l\). %, scaled by a function that transforms the output to a class probability.
+Training this example network with a large number of different images with class labels produces a model capable of predicting the class of novel input image vectors.
+A Coordinate MLP (CMLP) instead takes an input of explicitly stated pixel coordinates \(x,y\), and an output vector of image pixel intensities \(u\) at those coordinates.
+Training the CMLP requires a set of input coordinates and intensities from a single image, and results in a model capable of predicting the intensity of any arbitrary continuous coordinate within the input domain.
+Both tasks may use similar images and an MLP network structure with \(n\) hidden layers and \(m\) hidden features, but the predictive task is different.
+Coordinate MLP networks are a class of neural networks \(f\) which train \(u = f(x,y,z)\), with \(u\in\mathbb{R}^n\) and \((x,y,z)\in\mathbb{R}^3\), depending on the number of spatial dimensions used.
+
+Seminal work by \parencite{mildenhallNeRFRepresentingScenes2020} demonstrated implicit neural represenation of volume density and colour dimensions, learnt from five dimensions of radiance and spatial coordinates.
+However, it was not until the use of periodic activation functions \parencite{sitzmann2019siren} that implicit representation with CMLP networks could adequately recreate high frequency signals.
+Periodic activation functions differ from non-linear activations such as ReLU by comprising the neuron with a function which repeats periodically.
+Such functions include sinusoids \parencite{sitzmann2019siren}, Gaussians \parencite{ramasinghePeriodicityUnifyingFramework2022}, and most recently, wavelets \parencite{saragadamWIREWaveletImplicit2023}.
+Work by \parencite{ramasinghePeriodicityUnifyingFramework2022} revealed that it is the magnitude of the first and second derivatives of the activation that enhance high-frequency capacity, rather than periodicity.
+Periodic activations are important in enabling continuous differentiation throughout the depth of the network.
+%TODO Confirm re: blakely % ReLU has constant second derivative of zero, rendering it incapable of representing a harmonic function such as a potential field.
+
+Coordinate MLPs can be used for a variety of computer vision tasks, including three-dimensional point cloud represenation \parencite{qiPointNetDeepHierarchical2017}, and two-dimensional natural image representation tasks such as super-resolution and infilling \parencite{leeLocalTextureEstimator2022,chenLearningContinuousImage2021}.
+Resolution in these tasks is not limited by quantisation of the representation, but rather the capacity of the network architecture used.
+Increasing this capacity is currently the subject of very high interest in the machine learning research community, for example by leveraging new activation functions \parencite{saragadamWIREWaveletImplicit2023}, transforming the input space \parencite[e.g.][]{benbarkaSeeingImplicitNeural2022}, or using additional constraints on the search space such as physics-informed neural networks \parencite{raissiPhysicsinformedNeuralNetworks2019}.
+
+\subsection{Physics-informed neural networks}
+Physics-informed neural networks (PINNs) recognise that if the inputs to a neural network are samples of a function which follows some physical law, outputs from the model should similarly be constrained by that law.
+By regularising the network with an objective function which penalises solutions that don't fit the partial differential equations describing the law, it is possible to vastly reduce the physically valid solution search space.
+Examples of physics-informed constraints include enforcing initial or boundary conditions, or adherence to known properties of the modelled signal.
+As described in \cref{sec:geo_physics}, potential fields in geophysics obey \emph{Laplace's equation}, that the sum of partial second derivates is 0.
+Because CMLP networks with periodic activations are continuously differentiable, it is possible to enforce this constrain as an element of the overall loss function within the network.
+In addition to \(L^2\) (Mean Square Error) loss between the input and predicted coordinate values, a geophysics informed network could include a Laplace criterion \cref*{eqn:cri_laplace}.
+
+\begin{equation}
+    \label{eqn:cri_laplace}
+    \mathcal{L}_{PDE} = \beta{}\lVert{}\frac{\partial{}^2\phi}{\partial{}x^2} + \frac{\partial{}^2\phi}{\partial{}y^2} + \frac{\partial{}^2\phi}{\partial{}z^2}\rVert{}_{2}
+\end{equation}
+
+As denoted by the \(L^2\) operator \(\lVert{}\cdot{}\rVert{}_{2}\) and weighting \(\beta{}\), this criterion additionally penalises predictions that are not close to zero.
+
+\Textcite{sethiHardEnforcementPhysicsinformed2023} demonstrate that this regularisation does not have to be implemented as a loss function, but instead can be a hard constraint embedded within the network.
+This hard constraint takes the form of a function, which satisfies the \emph{a priori} laws, applied to the output of the network prior PDE and regularisation.
+Another approach \parencite{liImplicitStochasticGradient2023} replaces the ubiquitous stochastic gradient descent optimiser \emph{Adam} with an implicit stochastic gradient descent (ISGD) method.
+However, only the approach of \textcite{benbarkaSeeingImplicitNeural2022} is implemented for this work.
+% This method reduces the importance of batch size and learning rate
+% \[\theta_{n+1} = \theta_{n} - \alpha \cdot \nabla L (\theta_{n+1})\]
 
 \subsection{Automatic Differentiation}
 Automatic differentiation (AD) refers to one of several methods for computing derivatives, specifically to the accumulation of derivatives during function evaluation \parencite{baydin2018automatic}.
-This method underpins modern machine learning frameworks such as Pytorch \parencite{paszkePyTorchImperativeStyle2019}.
-In these frameworks, when evaluating a set of inputs against the models weight parameters, the derivatives with respect to the parameters are used to perform backpropogation when evaluating an objective function (loss).
-These derivative inform weight updates in the direction of the negative gradient, toward a minima in the objective function (for example, L2 norm between predictions and targets).
-However, automatic differentiation can also evaluate the derivatives with respect to the inputs.
-The gradient provides partial derivatives $\frac{\partial f}{\partial x}$, $\frac{\partial f}{\partial y}$, $\frac{\partial f}{\partial z}$.
-
-\subsection{Physics-Informed Neural Networks}
-\parencite{raissiPhysicsinformedNeuralNetworks2019} introduced Physics-informed neural networks (PINNs).
-When dealing with samples of phenomena which obey natural laws, there also exists \emph{a priori} constraints on those samples.
-These constrains can be used to regularise neural networks, vastly reducing the search space for physically possible solutions.
-
-\parencite{liImplicitStochasticGradient2023} replace the ubiquitous stochastic gradient descent optimiser \emph{Adam} with an implicit stochastic gradient descent (ISGD) method:
-$$\theta_{n+1} = \theta_{n} - \alpha \cdot \nabla L (\theta_{n+1})$$
-
-
-\parencite{sethiHardEnforcementPhysicsinformed2023} demonstrate that this regularisation does not have to be implemented as a loss function, but instead can be a \emph{hard} constraint embedded within the network.
-This hard constraint takes the form of a function, which satisfies the \emph{a priori} laws, applied to the output of the network prior PDE and regularisation.
-
-Potential fields in an airborne exploration context are constrained by a number of physical laws.
-From \parencite{blakelyPotentialTheoryGravity1996}, potential fields satisfy \emph{Laplace's equation},
-$$\nabla^2 \phi = 0$$
-This indicates the function lacks curvature, in three dimensions $\phi(x,y,z)$:
-$$\frac{\partial^2\phi}{\partial x^2} + \frac{\partial^2\phi}{\partial y^2} + \frac{\partial^2\phi}{\partial z^2} = 0$$
-
-\subsection{Geophysical Sampling and Continuation}
-\label{sec:geo_sampling}
-Potential fields in geophysics are vector fields, but are typically sampled as a scalar in one direction.
-A scalar field can be parameterised with a single dimension at each spatial coordinate, while a vector field requires three orthogonal components at each coordinate \parencite{blakelyPotentialTheoryGravity1996}.
-
-$F = \nabla \phi$ for the gravity potential, $F = - \nabla \phi$ for the Magnetic potential.
-
-$\phi(x,y,z) = constant$ is an equipotential surface. If Laplaces equation: $\nabla^2 \phi = 0$ is satisfied, it is harmonic, and has continuous single valued first derivatives, and has second derivatives.
-
+This method underpins modern machine learning frameworks such as Pytorch \parencite{paszkePyTorchImperativeStyle2019}, which the framework used to construct the network architecture and perform training in this work.
+In these frameworks, training is performed by evaluating the result of a set of inputs using the current model weight parameters during a forward pass, accumulating the partial derivatives with respect to the parameters, and minimising an objective (loss) function using those gradients.
+These gradients inform weight updates in the direction of the negative gradient, toward a minima in the objective function. 
+However, automatic differentiation can also evaluate the derivatives with respect to the inputs, using the same high-performance AD framework (e.g. Pytorch).
+This can provide the partial derivatives \(\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}, \frac{\partial f}{\partial z}\), as well as higher order derivatives.
 
 \section{Method}
 \subsection{Notation}
-$\mathbb{R}^n$ Real n-dimensional vectors, named using lower-case letters, e.g. \boldmath{x}.
+\(\mathbb{R}^n\) Real n-dimensional vectors, named using lower-case letters, e.g. \boldmath{u}.
 
-$\mathbb{R}^{m\times{}n}$ $m*n$ dimensional matrices, named using upper-case letters, e.g. \boldmath{A}.
+\(\mathbb{R}^{m\times{}n}\) \(m*n\) dimensional matrices, named using upper-case letters, e.g. \boldmath{A}.
 
 \subsection{Differentiation}
-A Numerical Differentiation approach to gradient calculation here would be to evaluate $\frac{\partial{U}}{\partial{(x, y, z)}}$ at a set of randomly sampled coordinates $(x, y, z)_1 ... (x,y,z)_n$.
+A Numerical Differentiation approach to gradient calculation here would be to evaluate \(\frac{\partial{U}}{\partial{(x, y, z)}}\) at a set of randomly sampled coordinates \({(x, y, z)}_1 \dots {(x,y,z)}_n\).
 However, using Automatic Differentiation within Pytorch, the continuous implicit represenation can be differentiated to provide gradients without being constrained by numerical precision or quantisation.
 These are also unstable, recognised in the geophysical community by divergence and noise in predictions depending on numerical methods.
 
@@ -97,46 +148,67 @@ These are also unstable, recognised in the geophysical community by divergence a
 
 \subsection{SIREN}
 \begin{enumerate}
-    \item SIREN (or WIRE, if it improves)
-    \item Regularisation loss
-    \item Parameter opt
+    \item{SIREN (or WIRE, if it improves)}
+    \item{Regularisation loss}
+    \item{Parameter opt}
 \end{enumerate}
 
-\subsection{Training Particulars}
-Performed on an Intel i5-12400 CPU with 32 GB RAM, and an Nvidia 3060 12 GB GPU.
-
-ADAM, One Cycle LR, 1000 iter/epochs.
-
-MSE loss.
-
 \subsection{Data}
-GADDS Wolfe Creek impact survey netCDF
+The case study dataset used here is the 2002 Wolfe Creek meteorite impact magnetic survey (Geophysical Acquisition \& Processing Section \cite*{wolfecreek2019}).
+The high-resolution survey contains 402 line-kilometres of data at 50m line spacing with a nominal terrain clearance of 40 m.
+Both line data netCDF and grid raster products were downloaded from the Geoscience Australia Geophysical Archive Data Delivery System and used without further processing.
+The line data netCDF contains tie-levelled, micro-levelled, and AWAGS levelled magnetic variables, in respective order of processing levels.
+
+
 
 Noddyverse
 
-tba
+
+\subsection{Training Particulars}
+% Performed on an Intel i5-12400 CPU with 32 GB RAM, and an Nvidia 3060 12 GB GPU.
+
+Implicit functions are trained using coordinate-value pairs, and for low-resolution images the entire cell value and cell coordinate dataset fits within GPU memory for batch gradient descent.
+The Wolfe Creek meteorite impact crater case study survey has 76,420 sample points, with the Geoscience Australia provided grid product having a resolution of 446 \(\times\) 445 cells.
+This coordinate dataset easily fits into available graphics memory, and can be trained using batch gradient descent.
+%However, training on large scattered aeromagnetic surveys with more than one million samples, memory becomes a constraint and mini-batch training is required.
+Training was performed on an Intel i9-10900KF workstation with an Nvidia RTX 3090 24 GB GPU\@.
+A highly accurate represenation can be learned in 1000 epochs using the Adam optimiser, for a duration of 90 seconds.
+The OneCycle learning rate scheduler \parencite{smithSuperconvergenceVeryFast2018} is used to provide fine tuning toward the end of training.
+
+
+
+
+
+MSE loss.
+
 
 \section{Results}
 \subsection{Implicit gridding}
 \begin{enumerate}
-    \item Best attempt at recreating grid as gridded by GA.
-    \item Demonstration of the range of altitude slices
+    \item{} Best attempt at recreating grid as gridded by GA.
+    \item{} Demonstration of the range of altitude slices
 \end{enumerate}
 
 \subsection{Spatial gradients and filters}
 \begin{enumerate}
-    \item Horizontal Gradients
-    \item Vertical Gradients
-    \item Combinations and filters
+    \item{} Horizontal Gradients
+    \item{} Vertical Gradients
+    \item{} Combinations and filters
 \end{enumerate}
 
 \section{Discussion}
 \begin{enumerate}
-    \item Limitations: Capacity of Network
-    \item RAM usage (if I can't do batched C-MLP training)
-    \item Accuracy of learnt x,y and z gradients
-    \item Forward looking at the field of INR
+    \item{} Limitations: Capacity of Network
+    \item{} RAM usage (if I can't do batched C-MLP training)
+    \item{} Accuracy of learnt x,y and z gradients
+    \item{} Forward looking at the field of INR
 \end{enumerate}
+
+
+% With this representation the extraction of regularised two dimensional slices, namely grids, could be performed \emph{a posteri} of gridding.
+% Regularising these samples to a two dimensional grid for interpretation, storage, and further machine processing is a well studied process with many methods available.
+% After regularisation, the grid arrays can be subject to a large number of widely used filters, such as horizontal and vertical gradient calculation and their derivatives.
+% These filters operate on the grid product, a representation of the potential field quantised by the cell spacing defined during the regularisation process.
 
 Implicit neural representation is a rapidly evolving field of research with many advances occuring within each year, borrowing contemporary deep learning improvements from related fields.
 In addition to constant work on improving the high-frequency learning capacity, the inclusion of additional dimensions or
