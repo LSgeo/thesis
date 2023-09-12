@@ -1,21 +1,171 @@
 % \includeonly{intro}
-\documentclass[12pt,a4paper]{report} %,twocolumn
+\documentclass[12pt,a4paper]{report} %,openright,twoside
 \usepackage{thesisstyle}
 \addbibresource{bib/PhD.bib}
 \begin{document}
-\author{Luke Thomas Smith}
-\title{Deep learning for geophysics}
-\date{\today}
-\maketitle{}
-\tableofcontents
-\listoffigures
-\listoftables
+
+\begin{titlepage}
+
+    \begin{center}
+        \large{\textbf{Potential Field Geophysics Enhancement Using Contemporary Deep Learning Approaches}}
+
+        \vspace{15 mm}
+        {\large{Luke Thomas Smith, BSc, MRes}}
+
+        \vspace{15 mm}
+        This thesis is presented for the degree of
+
+        \vspace{5 mm}
+        \textbf{Doctor of Philosophy}
+
+        of
+
+        \textbf{The University of Western Australia}
+
+        \vspace{5 mm}
+        School of Earth Sciences
+
+        \vspace{10 mm}
+        \begin{figure}[h]
+            \centering{}
+            \includegraphics[scale=0.65]{fig/UWA_FORMAL_PORTRAIT_CMYK}
+        \end{figure}
+
+        \vspace*{\fill}
+        2023
+    \end{center}
+\end{titlepage}
+
+\clearpage{}
+
+\pagenumbering{roman}
+\setcounter{page}{1}
+\renewcommand{\thesection}{\Roman{section}}
+
+
+\section{Thesis Declaration}
+I, Luke Thomas Smith, certify that:
+\begin{itemize}
+    \item{}This thesis has been substantially accomplished during enrolment in this degree.
+    \item{}This thesis is my own work and does not contain any material previously published or written by another person, except where due reference has been made in the text or Authorship Declaration.
+    \item{}This thesis does not contain material which has been submitted for the award of any other degree or diploma in my name, in any university or other tertiary institution.
+    \item{}In the future, no part of this thesis will be used in a submission in my name, for any other degree or diploma in any university or other tertiary institution without the prior approval of The University of Western Australia and where applicable, any partner institution responsible for the joint-award of this degree.
+    \item{}This thesis does not violate or infringe any copyright, trademark, patent, or other rights whatsoever of any person.
+\end{itemize}
+
+\vspace*{20 mm}
+\noindent\begin{tabular}{ll}
+                               &                           \\[8ex]
+    \makebox[100 mm]{\dotfill} & \makebox[30 mm]{\dotfill} \\
+    Student Signature          & Date                      \\
+\end{tabular}
+
+\newpage{}
+
+\section{Abstract}
+In the contemporary age of deep learning, namely the frantic and now forever advancing activity emerging from the mid 2010's, geoscience stands to embrace its own big data challenges.
+A small but critical component of the geophysical method is the practice of potential field surveying from aircraft, for rapid and extensive coverage of target geology.
+Airborne geophysical surveys are routinely conducted as pre-competitive regional data acquisition to stimulate exploration, or as targeted investigations by the mineral exploration industry.
+The collected data may contain millions of discrete samples scattered in three dimensions, and their interpretation often relies on regularisation to a quantised grid, allowing digital processing and human or machine interpretation.
+A ubiquitous constraint on the usefulness of these data is the data resolution, or more exactly, the Nyquist frequency of the grid.
+This limit on the high-frequency content available within the grid results directly from the spatial sampling density of the originating survey, and the density of cells used to represent the grid.
+The well known geophysics rule of thumb, \emph{a grids cell size should equal one quarter to one fifth of the line spacing}, has long informed the achievable detail in these survey products.
+
+This thesis reports on two topics in geophysics; enhancing the high-frequency content of survey data using \emph{super-resolution}; and, learning a representative function of a potential field extent using \emph{implicit neural representation}.
+The first has application in enhancing the value of geophysical surveys by extracting greater information from necessarily sparsely sampled potential fields.
+The second topic stands to benefit from ongoing research in deep learning, but may present a straightforward neural network framework for high quality grid regularisation, processing, storage, and data integration.
+For each chapter, real-world geophysical case studies are presented, in order to demonstrate the challenges and effectiveness of the method with currently available open file data.
+
+Chapter one establishes that deep learning can effectively enhance the resolution of real magnetic textures at a fixed four times scale.
+This is further explored in chapter two, explicitly using data gridded from both synthetic and real line data at increasingly wider spacings to achieve both super-resolution on real-world low-resolution data and to investigate the useful limits of upscaling.
+
+Chapter two quantifies the upscaling performance at line spacings between \SI{80}{\m} and \SI{480}{\m} and successfully enhances the resolution of unseen real world survey grids.
+
+Finally, chapter three presents successful representation learning of scattered real-world potential field samples by a neural network, in a framework that allows the extraction of high-resolution level grids and for rapid analytical calculation of spatial gradients.
+
+Similar outcomes to those presented throughout this thesis have been attempted by at-times surprisingly antique machine learning practices, as well as persistently effective numerical methods in the literature.
+However, the deep learning methods adopted within the component chapters of this manuscript have each been selected for their contemporaneity.
+Each chapter investigates the use of deep learning methods from the literature, published in the same year as the drafting of their respective geophysical application chapter.
+The rapid and increasing pace of advancement in deep learning research demands this adherance to the cutting-edge, in order to address the growing magnitudes of data collected and processed within geoscience to address current global challenges.
+
+\tableofcontents{}
+% \listoffigures{}
+% \listoftables{}
+
+\section{Acknowledgements}
+\dots{}
+
+This research was supported by a Rio Tinto Iron Ore PhD Scholarship.
+
+\section{Authorship Declaration}
+This thesis contains material that has been published or prepared for publication.
+The extent of the candidate's contribution toward publication is outlined below.
+
+\smallskip{}
+\noindent{}All software development was performed by L. Smith.
+
+\noindent{}The possible application of super-resolution for geophysical grid data was suggested by E.J. Holden.
+
+\medskip{}
+\noindent{}Sections comprising published journal articles:
+\begin{itemize}
+    \item{}\textbf{Section}: Chapter 1
+
+    \textbf{Publication}: Smith, L., Horrocks, T., Holden, E.J., Wedge, D., Akhtar, N., 2022. Magnetic grid resolution enhancement using machine learning: A case study from the Eastern Goldfields Superterrane. Ore Geology Reviews 150, 105119. https://doi.org/10.1016/j.oregeorev.2022.105119
+
+    \textbf{Contribution}: The method for was researched, developed, and drafted by L. Smith, who also performed revision based on manuscript review from co-authors EJ Holden, D. Wedge, T. Horrocks and N. Akhtar.
+    As a published manuscript, further revision was provided by the journal editor and peer reviewers.
+\end{itemize}
+
+\noindent{}Sections comprising manuscripts prepared for publication:
+\begin{itemize}
+    \item{}
+    \textbf{Section}: Chapter 2
+
+    \textbf{Contribution}: Further investigation of super-resolution was initiated, developed, analysed, and drafted by L. Smith, with guidance on manuscript direction from co-authors.
+
+    \item{}
+    \textbf{Section}: Chapter 3
+
+    \textbf{Contribution}: The concept and development of implicit neural representation for geophysics was initiated by L. Smith, who performed the subsequent development, analysis, and manuscript authorship with review from co-authors.
+
+\end{itemize}
+
+
+\noindent{}The contributions of the author have been truthfully stated, and permission from
+each author has been sought to include the published material in this thesis.
+
+% \vspace*{20 mm}
+
+\noindent\begin{tabular}{ll}
+                                          &                           \\[8ex]
+    \makebox[100 mm]{\dotfill}            & \makebox[30 mm]{\dotfill} \\
+    Eun-Jung Holden                       & Date                      \\
+    Principal and Coordinating Supervisor &                           \\[8ex]
+    \makebox[100 mm]{\dotfill}            & \makebox[30 mm]{\dotfill} \\
+    Daniel Wedge                          & Date                      \\
+    Co-supervisor                         &                           \\[8ex]
+    \makebox[100 mm]{\dotfill}            & \makebox[30 mm]{\dotfill} \\
+    Tom Horrocks                          & Date                      \\
+    Co-supervisor                         &                           \\[8ex]
+    \makebox[100 mm]{\dotfill}            & \makebox[30 mm]{\dotfill} \\
+    Naveed Akhtar                         & Date                      \\
+    Co-supervisor                         &                           \\
+\end{tabular}
+
+\clearpage{}
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\setcounter{section}{0}
+\renewcommand{\thesection}{\arabic{section}}
+
 \subfile{intro}
+\dots{}
 % \subfile{paper1}
-% \subfile{paper2}
+% % \subfile{paper2}
 % \subfile{paper3}
 \clearpage{}
-% \include{bibliography}
+\include{bibliography}
 \end{document}
 
 
