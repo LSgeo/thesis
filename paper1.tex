@@ -13,28 +13,28 @@
     Through the application of state-of-the-art deep learning super-resolution architectures, accurate high-resolution grids are predicted from corresponding low-resolution grid priors.
     Specifically, the RDN and ESRGAN+ neural network architectures, which were originally developed for enhancing images, are applied to enhance magnetic surveys and trained with high-resolution and low-resolution magnetic grids of the same extent.
     \SI{80}{\metre} cell size magnetic grids are upsampled to \SI{20}{\metre} cell size using this method, and predicted value and structural accuracy comparisons to the corresponding ground truth \SI{20}{\metre} grids are presented over two test sites in the Eastern Goldfields Superterrane, Western Australia.
-    The method based on RDN achieves 53\% lower error compared to Bicubic interpolation.
+    The method based on RDN achieves \qty{53}{\percent} lower error compared to Bicubic interpolation.
     The case study demonstrates that the deep learning approach can improve the resolution and frequency content of geophysical surveys without requiring additional sampling expense, while remaining accurate against known ground truth surveys.
     Super-resolution may assist in the interpretation of low-resolution survey grids, however these upsampled grids cannot perfectly recreate the accuracy of highly sampled surveys gridded at their optimal cell size.
 \end{abstract}
 
 \section{Introduction}
 \subsection{Resolution in geophysics}
-\label{resingeo}
+\label{sec:resingeo}
 Surveys of the spatial distribution of physical properties of the Earth, such as the magnetic potential field, are common in geoscience.
 These point-sampled surveys are typically interpolated onto a grid raster, and when a raster covers a known spatial extent, its resolution can be referred to as spatial resolution, indicating that each pixel covers a quantified area.
 Often referred to as high resolution, a fine spatial resolution is critical for representing high frequency components in a gridded raster.
 These high frequency components reveal localised variations in the surveyed potential field, which provide additional detail on subsurface geological structures and the potential for mineralisation.
-An example of the additional detail provided by a high-resolution grid is provided in \cref{lrandhr}, which shows an \SI{80}{\metre} cell size Total Magnetic Intensity (TMI) grid (a) compared to a \SI{20}{\metre} TMI grid of the same \SI{2560}{\metre} \texttimes\ \SI{2560}{\metre} extent (b), gridded from the same potential field samples, but interpolated to different resolutions.
+An example of the additional detail provided by a high-resolution grid is provided in \cref{fig:lrandhr}, which shows an \SI{80}{\metre} cell size Total Magnetic Intensity (TMI) grid (a) compared to a \SI{20}{\metre} TMI grid of the same \SI{2560}{\metre} \texttimes\ \SI{2560}{\metre} extent (b), gridded from the same potential field samples, but interpolated to different resolutions.
 The increased density of pixels in the high-resolution \SI{20}{\metre} grid allows higher frequencies in the sampled magnetic potential field to be displayed.
 These frequencies are irretrievably lost when the high-resolution grid is downsampled to \SI{80}{\metre}.
 
 \begin{figure}[hbt]
     \includegraphics[width=\textwidth]{fig/p1/image1.png}
     \caption[Comparison of different resolution grids]{Low resolution \SI{80}{\metre} cell size (a), and high-resolution \SI{20}{\metre} cell size (b) TMI grids over the same extent.
-    Each tile is \SI{2560}{\metre} \texttimes\ \SI{2560}{\metre}.
-    The additional detail shown in the high-resolution grid is made available by the finer cell size, which can convey higher frequency detail, if present in the sampled data.}
-    \label{lrandhr}
+        Each tile is \SI{2560}{\metre} \texttimes\ \SI{2560}{\metre}.
+        The additional detail shown in the high-resolution grid is made available by the finer cell size, which can convey higher frequency detail, if present in the sampled data.}
+    \label{fig:lrandhr}
 \end{figure}
 
 Geophysical rasters are created through a process of survey point sampling, grid interpolation, and usually post-process filtering.
@@ -45,22 +45,22 @@ Typically, cell sizes as fine as one fifth of the line sampling interval can be 
 Selecting a cell size finer than one fifth will increase the number of pixels in the image raster, achieving a higher resolution, however no additional geophysical frequencies exist in the point sampled data to be displayed and no detail will be gained.
 
 \subsection{Resolution and frequency}
-As discussed in \cref{resingeo}, a finer spatial resolution grid (fewer metres per pixel) can convey higher frequency information, due to the higher spatial sampling rate.
-Indeed, a gridded raster with regularly spaced square cells $\Delta x$ has an intrinsic Nyquist wavelength $\lambda _N$, at twice the cell size \labelcref{eq:nyq}.
+As discussed in \cref{sec:resingeo}, a finer spatial resolution grid (fewer metres per pixel) can convey higher frequency information, due to the higher spatial sampling rate.
+Indeed, a gridded raster with regularly spaced square cells \(\Delta x\) has an intrinsic Nyquist wavelength \(\lambda _N\), at twice the cell size \cref{eqn:nyq}.
 
 \begin{equation}
-    \lambda N = 2 \Delta x
-    \label{eq:nyq}
+    \label{eqn:nyq}
+    \lambda{}N = 2 \Delta{}x
 \end{equation}
 
 This corresponds to the shortest wavelength the grid can adequately display, which can be observed as the finest details resolvable in the grid raster.
 For example, a high-resolution grid with \SI{20}{\metre} spatial resolution (HR) has a Nyquist wavelength of \SI{40}{\metre}.
 In comparison, a low-resolution \SI{80}{\metre} grid (LR) has a Nyquist wavelength of \SI{160}{\metre}.
-Note the Nyquist wavelength is proportional between different cell size grids according to the scale factor S \labelcref{eq:hrn}.
+Note the Nyquist wavelength is proportional between different cell size grids according to the scale factor \(S\) \cref{eqn:hrn}.
 
 \begin{equation}
-    \lambda N_{HR} = \lambda N_{LR} \div S
-    \label{eq:hrn}
+    \label{eqn:hrn}
+    \lambda{}N_{HR} = \lambda{}N_{LR} \div{}S
 \end{equation}
 
 Because the highest frequency component preserved in a grid is limited by the grid cell size, any operation that coarsens the cell size is a low pass filter.
@@ -73,7 +73,7 @@ This paper will investigate a new method for enhancing the resolution of grids b
 
 Recent advances in machine learning techniques for image super-resolution (SR) have been shown to successfully increase image resolution for photographs and other image rasters, while also improving perceptual image quality.
 These modern techniques belong to a family of methods known as deep learning, where features learnt early in the network are leveraged to develop a higher understanding of later features.
-Notable published examples include SRCNN \parencite{dongLearningDeepConvolutional2014}, VDSR \parencite{kimAccurateImageSuperresolution2016}, SRGAN \parencite{ledigPhotorealisticSingleImage2017}, EDSR \parencite{limEnhancedDeepResidual2017}, RDN \parencite{zhangResidualDenseNetwork2018}, and the current state-of-the-art methods, ESRGAN \parencite{wangESRGANEnhancedSuperResolution2018} and ESRGAN+ \parencite{rakotonirinaESRGANFurtherImproving2020}.
+Notable published examples include SRCNN \parencite{dongLearningDeepConvolutional2014}, VDSR \parencite{kimAccurateImageSuperresolution2016}, SRGAN \parencite{ledigPhotorealisticSingleImage2017}, EDSR \parencite{limEnhancedDeepResidual2017}, RDN \parencite{zhangResidualDenseNetwork2018}, and the current state-of-the-art methods, ESRGAN \parencite{wangESRGANEnhancedSuperresolution2018} and ESRGAN+ \parencite{rakotonirinaESRGANFurtherImproving2020}.
 SRGAN and ESRGAN are similar in design to their contemporary counterparts but implement a Generative Adversarial Network (GAN) framework.
 In a GAN framework, the upsampling network (termed generator) is trained in an adversarial manner against another network (termed discriminator).
 Adversarial training of upsampling networks can help in learning a better model for the task at hand.
@@ -92,9 +92,9 @@ While several of the aforementioned works investigate deep learning super-resolu
 \begin{figure}
     \includegraphics[width=\textwidth]{fig/p1/image2.png}
     \caption[The RDN architecture]{The RDN architecture, which acts as the ESRGAN generator.
-    Twenty-three Basic Blocks are stacked sequentially to form the main convolution path.
-    Upsampling to the target output size is performed after the main convolution sequence.
-    Adapted from \cite{wangESRGANEnhancedSuperResolution2018}.
+        Twenty-three Basic Blocks are stacked sequentially to form the main convolution path.
+        Upsampling to the target output size is performed after the main convolution sequence.
+        Adapted from \cite{wangESRGANEnhancedSuperresolution2018}.
     }
     \label{fig:rdn}
 \end{figure}
@@ -108,24 +108,21 @@ To the best of our knowledge, detailed studies on applying and comparing deep le
 \begin{figure}[hbt]
     \includegraphics[width=\textwidth]{fig/p1/image3.png}
     \caption[Basic Blocks]{Each Basic Block (\cref{fig:rdn}, orange) comprises three weighted Residual Dense Blocks (\cref{fig:convs}).
-    ESRGAN+ extends ESRGAN with the addition of Gaussian Noise after each basic RDB block (black vectors).
-    Weight factors are indicated by $\beta$ and $\gamma$.
-    Noise injection is not used in RDN\@.
-    Adapted from \cite{rakotonirinaESRGANFurtherImproving2020}.
+        ESRGAN+ extends ESRGAN with the addition of Gaussian Noise after each basic RDB block (black vectors).
+        Weight factors are indicated by \(\beta{}\) and \(\gamma{}\).
+        Noise injection is not used in RDN\@.
+        Adapted from \cite{rakotonirinaESRGANFurtherImproving2020}.
     }
     \label{fig:rdb}
 \end{figure}
 
 \begin{figure}[hbt]
     \includegraphics[width=\textwidth]{fig/p1/image4.png}
-    \caption[RDB convolutional layers]{Each Residual Dense Block (\cref{fig:rdb}, purple) comprises four convolutional layers, with additional learning pathways present as residual connections (black), and dense connections (green).
-    LReLU refers to the Leaky-ReLU activation function.
-    Adapted from \cite{rakotonirinaESRGANFurtherImproving2020}.
-    }
+    \caption[RDB convolutional layers]{Each Residual Dense Block (\cref{fig:rdb}, purple) comprises four convolutional layers, with additional learning pathways present as residual connections (black), and dense connections (green). LReLU refers to the Leaky-ReLU activation function. Adapted from \cite{rakotonirinaESRGANFurtherImproving2020}.}
     \label{fig:convs}
 \end{figure}
 
-\subsection{Interplation}
+\subsection{Interpolation}
 Increasing the resolution of an image is achievable through computationally inexpensive interpolating filters, such as nearest neighbour or bicubic interpolation.
 These algorithms increase the number of pixels comprising the image raster and predict values for the interpolated pixels.
 The nearest neighbour algorithm makes a simple prediction that the value of an interpolated pixel is equal to the nearest ground truth pixel, while the bicubic filter predicts values at interpolated pixels using a cubic function fit to the neighbouring ground truth pixels.
@@ -154,7 +151,7 @@ RDN is trained to reduce the Mean Absolute Error L1-norm loss, which corresponds
 RDN was selected as a comparison against ESRGAN+ because RDN is structurally similar to the generator network in ESRGAN, allowing for analysis of the performance of GANs for super-resolution geophysics.
 The RDN implementation used here adopts some improvements from ESRGAN+ and will henceforth be referred to as RDN\textdaggerdbl{}.
 
-ESRGAN+, based on ESRGAN \parencite{wangESRGANEnhancedSuperResolution2018}, was chosen as the primary super-resolution CNN architecture for this task due to its reported success in other super-resolution tasks (especially \cite{bodeUsingPhysicsInformedSuperResolution2019} and \cite{leongDeepBedMapDeepNeural2020}) and state of the art results for its original application in image super-resolution.
+ESRGAN+, based on ESRGAN \parencite{wangESRGANEnhancedSuperresolution2018}, was chosen as the primary super-resolution CNN architecture for this task due to its reported success in other super-resolution tasks (especially \cite{bodeUsingPhysicsInformedSuperResolution2019} and \cite{leongDeepBedMapDeepNeural2020}) and state of the art results for its original application in image super-resolution.
 As a Generative Adversarial Network (GAN), it comprises two iteratively trained neural networks, a Generator (G) used to upscale low-resolution inputs, and Discriminator (D), which is trained to improve the performance of the generator.
 
 G is analogous in design to the RDN architecture described above (\cref{fig:rdn}), and is trained to upscale a low-resolution input, creating a super-resolution prediction.
@@ -201,11 +198,11 @@ In summary, the single channel high- and low-resolution state TMI grids were fil
 These data were normalised according to the statistics of the HR training set, and split into small patches suitable for the hardware limitations.
 After application of the architecture under investigation, the data are returned to predicted TMI values, and recompiled into a contiguous spatial extent.
 
-\begin{figure}[]
+\begin{figure}[hbt]
     \includegraphics[width=\textwidth]{fig/p1/image5.png}
     \caption[Dataset context]{Reserved training/validation and test areas of Eastern Goldfields Superterrane magnetic grid, and their tectonic context.
-    Background: \SI{20}{\metre} merged magnetic grid of Western Australia, \parencite{brett40MagneticMerged2020}.
-}
+        Background: \SI{20}{\metre} merged magnetic grid of Western Australia, \parencite{brett40MagneticMerged2020}.
+    }
     \label{fig:trainvaldata}
 \end{figure}
 
@@ -213,7 +210,7 @@ After application of the architecture under investigation, the data are returned
 Training of the RDN\textdaggerdbl{} and ESRGAN+ networks was performed with Pytorch \parencite{paszkePyTorchImperativeStyle2019} using an Nvidia RTX 3090 with 24 GB memory, on a desktop computer with an Intel i9-10900KF CPU and 64 GB RAM\@.
 Both networks were trained with minibatch size of 64 image patch pairs for \num{602} epochs (\num{17.6} h for RDN\textdaggerdbl{}, \num{21.8} h for ESRGAN+), at which point the PSNR plateaued.
 Training samples were augmented using random 90-degree rotations and flips to encourage a model with rotational and symmetrical invariance to the input images, and their order per epoch was shuffled to improve regularisation and supress overfitting.
-Further measures for the suppression of overfitting inherent to each of the applied architectures are described in their respective manuscripts \parencite{wangESRGANEnhancedSuperResolution2018,zhangResidualDenseNetwork2018}.
+Further measures for the suppression of overfitting inherent to each of the applied architectures are described in their respective manuscripts \parencite{wangESRGANEnhancedSuperresolution2018,zhangResidualDenseNetwork2018}.
 The optimiser used was Adam \parencite{kingmaAdamMethodStochastic2015}.
 The learning rate was adjusted over the course of the experiment using the Pytorch implementation of One Cycle Learning Rate scheduler \parencite{smithSuperconvergenceVeryFast2018}, which provides a “warm up” period to stabilise early predictions, and a “cool down” period where the loss minima is fine tuned.
 Following the generator implementation from ESRGAN+, twenty-three Residual Dense Blocks were ordered sequentially to form the main network, followed by two nearest neighbour upsampling filters at two times scale each.
@@ -233,7 +230,7 @@ For this metric, quality improves as the error value approaches \num{0}.
 The Structural Similarity (SSIM) \parencite{wangImageQualityAssessment2004} and Multi-Scale Structural Similarity (MSSSIM) \parencite{wangMultiscaleStructuralSimilarity2003} image quality metrics use sliding windows to quantify image perceptual similarity based on localised structural information.
 MS-SSIM extends SSIM by performing a weighted sum of the measure at several different scales.
 In both structural metrics, the result is a combination of localised image luminance, contrast, and structural information.
-A SSIM value of 1 indicates perfect similarity, and values approaching 0 indicate increasing dissimilarity.
+A SSIM value of 1 indicates perfect similarity, and values approaching \num{0} indicate increasing dissimilarity.
 
 \section{Results}
 Results are presented to compare the three methods described above, with the metrics of RMSE, SSIM and MS-SSIM, as well as observed perceptual quality.
@@ -247,23 +244,23 @@ The result of bicubic interpolation (\cref{fig:resultsvis} c) demonstrates the s
 The two neural network methods more closely match the ground truth \SI{20}{\metre} tile than the bicubic upsampled image does, when observing feature edges and textural detail.
 
 
-\begin{figure}
+\begin{figure}[hbt]
     \includegraphics[width=\textwidth]{fig/p1/image6.png}
     \caption[Visual inference results]{Visual comparisons of a selected tile from the reserved test region.
-    The \SI{80}{\metre} low-resolution input (a) is shown at equivalent size to the \SI{20}{\metre} high-resolution ground truth (b) using nearest neighbour interpolation.
-    The colourmap is shared between subfigures.
+        The \SI{80}{\metre} low-resolution input (a) is shown at equivalent size to the \SI{20}{\metre} high-resolution ground truth (b) using nearest neighbour interpolation.
+        The colourmap is shared between subfigures.
     }
     \label{fig:resultsvis}
 \end{figure}
 
-\Cref{fig:residuals} demonstrates the error residuals between the predicted TMI grids for each upsampling method and the HR ground truth.
+\cref{fig:residuals} demonstrates the error residuals between the predicted TMI grids for each upsampling method and the HR ground truth.
 For the selected tile, the RMSE is best minimised using RDN\textdaggerdbl{}, which also shows the best structural metric performance.
 ESRGAN+ outperforms the bicubic method in RMSE and MSSIM\@.
 
-\begin{figure}
+\begin{figure}[hbt]
     \includegraphics[width=\textwidth]{fig/p1/image7.png}
     \caption[Error residuals map for a selected tile]{Error residuals map for the selected test tile, for each upsampling method; Bicubic (a), RDN\textdaggerdbl{} (b), and ESRGAN+ (c).
-    Image quality metrics are reported for each upsampled tile, calculated against the groundtruth HR\@.}
+        Image quality metrics are reported for each upsampled tile, calculated against the groundtruth HR\@.}
     \label{fig:residuals}
 \end{figure}
 
@@ -274,13 +271,13 @@ The Radially Averaged Power Spectral Density (RAPSD) \parencite{ulichneyDitherin
 
 % TODO USE REVISED MANUSCRIPT FIGURES 
 
-\begin{figure}
+\begin{figure}[hbt]
     \includegraphics[width=\textwidth]{fig/p1/image8.png}
     \caption[short]{Radially Averaged Power Spectra for the complete test extent shown in \cref{fig:trainvaldata}.
-    The Nyquist wavelengths for the high-resolution (and upsampled) rasters and low-resolution raster are also shown.
-    The frequency axis has been transformed to wavelength, and the spectra have been normalised for direct comparison.
-    Note the complete test extent is covered by surveys with a range of line spacings from \SI{100}{\metre} to \SI{20}{\metre}, with \SI{100}{\metre} being the most extensive.
-    The Nyquist wavelength of the \SI{100}{\metre} surveys (optimal grid cell size approximately \SI{20}{\metre}) likely causes the reduction in power at \SI{55}{\metre} and \SI{220}{\metre}.
+        The Nyquist wavelengths for the high-resolution (and upsampled) rasters and low-resolution raster are also shown.
+        The frequency axis has been transformed to wavelength, and the spectra have been normalised for direct comparison.
+        Note the complete test extent is covered by surveys with a range of line spacings from \SI{100}{\metre} to \SI{20}{\metre}, with \SI{100}{\metre} being the most extensive.
+        The Nyquist wavelength of the \SI{100}{\metre} surveys (optimal grid cell size approximately \SI{20}{\metre}) likely causes the reduction in power at \SI{55}{\metre} and \SI{220}{\metre}.
     }
     \label{fig:rapsd}
 \end{figure}
@@ -300,36 +297,33 @@ The effect of this texture occasionally reveals features matching the high-resol
 \begin{figure}[hbt]
     \includegraphics[width=\textwidth]{fig/p1/image9.png}
     \caption[High Pass filtered results]{High Pass filtered test tile and its upsampled counterparts.
-    The cut-off for the high pass Butterworth filter was selected with wavelength equal to the Nyquist wavelength of the LR grid, i.e. four times the HR Nyquist wavelength
+        The cut-off for the high pass Butterworth filter was selected with wavelength equal to the Nyquist wavelength of the LR grid, i.e. four times the HR Nyquist wavelength
     }
     \label{fig:filtered}
 \end{figure}
 
 \begin{table}
     \begin{tblr}{
-        colspec={
-            r
-            Q[si={table-format=2.3},r]
-            Q[si={table-format=2.3},l]
-            Q[si={table-format=2.3},r]
-            Q[si={table-format=2.3},l]
-            Q[si={table-format=2.3},r]
-            Q[si={table-format=2.3},l]
-            },
-        row{1-2} = {guard}
-    }
-    & Bicubic & & RDN\textdaggerdbl{} & & ESRGAN+ & \\
-    \hline{}
-    & Mean & {Standard \\ Deviation} & Mean & {Standard \\ Deviation} & Mean & {Standard \\ Deviation} \\
-    RMSE   & 13.545 & 26.576 & 7.265 & 13.741 & 11.120 & 21.670 \\
-    SISM    & 0.924 &  0.047 & 0.959 &  0.037 &  0.922 &  0.054 \\
-    MS-SSIM & 0.971 &  0.018 & 0.988 &  0.012 &  0.976 &  0.020 \\
+            colspec={
+                    r
+                    Q[si={table-format=2.3},r]
+                    Q[si={table-format=2.3},l]
+                    Q[si={table-format=2.3},r]
+                    Q[si={table-format=2.3},l]
+                    Q[si={table-format=2.3},r]
+                    Q[si={table-format=2.3},l]
+                },
+            row{1-2} = {guard}
+        }
+                & Bicubic &           & RDN\textdaggerdbl{} &        & ESRGAN+ &        \\
+        \hline{}
+                & Mean    & {Standard                                                   \\ Deviation} & Mean & {Standard \\ Deviation} & Mean & {Standard \\ Deviation} \\
+        RMSE    & 13.545  & 26.576    & 7.265               & 13.741 & 11.120  & 21.670 \\
+        SISM    & 0.924   & 0.047     & 0.959               & 0.037  & 0.922   & 0.054  \\
+        MS-SSIM & 0.971   & 0.018     & 0.988               & 0.012  & 0.976   & 0.020  \\
     \end{tblr}
 
-    \caption[Accuracy Metrics]{
-        Accuracy metrics for each upsampling method.
-        The best performing method for each metric is bolded.
-     }
+    \caption[Accuracy Metrics]{Accuracy metrics for each upsampling method. The best performing method for each metric is bolded.}
     \label{tab:metrics}
 \end{table}
 
@@ -356,7 +350,7 @@ The ESRGAN+ prediction profile shows two distinct low TMI features, but they are
     \includegraphics[width=\textwidth]{fig/p1/image11.png}
     \includegraphics[width=\textwidth]{fig/p1/image12.png}
     \caption[Jasper Hills Project TMI grids and line profile]{Jasper Hills Project TMI grids (a--e) and line profile (f).
-    Bicubic interpolation of the low-resolution grid closely matches the low-resolution grid, while both super-resolution methods better approximate the magnitude of the features present in the HR profile, between \SI{650}{\metre} and \SI{1020}{\metre}.
+        Bicubic interpolation of the low-resolution grid closely matches the low-resolution grid, while both super-resolution methods better approximate the magnitude of the features present in the HR profile, between \SI{650}{\metre} and \SI{1020}{\metre}.
     }
     \label{fig:jhilldykes}
 \end{figure}
