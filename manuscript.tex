@@ -1,7 +1,5 @@
-% \includeonly{intro}
 \documentclass[12pt,a4paper]{report} %,openright,twoside
 \usepackage{thesisstyle}
-\usepackage{unnumberedtotoc}
 \addbibresource{bib/PhD.bib}
 \begin{document}
 
@@ -70,7 +68,7 @@ The second topic explores a method for learning a representation of a potential 
 The data-driven approach allows the extraction of high-resolution level grids from the learn representation, as well as the rapid analytical calculation of spatial gradients.
 Grid rasters and horizontal gradients calculated with the method very closely match their numerical counterparts, however vertical gradients are not represented well.
 
-Individually the methods developed in this thesis enhance the information extractable from potential field surveys. 
+Individually the methods developed in this thesis enhance the information extractable from potential field surveys.
 However, in combination they reflect ongoing advances in deep learning and their extension to challenges and opportunities in geophysics.
 
 \newpage{}
@@ -97,7 +95,7 @@ I, Luke Thomas Smith, certify that:
 
 \vspace*{20 mm}
 \noindent\begin{tabular}{ll}
-    &                           \\[8ex]
+                               &                           \\[8ex]
     \makebox[100 mm]{\dotfill} & \makebox[30 mm]{\dotfill} \\
     Student Signature          & Date                      \\
 \end{tabular}
@@ -166,14 +164,9 @@ each author has been sought to include the published material in this thesis.
 \setcounter{section}{0}
 \renewcommand{\thesection}{\arabic{section}}
 
-% \subfile{intro}
-% \dots{}
+\subfile{intro}
 % \subfile{paper1}
 % \subfile{paper2}
 % \subfile{paper3}
-% \subfile{conclusions}
-\clearpage{}
-\include{bibliography}
+\subfile{conclusions}
 \end{document}
-
-
