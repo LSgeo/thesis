@@ -1,4 +1,6 @@
 *.pdf
+# Allow pdf figures
+!fig/**/*.pdf 
 bib/
 
 ## Core latex/pdflatex auxiliary files:

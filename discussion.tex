@@ -1,0 +1,34 @@
+\documentclass[manuscript.tex]{subfiles}
+\begin{document}
+\label{discussion}
+\section{Contemporary Advances in Machine Learning} %brings together the key findings and contributions of the research as a whole
+% provide a synthesis of the work as a whole presented in the body of the thesis.
+% It is important that this final chapter demonstrates the collective contribution to knowledge provided by the research described in the thesis and provide overall conclusions that address the research aims.
+
+
+One of the challenges identified in \cref{paper1} was the need for large extents of suitable training data.
+During the initiation of cref{paper2}, a large amount of geologically varied synthetic training data was released as \emph{the Noddyverse} \parencite{jessellNoddyverseMassiveData2022}.
+
+\section{RDN and ESRGAN for super-resolution with line spacing varied data}
+The method for creating synthetically sampled line profiles form potential field grids, like those available in the Noddyverse, can be extended and used to train the networks described in \cref{paper1}.
+The resulting RDN and ESRGAN models can be compared (at 4 times scale) with the LTE model.
+
+
+
+\section{Are potential field grids natural signals?}
+Throughout this thesis, methods developed in computer vision research for natural images have been extended to geophysical grid rasters.
+Despite the success of the contributed methods, an important question has remained unaddressed.
+Do grid rasters in potential field geophysics share the same properties as natural images?
+More precisely, \emph{Are potential field grids natural signals?}
+If so, it can be expected that future methods in deep learning developed for natural images will be readily extensible to Geophysics.
+\Textcite{donohoCompressedSensing2006}
+
+% Questions:
+% Are geophysical grids natural signals?
+% -   Lipschitz smoothness
+% -   Fourier power spectra fall-off
+% -   There's a citation in Compressed sensing 2006 about natural signals, from Donohan or something.
+
+
+
+\end{document}
