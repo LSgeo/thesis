@@ -8,19 +8,20 @@
 
 \begin{abstract}
     The recent use of spatial coordinate features in multilayer perceptron (MLP) neural networks provides opportunities for novel applications in potential field geophysics.
-    So-called coordinate MLP networks allow for learning a representative function of potential fields from their surveyed samples and locations.
-    Using this new paradigm of encoding spatial information within a neural network enables new methods for working with potential field survey data.
-    We present a novel application of implicit neural representation to potential fields, demonstrate the quality of the learnt implicit function by encoding real airborne geophysical survey line data, predict constant level grids, and compare the result to grid data processed with a traditional workflow.
-    We further demonstrate processing the learnt function directly in the continuous domain using automatic differentiation, with the same framework used to train the neural network.
-    %TODO too much detail in abstract here
-    For example, directional gradients are calculated in the continuous domain prior to grid quantisation, and therefore without the associated loss of high-resolution content imposed by gridding.
-    The training process requires only the sample coordinates and recorded potential field for a single survey extent and can be applied to various geophysical techniques including magnetics and gravity.
+    So-called coordinate MLP networks allow for learning a representative function of potential fields from their surveyed samples.
+    % Using this new paradigm of encoding spatial information within a neural network enables new methods for working with potential field survey data.
+    We present a novel method for implicit neural representation for potential fields, demonstrate the quality of the learnt implicit function by encoding real airborne geophysical survey line data, predict constant level grids, and compare the result to grid data processed with a traditional workflow.
+    We further demonstrate the analytical calculation of gradients directly in the continuous domain using automatic differentiation, with the same framework used to train the neural network representation.
+    Level grids queried from the learnt representation closely match the reference grid product, with a peak signal to noise ratio of 40 dB.
+    Horizontal gradients calculated with this method are accurate against numerically derived gradients, while the vertical gradient is a poor match.
+    The training process is rapid, and only requires recorded samples from a single survey extent.
 \end{abstract}
 
 \section{Introduction}
 Geophysical potential fields are routinely collected and used to assist the understanding of the subsurface for geoscience and mineral exploration.
-When surveying these fields, which are continuous functions in three dimensions, sample locations are scattered in x, y, and z, despite best efforts to conform to a regular grid or line sample regime.
-These scattered data are typically regularised to a quantised grid, which reduces high frequency information and gives rise to spurious artefacts that are a product of the gridding process, not the surveyed field.
+When surveying these fields, which are continuous functions in three dimensions, sample locations are scattered in x, y, and z, despite best efforts to conform to a regularly spaced line or grid acquisition plan.
+These scattered data are typically regularised to a quantised grid for subsequent interpretation, which imposes a new limit on high frequency content and gives rise to spurious artefacts that are a product of the gridding process, not the surveyed field.
+% The interpolation process may 
 
 Neural networks can be considered as universal function approximators.
 The recent technique of deep learning implicit neural representation (INR) \parencite{mildenhallNeRFRepresentingScenes2020} represents a signal as a function of its coordinates, built on a network architecture known as a coordinate multilayer perceptron (CMLP) (see \cite{ramasinghePeriodicityUnifyingFramework2022} for a recent introduction).
@@ -28,16 +29,15 @@ By parameterising the function in coordinate space, novel values of the function
 Recent advances in CMLPs by using periodic activations such as sinusoids have demonstrated that high frequency information can be modelled well by CMLP networks, while being continuously differentiable throughout the depth of the network.
 
 We present a novel method of encoding a representation of a geophysical potential field using INR\@.
-%TODO "used to demonstrate" poor
-This method is used to demonstrate a novel method of creating level grids from scattered aeromagnetic data.
+This method contributes a novel method of creating level grids from scattered aeromagnetic data.
 In our method, due to using a continuous coordinate representation, there is no dependency on grid quantisation from an initial cell size selection.
 The proposed technique also provides for further processing that can be calculated analytically in the continuous spatial domain, allowing the use of all available sample information in these calculations.
 
 %TODO - a bit abrupt
 For the task of level grid prediction, the PSNR similarity between a case study reference grid and the proposed method is \SI{40}{\dB}.
-Additionally, directional derivatives of the implicit representation calculated numerically and using automatic differentiation are shown, with average residuals of \SI{0.4} and \SI{0.8}{nT/m} for the easting and northing derivatives respectively, albeit vertical derivative performance remains limited.
+Additionally, directional derivatives of the implicit representation calculated numerically and using automatic differentiation are shown, with average residuals of \SI{0.4} and \SI{0.8}{\nano\tesla\per\m} for the easting and northing derivatives respectively, albeit vertical derivative performance remains limited.
 
-INR and CMLP have recently emerged in the literature, so our proposed method stands to benefit from ongoing research in these highly active fields.
+INR and CMLP have recently emerged in the literature, and our proposed method stands to benefit from ongoing research in these highly active fields.
 
 \subsection{Geophysical sampling and regularisation}
 \label{sec:geo_airborne}
@@ -85,6 +85,8 @@ Resolution in these tasks is not limited by quantisation of the representation, 
 Increasing this capacity is currently the subject of high interest in the machine learning research community.
 Research directions include leveraging new activation functions \parencite{saragadamWIREWaveletImplicit2023}, transforming the input space \parencite[e.g.][]{benbarkaSeeingImplicitNeural2022} or using additional constraints on the search space such as physics-informed neural networks \parencite{raissiPhysicsinformedNeuralNetworks2019}.
 
+In geoscience, INR has been used for geological modelling \parencite{hillierGeoINRImplicitNeural2023}, where the existing implicit interpolation approaches.
+
 CMLP networks for INR can be compared to compressed sensing \parencite{candesIntroductionCompressiveSampling2008} for their ability to recover accurate grids from sparsely sampled geophysics samples.
 While recovery of potential field grids using a compressed sensing approach is often framed as a numerical optimisation problems \parencite[e.g.][]{yangAirborneGravimetryData2015,xuGravityAnomalyReconstruction2019}, these are not equivalent to modern deep learning approaches.
 Compressed sensing relies on the theory that a signal has a sparse representation in some transform domain, and a deeper exploration of the comparison between INR and compressed sensing remains to be performed.
@@ -113,7 +115,6 @@ An overview diagram is presented in \cref{fig:overview}.
     \centering{}
     % \includegraphics[width=0.5\linewidth]{fig/p3/overview.pdf}
     \caption[Overview of the proposed method]{Overview}
-    
     \label{fig:overview}
 \end{figure}
 
@@ -121,7 +122,7 @@ An overview diagram is presented in \cref{fig:overview}.
 
 \subsection{Data}
 The case study is performed using data from the 2002 Wolfe Creek meteorite impact magnetic survey \parencite{wolfecreek2019}.
-This high-resolution survey contains \SI{402}{line-kilometres} of data at \SI{50}{\m} line spacing with a nominal terrain clearance of \SI{40}{\m}, with line data collected on North-South transects.
+This high-resolution survey contains \qty{402}{line-kilometres} of data at \SI{50}{\m} line spacing with a nominal terrain clearance of \SI{40}{\m}, with line data collected on North-South transects.
 Prominently featured in the survey are the circular crater rim, and two East-West trending linear dunes to the North of the survey extent.
 The data used for implicit representation excludes the survey tie lines, typically used in airborne geophysical surveys to reduce inter-line levelling noise.
 The mean altitude of the drape surface excluding tie lines is \SI{39.5}{\m}, with a standard deviation of \SI{4.5}{\m}.
@@ -138,41 +139,41 @@ Both the line data and grid raster netCDFs for the Wolfe Creek survey were downl
 The line data netCDF contains tie-levelled, micro-levelled, and AWAGS levelled magnetic variables, in respective order of processing levels.
 The micro-levelled magnetic data are used in this case study. % and the additional surveys presented in Appendix A.
 Both geographic and projected coordinate systems can be used, provided the query coordinates for inference match those used during training.
-The three spatial coordinate dimensions are independently and linearly min-max normalised between -1 and 1.
+The three spatial coordinate dimensions are independently and linearly min-max normalised between \num{-1} and \num{1}.
 While this means the axes in the latent spatial domain may be compressed relative to each other axis, the inverse normalisation process returns proportionality between axes.
-The case study data do not span a large or magnetically varying geological extent, hence it is sufficient to use simple min-max normalisation for the magnetic field data within the global extent of the survey samples, here between -1 and 1.
+The case study data do not span a large or magnetically varying geological extent, hence it is sufficient to use simple min-max normalisation for the magnetic field data within the global extent of the survey samples, here between \num{-1} and \num{1}.
 If extensive or complexly varying magnetic provinces were present within the dataset, a normalisation method more robust to outliers may be required.
-
-The \SI{76420}{} sample points contained within the case study line data are split, with \qty{70}{\percent} used for training, and a random \qty{20}{\percent} of the remaining points are reserved to validate the model performance during training.
+The \num{76420} sample points contained within the case study line data are split, with \qty{70}{\percent} used for training, and a random \qty{20}{\percent} of the remaining points are reserved to validate the model performance during training.
 Inference is performed by querying novel coordinates within the learnt domain, here at regularly spaced grid intervals for comparison with standard grid regularisation methods.
 
 \subsection{Network architecture}
 The CMLP architecture comprises a simple fully connected network with \(n\) hidden layers, each with \(m\) neurons, presented within \cref{fig:overview}.
-Comparison of recently proposed activatons for CMLP is performed in \cref{saragadamWIREWaveletImplicit2023}, where increasing both \(n\) and \(m\) increases the capacity of the model, at the cost of computational requirements.
-
-The sinusoidal activation of \cite{sitzmann2019siren} is used.
-High quality implicit representation has been achieved in contemporary INR research with only several hidden layers, typically between 3 and 8.
-The presented method uses 8 hidden layers and 256 neurons per layer.
-%per naveed: Why choose these? Why choose the specific input output layer sizes?
+Comparison of recently proposed activatons and hyperparameters for CMLP is performed by \textcite{saragadamWIREWaveletImplicit2023}, where increasing both \(n\) and \(m\) increases the capacity of the model, at the cost of computational requirements.
+High quality implicit representation is typically achievable with the number hidden layers between \num{3} and \num{8}, and number of neurons per layer up to \num{256}.
+Empirically, the quality of the high-resolution representation continued to improve with increasing both \(n\) and \(m\).
+Therefore, the presented method uses \num{8} hidden layers and \num{256} neurons per layer, which achieves good quality results in rapid time and within the system memory constraints.
+The sinusoidal activation of \textcite{sitzmann2019siren} is used.
+The WIRE or Gaussian activations were empirically less robust to hyperparameter selection, and did not return high-quality representation for the magnetic geophysics grids.
 
 \subsection{Training setup}
 \label{sec:training}
 
 Implicit functions are trained using coordinate-value pairs.
 For low-resolution inputs the entire cell coordinate and cell value dataset fits within GPU memory for batch gradient descent.
-The Wolfe Creek meteorite impact crater case study line data has , and the Geoscience Australia provided reference grid has a resolution of 446 \(\times{}\) 445 cells.
+The Wolfe Creek meteorite impact crater case study line data has \num{76420} sample points, and the Geoscience Australia provided reference grid has a resolution of \numproduct{446 x 445} cells.
 The case study line data easily fit into available graphics memory, and can be trained using batch gradient descent.
 
 Training was performed on an Intel i9-10900KF workstation with an Nvidia RTX 3090 24 GB GPU\@.
-A highly accurate representation can be learned within \SI{5000}{epochs} using the Adam optimiser, for a duration in the order of \SI{60}{seconds}.
-The objective function comprises \(L^2\) loss between the input and predicted field values (\cref{eqn:cri}).
+A highly accurate representation can be learned within \qty{5000}{epochs} using the Adam optimiser, for a duration in the order of \qty{60}{seconds}.
+The objective function comprises \(L^2\) loss between the input and predicted field values \(u\),
 
 \begin{equation}
     \label{eqn:cri}
-    \mathcal{L}_{Total} = \lVert{}u_{input} - u_{pred}\rVert{}_{2} % + \beta{} \lVert{}\frac{\partial^{2}{u_{pred}}}{\partial{}\phi{}_{pred}^{2}}\rVert{}_{2}
+    \mathcal{L}_{Total} = \lVert{}u_{input} - u_{pred}\rVert{}_{2}. % + \beta{} \lVert{}\frac{\partial^{2}{u_{pred}}}{\partial{}\phi{}_{pred}^{2}}\rVert{}_{2}
 \end{equation}
 
-The OneCycle learning rate scheduler \parencite{smithSuperconvergenceVeryFast2018} with a maximum rate of \(1\times{}10^{-4}\) is used to provide fine tuning at low learning rates toward the end of training.
+The OneCycle learning rate scheduler \parencite{smithSuperconvergenceVeryFast2018} with a maximum rate of \num{1e-4} is used to provide fine tuning at low learning rates toward the end of training.
+The very low learning rates in the late stages of training significantly contribute to the quality of the representation when compared to a constant learning rate.
 Convergence of the network is shown in \cref{fig:convergence}.
 %However, training on large scattered aeromagnetic surveys with more than one million samples, memory becomes a constraint and mini-batch training is required.
 
@@ -188,8 +189,7 @@ Convergence of the network is shown in \cref{fig:convergence}.
 A naive approach to calculating gradients with the trained INR would be to evaluate the representation \(f(x, y, z)\) at a set of coordinates \({(x, y, z)}_1 \dots {(x,y,z)}_n\), and use numerical differentiation with the output grid to calculate derivatives.
 However, using AD with Pytorch, the implicit representation can be differentiated with respect to its coordinate inputs to provide spatial gradients, prior to being queried at the nodes of a quantised grid.
 That is, to directly sample \(\nabla{}\phi{}_{(x,y,z)}\) at \({(x, y, z)}_1 \dots {(x,y,z)}_n\).
-%TODO we dont show these Higher orders - should we?
-Higher order derivatives are calculated using AD in the same manner.
+Higher order derivatives can be calculated using AD in the same manner, but are not presented here.
 
 \section{Results}
 \subsection{Level grid prediction from INR}
@@ -198,7 +198,7 @@ The cell size can be selected using a finer or coarser \(x,y\) spacing, includin
 Contemporary super-resolution research can leverage this continual representation as a framework for high quality arbitrary scale factor high-frequency signal prediction \parencite[e.g][]{chenLearningContinuousImage2021}.
 However, the potential field representation task here does not attempt to predict additional high-frequency information and resolution remains determined by the survey sample spacing and neural network capacity.
 
-\Cref{fig:grid} shows the INR queried at \(z=\SI{40}{\meter}\), which is the nominal terrain clearance of the survey.
+\Cref{fig:grid} shows the INR queried at \(z=\SI{40}{\m}\), which is the nominal terrain clearance of the survey.
 A good qualitative match is achieved between the GA reference grid and the grid queried from the implicit representation, which successfully reconstructs the linear dune features and circular rim features.
 This high performance is quantified by the residuals and peak signal to noise ratio (PSNR) of \SI{40.12}{\dB}.
 % Further level grids from other survey extents are included in Appendix A.
@@ -206,7 +206,7 @@ This high performance is quantified by the residuals and peak signal to noise ra
 \begin{figure}[hbt]
     \centering{}
     \includegraphics[width=1.0\linewidth]{fig/p3/P864_grid_comparison_40m.pdf}
-    \caption[Grid prediction (40 m)]{Comparison between the reference grid processed by Geoscience Australia (left) and the constant level grid queried from the INR at \SI{40}{\m} (middle). The residuals are shown for areas containing reference data (right), with a range of ±2 standard deviations of values in the reference grid.}
+    \caption[Grid prediction at the nominal altitude]{Comparison between the reference grid processed by Geoscience Australia (left) and the constant level grid queried from the INR at \SI{40}{\m} (middle). The residuals are shown for areas containing reference data (right), with a range of ±2 standard deviations of values in the reference grid.}
     \label{fig:grid}
 \end{figure}
 
@@ -222,7 +222,7 @@ While the rim feature can still be interpreted within this lower level grid, the
 \begin{figure}[hbt]
     \centering{}
     \includegraphics[width=1.0\linewidth]{fig/p3/P864_grid_comparison_35m.pdf}
-    \caption[Grid prediction (35 m)]{A constant level grid queried from the INR at the height of \SI{35}{\m} (middle).}
+    \caption[Grid prediction outside the nominal altitude]{A constant level grid queried from the INR at the height of \SI{35}{\m} (middle).}
     % AWAGS is 80 m, but we see nothing useful at 80m
     \label{fig:grid35}
 \end{figure}
@@ -240,7 +240,7 @@ While the rim feature can still be interpreted within this lower level grid, the
 \subsection{Spatial derivatives and filters}
 Using AD, derivatives can be calculated between the input spatial coordinates and the output potential field representation.
 While horizontal derivatives queried from the INR correspond well to numerical derivatives calculated on the \SI{40}{\m} level grid in \cref{fig:hori_grad}, the vertical derivative suffers poor performance \cref{fig:vert_grad}.
-This correlates with the poor continuation performance of model when predicting level grids several meters or more beyond the nominal sample height.
+This correlates with the poor continuation performance of model when predicting level grids several metres or more beyond the nominal sample height.
 This is interpreted as the presented model having a limited capacity to extrapolate, and learning a poor representation of the vertical component of the potential field, which we further discuss in \cref{sec:discussion}
 
 \begin{figure}[hbt]
@@ -255,7 +255,7 @@ This is interpreted as the presented model having a limited capacity to extrapol
 \begin{figure}[hbt]
     \centering{}
     \includegraphics[width=1.0\linewidth]{fig/p3/P864_dv_comparison.pdf}
-    \caption[Vertical derivative]{Vertical derivative grids queried from AD differentiated INR (left) and calculated numerically (right) on the \SI{40}{m} level grid queried from the INR\@. The proposed method has poor vertical gradient representation, possibly due to the nature of aeromagnetic survey design.}
+    \caption[Vertical derivative]{Vertical derivative grids queried from AD differentiated INR (left) and calculated numerically (right) on the \SI{40}{\m} level grid queried from the INR\@. The proposed method has poor vertical gradient representation, possibly due to the nature of aeromagnetic survey design.}
     \label{fig:vert_grad}
 \end{figure}
 
@@ -301,8 +301,8 @@ or denoted in three dimensions,
     \label{eqn:Laplace}
     \frac{\partial{}^2\phi}{\partial{}x^2} + \frac{\partial{}^2\phi}{\partial{}y^2} + \frac{\partial{}^2\phi}{\partial{}z^2} = 0.
 \end{equation}
-Inspired by the approach of \cite{raissiPhysicsinformedNeuralNetworks2019}, a geophysics informed network could include a Laplace criterion,
 
+Inspired by the approach of \cite{raissiPhysicsinformedNeuralNetworks2019}, a geophysics informed network could include a Laplace criterion,
 \begin{equation}
     \label{eqn:cri_laplace}
     \mathcal{L}_{PDE} = \frac{1}{S_i}\sum_{i=1}^{S_i} \left(\frac{\partial{}^2f}{\partial{}x^2} + \frac{\partial{}^2f}{\partial{}y^2} + \frac{\partial{}^2f}{\partial{}z^2}\right)^2,
@@ -323,7 +323,7 @@ Initial attempts using the objective function approach were trialled in this wor
 Other geophysical formulae may present avenues for PINN implementation, such as vertical continuation described in \cite{blakelyPotentialTheoryGravity1996}.
 
 \section{Conclusions}
-High-resolution implicit neural representation of potential field geophysics surveys is achieved with the use of coordinate MLP neural networks for INR.
+High-resolution implicit neural representation of potential field geophysics surveys is achieved with the use of coordinate MLP neural networks for INR\@.
 Resolution in the representation is limited by network capacity, rather than initial grid cell size selection during regularisation.
 Level grids can be extracted from these representations, emerging as a novel method for regularising scattered geophysical sample data.
 Gradients can be calculated using the learnt representation, and gridded \emph{a posteri} of gradient calculation.
