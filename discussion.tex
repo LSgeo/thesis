@@ -6,13 +6,20 @@
 % It is important that this final chapter demonstrates the collective contribution to knowledge provided by the research described in the thesis and provide overall conclusions that address the research aims.
 
 
-One of the challenges identified in \cref{paper1} was the need for large extents of suitable training data.
+One of the challenges identified in cref{paper1} was the need for large extents of suitable training data.
 During the initiation of cref{paper2}, a large amount of geologically varied synthetic training data was released as \emph{the Noddyverse} \parencite{jessellNoddyverseMassiveData2022}.
 
 \section{RDN and ESRGAN for super-resolution with line spacing varied data}
 The method for creating synthetically sampled line profiles form potential field grids, like those available in the Noddyverse, can be extended and used to train the networks described in \cref{paper1}.
 The resulting RDN and ESRGAN models can be compared (at 4 times scale) with the LTE model.
 
+
+\section{Informed Neural Networks}
+Cref{paper3} introduced to the thesis the concept of physics informed neural networks, however the .
+The mechanism of informing a network is the design a criterion to impose a specific condition, which matches \emph{a priori} property of the output.
+Indeed, we can extend the concept of informing a network to the use of generative adversarial networks in cref{paper1}.
+A criterion is calculated, in this case \emph{discriminator loss}, using a classification network preconditioned to arbitrarily identify images as `realistic' or `not realistic'.
+Using bespoke or learnt criterions greatly assists with learning high quality models, and assists with the paucity of ground truth samples in geoscience.
 
 
 \section{Are potential field grids natural signals?}
