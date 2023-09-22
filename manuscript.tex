@@ -1,20 +1,190 @@
-% \includeonly{intro}
-\documentclass[12pt,a4paper,twocolumn]{report}
+\documentclass[12pt,a4paper]{report} %,openright,twoside
 \usepackage{thesisstyle}
+\addbibresource{bib/PhD.bib}
 \begin{document}
-\author{Luke Thomas Smith}
-\title{Deep learning for geophysics}
-\date{\today}
-\maketitle{}
-\tableofcontents
-\listoffigures
-\listoftables
+
+\begin{titlepage}
+
+    \begin{center}
+        \large{\textbf{Potential Field Geophysics Enhancement Using Contemporary Deep Learning Approaches}}
+
+        \vspace{15 mm}
+        {\large{Luke Thomas Smith, BSc, MRes}}
+
+        \vspace{15 mm}
+        This thesis is presented for the degree of
+
+        \vspace{5 mm}
+        \textbf{Doctor of Philosophy}
+
+        of
+
+        \textbf{The University of Western Australia}
+        \vspace{5 mm}
+
+        School of Earth Sciences
+        \vspace{15 mm}
+
+        \begin{figure}[h]
+            \centering{}
+            \includegraphics[scale=0.6]{fig/etc/UWA_FORMAL_PORTRAIT_CMYK}
+        \end{figure}
+
+        \vspace*{\fill}
+        2023
+    \end{center}
+\end{titlepage}
+
+% \clearpage{}
+
+\pagenumbering{roman}
+\setcounter{page}{1}
+
+\addsec{\centering{}Abstract}
+Geophysics examines the petrophysical expression of geology within the Earth and is vital for exploring and understanding mineral systems under cover.
+The growing global demand for resources drives new data acquisition, with sensors that return more and higher quality data.
+The challenges and opportunities of big data are not unique to the geosciences, and the development of methods and computing to address these are ubiquitous in the contemporary age of deep learning.
+
+Potential field surveying from aircraft provides rapid and extensive coverage of target geology.
+These surveys are routinely conducted as pre-competitive regional data acquisition to stimulate exploration, or as targeted investigations by the exploration industry.
+% Surveys are also routinely collected on the ground or by satellite, with processing methods and interpretation shared between all forms of acquisition.
+The collected data may contain millions of discrete samples scattered in three dimensions, and their interpretation often relies on regularisation to a quantised grid, allowing digital processing and human or machine interpretation.
+% A constraint on the usefulness of these data is the data resolution, or more precisely, the Nyquist frequency of the grid.
+The limit on information available within gridded data results directly from the spatial sampling density of the originating survey, and the density of cells used to represent the grid raster.
+% The well known geophysics rule of thumb, \emph{a grids cell size should be specified as one-quarter to one-fifth of the line spacing}, has long informed the achievable detail in these survey products.
+However, sampling density suffers various constraints such as cultural obstructions and budget, leading to the need to fly the fewest number of lines that can still meet the resolution required to interpret target geological features.
+
+This thesis reports on three bodies of work across two topics in geophysics; enhancing the high-frequency content of gridded potential field data using \emph{super-resolution}; and, learning a representative function of a potential field extent using \emph{implicit neural representation}.
+The first topic enhances the value of geophysical surveys by predicting high-frequency components in sparsely sampled potential field grids.
+The second presents a straightforward neural network framework for high quality grid regularisation, processing, and data integration.
+For each body of work in these topics, real-world geophysical case studies are presented in order to demonstrate the effectiveness and challenges of the method with open access data.
+Each body of work extends deep learning methods described in computer science literature the same year as the development of each respective geophysical method, to keep pace with rapid advances in the field of machine learning.
+
+In the topic of super-resolution, the first method uses convolutional neural networks to enhance the resolution of real magnetic textures in state magnetic grids at a fixed four times scale.
+This is further explored in the second body of work, where synthetic potential field line data are used for model pretraining, to address the lack of survey data with sufficient line spacing variability.
+It quantifies the performance of super-resolution upscaling on real-world low-resolution grids with line spacings between \SI{80}{\m} and \SI{480}{\m}, and investigates the useful limits of upscaling using the method.
+
+The second topic explores a method for learning a representation of a potential field extent from scattered real-world survey data by a contemporary neural network.
+The data-driven approach allows the extraction of high-resolution level grids from the learn representation, as well as the rapid analytical calculation of spatial gradients.
+Grid rasters and horizontal gradients calculated with the method very closely match their numerical counterparts, however vertical gradients are not represented well.
+
+Individually the methods developed in this thesis enhance the information extractable from potential field surveys.
+However, in combination they reflect ongoing advances in deep learning and their extension to challenges and opportunities in geophysics.
+
+\newpage{}
+\addsec{Acknowledgements}
+\dots{}
+
+This research was supported by a Rio Tinto Iron Ore PhD Scholarship.
+
+\newpage{}
+\tableofcontents{}
+% \listoffigures{}
+% \listoftables{}
+
+\newpage{}
+\addsec{Thesis Declaration}
+I, Luke Thomas Smith, certify that:
+\begin{itemize}
+    \item{}This thesis has been substantially accomplished during enrolment in this degree.
+    \item{}This thesis is my own work and does not contain any material previously published or written by another person, except where due reference has been made in the text or Authorship Declaration.
+    \item{}This thesis does not contain material which has been submitted for the award of any other degree or diploma in my name, in any university or other tertiary institution.
+    \item{}In the future, no part of this thesis will be used in a submission in my name, for any other degree or diploma in any university or other tertiary institution without the prior approval of The University of Western Australia and where applicable, any partner institution responsible for the joint-award of this degree.
+    \item{}This thesis does not violate or infringe any copyright, trademark, patent, or other rights whatsoever of any person.
+\end{itemize}
+
+\vspace*{20 mm}
+\noindent\begin{tabular}{ll}
+                               &                           \\[8ex]
+    \makebox[100 mm]{\dotfill} & \makebox[30 mm]{\dotfill} \\
+    Student Signature          & Date                      \\
+\end{tabular}
+
+
+\newpage{}
+\addsec{Authorship Declaration}
+This research was carried out at the University of Western Australia.
+This thesis contains material that has been published or prepared for publication.
+The extent of the candidate's contribution toward publication is outlined below.
+
+\smallskip{}
+\noindent{}All software development was performed by L. Smith.
+
+\noindent{}The possible application of super-resolution for geophysical grid data was suggested by E.J. Holden.
+
+\medskip{}
+\noindent{}Sections comprising published journal articles:
+\begin{itemize}
+    \item{}\textbf{Location in thesis}: Chapter 1
+
+          \textbf{Publication}: Smith, L., Horrocks, T., Holden, E.J., Wedge, D., Akhtar, N., 2022. Magnetic grid resolution enhancement using machine learning: A case study from the Eastern Goldfields Superterrane. Ore Geology Reviews 150, 105119. https://doi.org/10.1016/j.oregeorev.2022.105119
+
+          \textbf{Contribution}: The method was researched, developed, analysed and drafted by L. Smith, who performed revision based on manuscript review from co-authors E.J. Holden, D. Wedge, T. Horrocks, and N. Akhtar.
+          As a published manuscript, further revision was provided by the journal editor and peer reviewers.
+\end{itemize}
+
+\noindent{}Sections comprising manuscripts in preparation:
+\begin{itemize}
+    \item{}
+          \textbf{Location in thesis}: Chapter 2
+
+          \textbf{Contribution}: Further investigation of super-resolution was initiated, developed, analysed, and drafted by L. Smith, with guidance on manuscript direction from co-authors E.J. Holden, D. Wedge, T. Horrocks, and N. Akhtar.
+
+    \item{}
+          \textbf{Location in thesis}: Chapter 3
+
+          \textbf{Contribution}: The concept and development of implicit neural representation for geophysics was initiated by L. Smith, who performed the subsequent development, analysis, and drafting with manuscript review from co-authors E.J. Holden, D. Wedge, T. Horrocks, and N. Akhtar.
+
+\end{itemize}
+
+
+\noindent{}The contributions of the author have been truthfully stated, and permission from
+each author has been sought to include the published material in this thesis.
+
+% \vspace*{20 mm}
+
+\noindent\begin{tabular}{ll}
+                                          &                           \\[8ex]
+    \makebox[100 mm]{\dotfill}            & \makebox[30 mm]{\dotfill} \\
+    Eun-Jung Holden                       & Date                      \\
+    Principal and Coordinating Supervisor &                           \\[8ex]
+    \makebox[100 mm]{\dotfill}            & \makebox[30 mm]{\dotfill} \\
+    Daniel Wedge                          & Date                      \\
+    Co-supervisor                         &                           \\[8ex]
+    \makebox[100 mm]{\dotfill}            & \makebox[30 mm]{\dotfill} \\
+    Tom Horrocks                          & Date                      \\
+    Co-supervisor                         &                           \\[8ex]
+    \makebox[100 mm]{\dotfill}            & \makebox[30 mm]{\dotfill} \\
+    Naveed Akhtar                         & Date                      \\
+    Co-supervisor                         &                           \\
+\end{tabular}
+
+\clearpage{}
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\setcounter{section}{0}
+\renewcommand{\thesection}{\arabic{section}}
+
+\chapter{Introduction}
 \subfile{intro}
-% \subfile{paper1}
+
+\chapter{Magnetic Grid Resolution Enhancement using Machine Learning}
+\label{paper1}
+This chapter has been reproduced from the following peer reviewed publication. Formatting has been adjusted for consistency.
+
+Smith, L., Horrocks, T., Holden, E.-J., Wedge, D., Akhtar, N., 2022. Magnetic grid resolution enhancement using machine learning: A case study from the Eastern Goldfields Superterrane. Ore Geology Reviews 150, 105119.
+https://doi.org/10.1016/j.oregeorev.2022.105119 
+\subfile{paper1}
+
+\chapter{A Line Spacing Method for Super-resolution of Geophysical Surveys}
+\label{paper2}
 % \subfile{paper2}
+
+\chapter{Implicit Neural Representation for Potential Field Geophysics}
+\label{paper3}
 % \subfile{paper3}
-\clearpage
-% \include{bibliography}
+
+\chapter{Discussion}
+\subfile{discussion}
+
 \end{document}
-
-
