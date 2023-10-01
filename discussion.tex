@@ -1,27 +1,77 @@
 \documentclass[manuscript.tex]{subfiles}
 \begin{document}
-\label{discussion}
-\section{Contemporary Advances in Machine Learning} %brings together the key findings and contributions of the research as a whole
+
+%brings together the key findings and contributions of the research as a whole
 % provide a synthesis of the work as a whole presented in the body of the thesis.
-% It is important that this final chapter demonstrates the collective contribution to knowledge provided by the research described in the thesis and provide overall conclusions that address the research aims.
+% It is important that this final chapter demonstrates the collective contribution to knowledge provided by the research described in the thesis,
+% and provide overall conclusions that address the research aims.
+\setcounter{chapter}{1}
 
 
-One of the challenges identified in \cref{paper1} was the need for large extents of suitable training data.
-During the initiation of cref{paper2}, a large amount of geologically varied synthetic training data was released as \emph{the Noddyverse} \parencite{jessellNoddyverseMassiveData2022}.
+\section{Summary}
+This thesis presented contemporary methods in deep learning to address the need for modern data driven applications in geoscience.
+By including both synthetic and real survey data for training and case studies, it was established that these methods could generalise to real-world applications.
 
-\section{RDN and ESRGAN for super-resolution with line spacing varied data}
-The method for creating synthetically sampled line profiles form potential field grids, like those available in the Noddyverse, can be extended and used to train the networks described in \cref{paper1}.
-The resulting RDN and ESRGAN models can be compared (at 4 times scale) with the LTE model.
+The proposed super-resolution (SR) method explored in Chapter 1 and Chapter 2 significantly enhanced gridded low-resolution survey data by predicting grid values that contain accurate high-frequency information.
+After establishing the feasibility of geophysics super-resolution in Chapter 1, an updated neural network and new dataset were developed in Chapter 2, where simulated line profile surveys create training data with the low-resolution transform encountered in real world exploration geophysics.
+The use of synthetic data to train a baseline model addresses the challenge of training data acquisition, as well as opens avenues for targeted geological domain specific applications.
+
+The contribution in Chapter 3 used coordinate multilayer perceptron neural networks to learn a representation of the function that describes a surveyed potential field extent.
+These networks are highly suited for processing spatial data such as point sampled geophysics surveys.
+The applications contributed were predicting a regularly spaced grid from scattered survey point data, and a novel method using the representation to calculate derivatives of a potential field, both fundamental to interpretation and processing in geophysics.
+By commencing the methods from point sample data, the number of individual processing steps is reduced, and the application is fully trainable.
+The neural network approach developed in Chapter 3 uses coordinate MLP for implicit representation, a currently burgeoning field of research in computer science, and it is hoped that the proposed trainable approach for geophysics point data will prompt further development of geoscience applications in the implicit neural network domain.
+
+\section{The case for super-resolution}
+As ever, all models are wrong, but some models are useful, and this extends to super-resolution imputation.
+I envision one use-case for SR is to increase confidence in interpreting low-resolution magnetic features for geological mapping. 
+When a cautious domain expert encounters low-resolution grid data, they may interpret which gridding method was used, the line spacing and direction, and form their understanding of potential aliasing and spurious anomalies in the grid accordingly.
+Assisted by this understanding, they can infer geological features with varying degrees of confidence.
+Low confidence features which are obscured by low-resolution data will be altered, constructively or destructively, by the SR method.
+The domain expert can then use this information to reassure or reassess the original low-resolution grid.
+Because it shares the same modality, super-resolution data can be readily trialled in place of existing low-resolution data used in automated analysis and machine processing tools.
+It is expected that the enhanced appearance of features will generally improve the performance of subsequent analysis tasks on the grid raster.
+
+At the same time, it was seen in both Chapter 1, paper2 that super-resolution predictions can be misleading or entirely incorrect.
+The examples being the additional noise and implementation artefacts common in SR inference, as well as the enhancement of incorrect features in low-resolution data such as the aliased geological strike.
+Used blindly or without characterisation, these tools may inspire false confidence in the interpreter.
+I recommend a cautious approach in the use of SR\@; begin with a detailed interpretation of the low-resolution data, then enhance that understanding with the super-resolution product.
+
+\section{Revisiting Chapter 1}
+The method developed in Chapter 2 for creating sampled line profiles from potential field grids can be extended and used to train the networks described in Chapter 1.
+The resulting RDN and ESRGAN models can be compared with the LTE model described in Chapter 2, although the fixed factor upscaling block in the earlier networks limits this comparison to 4x scale.
+\Cref{fig:rdncomp} shows that RDN and ESRGAN are both highly performant for the task of predicting accurate features when upscaling \SI{320}{\m} data to \SI{40}{\m} line spacing.
+It can be inferred that the challenge of super-resolution is predominantly a question of providing suitable and sufficient training data, and less constrained to neural network choices.
+
+\begin{figure}[hbt]
+    \includegraphics[width=\linewidth]{fig/etc/TMI Comparison_23.pdf} % TODO Update for RDN, ESRGAN, LTE, ~3 hours ea.
+    \caption{}
+    \label{fig:rdncomp}
+\end{figure}
+
+\section{Synthetic data in geoscience}
+One of the challenges identified in Chapter 1 was the need for large extents of suitable training data.
+This applies to many machine learning tasks in geoscience.
+During the preparation of Chapter 2, a large and varied synthetic geology training dataset was released \parencite{jessellNoddyverseMassiveData2022}.
+This collection of labelled petrophysical voxel models and associated geophysical forward models provides many opportunities beyond those explored in this thesis.
+When taking advantage of transfer learning for pre-training, synthetic data can increase the generalisability of models for real data, as seen in Chapter 2.
 
 
+\section{Informed Neural Networks}
+There are controls on the learning of a neural network beyond the training data samples.
+Chapter 3 introduced to the thesis the concept of physics informed neural networks, in the form of a criterion to impose a specific constraint.
+For PINNs, this criterion enforces \emph{a priori} physical properties of the approximated function.
+It is possible to broaden the definition and extend the concept of informed networks to the use of generative adversarial networks in Chapter 1.
+In these networks, the informing method is termed \emph{discriminator loss}, and is performed by a classification network preconditioned to identify images as `realistic' or `not realistic'.
+Using crafted or learnt criterions to inform a neural network greatly assists with learning high quality models, and there is a stark contrast between the well-understood physical principles and the paucity of ground truth samples in geoscience.
 
 \section{Are potential field grids natural signals?}
-Throughout this thesis, methods developed in computer vision research for natural images have been extended to geophysical grid rasters.
+Throughout this thesis, the methods developed for geophysical data have been extended from computer vision research developed for natural images.
 Despite the success of the contributed methods, an important question has remained unaddressed.
-Do grid rasters in potential field geophysics share the same properties as natural images?
-More precisely, \emph{Are potential field grids natural signals?}
-If so, it can be expected that future methods in deep learning developed for natural images will be readily extensible to Geophysics.
-\Textcite{donohoCompressedSensing2006}
+\emph{Are potential field grids natural images?}
+If so, it can be predicted that future methods developed in computer vision for natural images will be readily extensible to geophysics.
+Studies into the statistics of natural images have been performed \parencite{simoncelliNaturalImageStatistics2001,rudermanStatisticsNaturalImages1994,tolhurstAmplitudeSpectraNatural1992}.
+\Textcite{lecunDeepLearning2015} - CNN take advantage of ... natural signals. 
 
 % Questions:
 % Are geophysical grids natural signals?
