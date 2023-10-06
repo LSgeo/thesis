@@ -23,11 +23,11 @@
         \vspace{5 mm}
 
         School of Earth Sciences
-        \vspace{15 mm}
+        \vspace{20 mm}
 
         \begin{figure}[h]
             \centering{}
-            \includegraphics[scale=0.6]{fig/etc/UWA_FORMAL_PORTRAIT_CMYK}
+            \includegraphics[scale=0.5]{fig/etc/UWA_FORMAL_PORTRAIT_CMYK}
         \end{figure}
 
         \vspace*{\fill}
@@ -35,7 +35,7 @@
     \end{center}
 \end{titlepage}
 
-% \clearpage{}
+\shipout\null
 
 \pagenumbering{roman}
 \setcounter{page}{1}
@@ -71,16 +71,22 @@ Grid rasters and horizontal gradients calculated with the method very closely ma
 Individually the methods developed in this thesis enhance the information extractable from potential field surveys.
 However, in combination they reflect ongoing advances in deep learning and their extension to challenges and opportunities in geophysics.
 
+\vfill{}
+\epigraph{All collected data had come to a final end. Nothing was left to be collected.}{}
+
 \newpage{}
 \addsec{Acknowledgements}
 \dots{}
 
 This research was supported by a Rio Tinto Iron Ore PhD Scholarship.
 
+\vfill{}
+\epigraph{But all collected data had yet to be completely correlated and put together in all possible relationships.}{Isaac Asimov}
+
 \newpage{}
 \tableofcontents{}
-% \listoffigures{}
-% \listoftables{}
+\listoffigures{}
+\listoftables{}
 
 \newpage{}
 \addsec{Thesis Declaration}
@@ -100,66 +106,9 @@ I, Luke Thomas Smith, certify that:
     Student Signature          & Date                      \\
 \end{tabular}
 
-
 \newpage{}
-\addsec{Authorship Declaration}
-This research was carried out at the University of Western Australia.
-This thesis contains material that has been published or prepared for publication.
-The extent of the candidate's contribution toward publication is outlined below.
+\subfile{authorship_declaration}
 
-\smallskip{}
-\noindent{}All software development was performed by L. Smith.
-
-\noindent{}The possible application of super-resolution for geophysical grid data was suggested by E.J. Holden.
-
-\medskip{}
-\noindent{}Sections comprising published journal articles:
-\begin{itemize}
-    \item{}\textbf{Location in thesis}: Chapter 1
-
-          \textbf{Publication}: Smith, L., Horrocks, T., Holden, E.J., Wedge, D., Akhtar, N., 2022. Magnetic grid resolution enhancement using machine learning: A case study from the Eastern Goldfields Superterrane. Ore Geology Reviews 150, 105119. https://doi.org/10.1016/j.oregeorev.2022.105119
-
-          \textbf{Contribution}: The method was researched, developed, analysed and drafted by L. Smith, who performed revision based on manuscript review from co-authors E.J. Holden, D. Wedge, T. Horrocks, and N. Akhtar.
-          As a published manuscript, further revision was provided by the journal editor and peer reviewers.
-\end{itemize}
-
-\noindent{}Sections comprising manuscripts in preparation:
-\begin{itemize}
-    \item{}
-          \textbf{Location in thesis}: Chapter 2
-
-          \textbf{Contribution}: Further investigation of super-resolution was initiated, developed, analysed, and drafted by L. Smith, with guidance on manuscript direction from co-authors E.J. Holden, D. Wedge, T. Horrocks, and N. Akhtar.
-
-    \item{}
-          \textbf{Location in thesis}: Chapter 3
-
-          \textbf{Contribution}: The concept and development of implicit neural representation for geophysics was initiated by L. Smith, who performed the subsequent development, analysis, and drafting with manuscript review from co-authors E.J. Holden, D. Wedge, T. Horrocks, and N. Akhtar.
-
-\end{itemize}
-
-
-\noindent{}The contributions of the author have been truthfully stated, and permission from
-each author has been sought to include the published material in this thesis.
-
-% \vspace*{20 mm}
-
-\noindent\begin{tabular}{ll}
-                                          &                           \\[8ex]
-    \makebox[100 mm]{\dotfill}            & \makebox[30 mm]{\dotfill} \\
-    Eun-Jung Holden                       & Date                      \\
-    Principal and Coordinating Supervisor &                           \\[8ex]
-    \makebox[100 mm]{\dotfill}            & \makebox[30 mm]{\dotfill} \\
-    Daniel Wedge                          & Date                      \\
-    Co-supervisor                         &                           \\[8ex]
-    \makebox[100 mm]{\dotfill}            & \makebox[30 mm]{\dotfill} \\
-    Tom Horrocks                          & Date                      \\
-    Co-supervisor                         &                           \\[8ex]
-    \makebox[100 mm]{\dotfill}            & \makebox[30 mm]{\dotfill} \\
-    Naveed Akhtar                         & Date                      \\
-    Co-supervisor                         &                           \\
-\end{tabular}
-
-\clearpage{}
 \pagenumbering{arabic}
 \setcounter{page}{1}
 \setcounter{section}{0}
@@ -173,7 +122,7 @@ each author has been sought to include the published material in this thesis.
 This chapter has been reproduced from the following peer reviewed publication. Formatting has been adjusted for consistency.
 
 Smith, L., Horrocks, T., Holden, E.-J., Wedge, D., Akhtar, N., 2022. Magnetic grid resolution enhancement using machine learning: A case study from the Eastern Goldfields Superterrane. Ore Geology Reviews 150, 105119.
-https://doi.org/10.1016/j.oregeorev.2022.105119 
+https://doi.org/10.1016/j.oregeorev.2022.105119
 \subfile{paper1}
 
 \chapter{A Line Spacing Method for Super-resolution of Geophysical Surveys}
@@ -182,7 +131,7 @@ https://doi.org/10.1016/j.oregeorev.2022.105119
 
 \chapter{Implicit Neural Representation for Potential Field Geophysics}
 \label{paper3}
-% \subfile{paper3}
+\subfile{paper3}
 
 \chapter{Discussion}
 \subfile{discussion}
