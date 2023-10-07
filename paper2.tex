@@ -269,43 +269,51 @@ In addition to mean-square error, Feature Similarity (FSIM) \parencite{linzhangF
 \label{sec:2results}
 It is seen that fine-tune training increases FSIM score for the task of super-resolution for aeromagnetic grids over the baseline model.
 Qualitative results are shown to compare the outputs from the two models, the baseline model that is trained with synthetic data and the fine-tuned model trained with open access survey data.
-Each figure follows the following layout for the grids from left to right; the ground truth (GT) \numproduct{200 x 200} cell tile is presented with low-resolution sampled data indicated in colour.
-The target high-resolution grid (HR), created from sampling and gridding GT at \qty{80}{\m} line spacing, is shown for comparison.
-The \numproduct{45 x 45} cell low-resolution grid (LR) shows the result of the described sampling and gridding method at \qty{320}{m} line spacing, and is upscaled for display using bicubic interpolation.
-The model prediction (SR), using an input of LR with the proposed method, is shown with the corresponding FSIM metric between HR and SR\@.
 
-\Cref{fig:srdata1,fig:srdata2,fig:srdata3} contain open access grid data from the Eastern Goldfields Superterrane of Western Australia, prepared using the proposed method.
+\Cref{fig:srdata23,fig:srdata14,fig:srdata17,fig:srdata18} contain open access grid data from the Eastern Goldfields Superterrane of Western Australia, prepared using the proposed method.
+Each figure follows the following layout for the grids; a) the ground truth (GT) \numproduct{200 x 200} cell tile is presented with low-resolution sampled data indicated in colour.
+The target high-resolution grid (HR), created from sampling and gridding GT at \qty{80}{\m} line spacing, is shown in b) for comparison.
+The \numproduct{45 x 45} cell low-resolution grid (LR) shows the result of the described sampling and gridding method at \qty{320}{m} line spacing, and is upscaled for display using bicubic interpolation in c).
+The baseline model prediction (Baseline SR), using an input of LR with the proposed method, is shown in d) with the corresponding SSIM metric between HR and SR\@.
+The fine-tuned model prediction is shown in e).
 
 Strong line-perpendicular smearing in LR is reduced in both SR predictions, and fine structural divisions are better delineated.
-NW striking features around in HR are aliased in LR and subsequently incorrectly rotated by 90 degrees in the baseline SR prediction (\Cref{fig:srdata1}A).
-The fine-tuned model (\Cref{fig:srdata1}B) resolves the correct strike, and separates the two features present.
-The enhanced structural similarity is reflected by the higher FSIM score in the fine-tuned model.
+NW striking features around in HR are aliased in LR and subsequently incorrectly rotated by 90 degrees in the baseline SR prediction (\Cref{fig:srdata23} d).
+The fine-tuned model (\Cref{fig:srdata23} e) resolves the correct strike, and separates the two features present.
+The enhanced structural similarity is reflected by the higher SSIM score in the fine-tuned model.
 
 \begin{figure}[hbt]
-    % \includegraphics[width=\textwidth]{fig/p2/image1.png}
+    \includegraphics[width=\textwidth]{fig/p2/srcomp_23.pdf}
     \caption[Super-resolution geophysics grid results]{Super-resolution predictions on open access data, prepared using the proposed method.
         Explanation in-text.
         Grid A is the super-resolution prediction using the baseline model, while grid B is the SR prediction using the fine-tuned model.}
-    \label{fig:srdata1}
+    \label{fig:srdata23}
 \end{figure}
 
 \begin{figure}[hbt]
-    % \includegraphics[width=\textwidth]{fig/p2/image1.png}
+    \includegraphics[width=\textwidth]{fig/p2/srcomp_14.pdf}
     \caption[Super-resolution geophysics grid results]{Super-resolution predictions on open access data, prepared using the proposed method.
         Explanation in-text.
         Grid A is the super-resolution prediction using the baseline model, while grid B is the SR prediction using the fine-tuned model.}
-    \label{fig:srdata2}
+    \label{fig:srdata14}
 \end{figure}
-%TODO
 
 \begin{figure}[hbt]
-    % \includegraphics[width=\textwidth]{fig/p2/image1.png}
+    \includegraphics[width=\textwidth]{fig/p2/srcomp_17.pdf}
     \caption[Super-resolution geophysics grid results]{Super-resolution predictions on open access data, prepared using the proposed method.
         Explanation in-text.
         Grid A is the super-resolution prediction using the baseline model, while grid B is the SR prediction using the fine-tuned model.}
-    \label{fig:srdata3}
+    \label{fig:srdata17}
 \end{figure}
-%TODO
+
+\begin{figure}[hbt]
+    \includegraphics[width=\textwidth]{fig/p2/srcomp_18.pdf}
+    \caption[Super-resolution geophysics grid results]{Super-resolution predictions on open access data, prepared using the proposed method.
+        Explanation in-text.
+        Grid A is the super-resolution prediction using the baseline model, while grid B is the SR prediction using the fine-tuned model.}
+    \label{fig:srdata18}
+\end{figure}
+
 
 \section{Discussion}
 \label{sec:discussion}
