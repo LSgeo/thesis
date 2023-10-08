@@ -1,6 +1,6 @@
 \documentclass[manuscript.tex]{subfiles}
 \begin{document}
-\setcounter{chapter}{1}
+% \setcounter{chapter}{1}
 \title{Super-resolution of Aeromagnetic Survey Data}
 \author[1*]{Luke Thomas Smith}
 \author[1]{Tom Horrocks}
@@ -44,7 +44,7 @@ The subsequent analysis of surveyed potential fields generally relies on gridded
 There are several classes of gridding methods available.
 Minimum Curvature gridding \parencite{briggsMachineContouringUsing1974} is routinely applied in industry applications, as it gives well characterised results in rapid time, with minimal manual intervention.
 A comprehensive review of alternative spatial interpolation methods is presented by \textcite{liReviewComparativeStudies2011}.
-Each method of gridding has characteristic interpolation traits (which when undesired are termed artifacts), but irrespective of the gridding process the detail resolvable in the output grid is a product of the sample height, sampling density, and the final cell size at which the grids are rendered.
+Each method of gridding has characteristic interpolation traits (which when undesired are termed artefacts), but irrespective of the gridding process the detail resolvable in the output grid is a product of the sample height, sampling density, and the final cell size at which the grids are rendered.
 Gridding at a finer cell size preserves higher frequencies present in the sampled data, resulting in greater detail.
 This resolvable detail is termed resolution, and high-resoluton details better define structures apparent in the data which are contextually important to interpretation.
 When the cell size covers a quantified distance, the smallest resolvable detail can be expressed in terms of wavelength.
@@ -54,7 +54,7 @@ For example, a potential field which lacks significant wavelength components sho
 Extending this concept, arbitrarily shrinking the cell size will not resolve additional detail unless also predicting features with wavelengths shorter than those present in the sample data.
 These are limited by the sample spacing during acquisition.
 % Low-resolution aeromagnetic survey data are the result of wide line spacings during acquisition, with the resulting grid cells predominantly being those predicted by interpolation between sparse sample points.
-Achieving higher resolution traditionally requires additional sampling to increase the grid resolution. %, which refines structures in the response and reduces blocky textures and other gridding artifacts.
+Achieving higher resolution traditionally requires additional sampling to increase the grid resolution. %, which refines structures in the response and reduces blocky textures and other gridding artefacts.
 In addition to human interpretation, machine processing of geophysical data is benefitted by using higher resolution data, with the negligible cost of increased computational load.
 
 A small number of regions in Western Australia are covered by high-resolution aeromagnetic surveys with a line spacing of 100 m or closer, and these are biased toward prospective geological terranes \parencite{howardAirborneGeophysicalCoverage2004}.
@@ -156,7 +156,7 @@ Specifics of the LTE implementation to investigate the performance of SR for geo
 
 The remainder of this paper is structured as follows.
 \Cref{sec:2methods} describes the experimental design to generate low-resolution aeromagnetic survey grids from synthetic and real-world data, where \Cref{sec:baseline,sec:finetune} specifically describe the training approach for the neural network model.
-Results are presented in \Cref{sec:2results} and are discussed in \Cref{sec:discussion}.
+Results are presented in \Cref{sec:2results} and are discussed in \Cref{sec:2discussion}.
 Conclusions are drawn in \Cref{sec:2conclusion}.
 
 \section{Data and Experimental Methods}
@@ -192,7 +192,7 @@ The low-resolution input data (LR) are sampled from GT at \(n = 4\).
 At this scale the LR line spacing is \qty{320}{\m}, the cell size is \qty{80}{\m}, and the array shape is \numproduct{45 x 45} cells, covering the same extent as HR\@.
 Subsampling and gridding of the pre-generated Noddyverse data is performed on-the-fly during training.
 The cubic method of Verde (itself implemented by Scipy Clough-Tocher 2D interpolation \parencite{2020SciPy-NMeth}) produces a \(C^1\) smooth grid with minimised curvature.
-This type of gridding is common for regularising geophysical data and creates a variety of typical low-resolution artefacts such as aliasing and bullseye artifacts.
+This type of gridding is common for regularising geophysical data and creates a variety of typical low-resolution artefacts such as aliasing and bullseye artefacts.
 \Cref{fig:lrdata} shows an example of the resulting high- and low-resolution grids for the proposed line sampling and gridding process.
 
 This method of generating low-resolution training data is distinct from computer-vision image super-resolution, where a three-channel colour image is downsampled using an interpolating filter such as nearest neighbour or cubic splines operating on all pixels in the original image.
@@ -316,7 +316,7 @@ The enhanced structural similarity is reflected by the higher SSIM score in the 
 
 
 \section{Discussion}
-\label{sec:discussion}
+\label{sec:2discussion}
 The Noddyverse synthetic training dataset comprises geology models with a variety of realistic petrophysics and geological histories, and was sampled using simple but realistic airborne survey methodology.
 Furthermore, real survey data used to fine tune the model were extracted from extents across a range of different terranes in Western Australia.
 As such, the method and trained models generalise to the geological terranes represented in the Noddyverse and high-resolution state grid extents.

@@ -1,7 +1,7 @@
 \documentclass[manuscript.tex]{subfiles}
 \begin{document}
-\setcounter{chapter}{1}
-\title{Implicit Neural Representation for Potential Field Geophysics }
+% \setcounter{chapter}{1}
+\title{Implicit Neural Representation for Potential Field Geophysics}
 \author[1*]{Luke Thomas Smith}
 \author[1]{Tom Horrocks}
 \author[2]{Naveed Akhtar}
@@ -203,7 +203,7 @@ The cell size can be selected using a finer or coarser \(x,y\) spacing, includin
 Contemporary super-resolution research can leverage this continual representation as a framework for high quality arbitrary scale factor high-frequency signal prediction \parencite[e.g][]{chenLearningContinuousImage2021}.
 However, the potential field representation task here does not attempt to predict additional high-frequency information and resolution remains determined by the survey sample spacing and neural network capacity.
 
-\Cref{fig:grid} shows the INR queried at \(z=\qty{40}{\m}\), which is the nominal terrain clearance of the survey.
+\Cref{fig:grid40} shows the INR queried at \(z=\qty{40}{\m}\), which is the nominal terrain clearance of the survey.
 A good qualitative match is achieved between the GA reference grid and the grid queried from the implicit representation, which successfully reconstructs the linear dune features and circular rim features.
 This high performance is quantified by the residuals and peak signal to noise ratio (PSNR) of \qty{40.12}{\dB}.
 % Further level grids from other survey extents are included in Appendix A.
@@ -212,11 +212,11 @@ This high performance is quantified by the residuals and peak signal to noise ra
     \centering{}
     \includegraphics[width=1.0\linewidth]{fig/p3/P864_grid_comparison_40m.pdf}
     \caption[Grid prediction at the nominal altitude]{Comparison between the reference grid processed by Geoscience Australia (left) and the constant level grid queried from the INR at \qty{40}{\m} (middle). The residuals are shown for areas containing reference data (right), with a range of ±2 standard deviations of values in the reference grid.}
-    \label{fig:grid}
+    \label{fig:grid40}
 \end{figure}
 
 The INR can be queried at arbitrary continuous coordinates, including out-of-range values beyond the training domain.
-As expected, the predicted field becomes unrealistic when extrapolating beyond this boundary, which can be seen in the periphery of the INR grid in \Cref{fig:grid}.
+As expected, the predicted field becomes unrealistic when extrapolating beyond this boundary, which can be seen in the periphery of the INR grid in \Cref{fig:grid40}.
 This boundary region (indicated by solid white in the reference grid) is excluded from PSNR calculation.
 
 Constant level grids can be queried from the INR at any height.
@@ -244,10 +244,10 @@ While the rim feature can still be interpreted within this lower level grid, the
 
 \subsection{Spatial derivatives}
 Using AD, derivatives can be calculated between the input spatial coordinates and the output potential field representation.
-For comparison, the derivatives calculated with AD are compared with numerical derivatives calculated on the level grid queried from the same INR model. 
+For comparison, the derivatives calculated with AD are compared with numerical derivatives calculated on the level grid queried from the same INR model.
 While horizontal derivatives queried from the INR correspond well to numerical derivatives calculated on the \qty{40}{\m} level grid in \Cref{fig:hori_grad}, the vertical derivative suffers poor performance (\Cref{fig:vert_grad}).
 This correlates with the poor continuation performance of model when predicting level grids several metres or more beyond the nominal sample height.
-This is interpreted as the presented model having a limited capacity to extrapolate, and learning a poor representation of the vertical component of the potential field, which we further discuss in \Cref{sec:discussion}
+This is interpreted as the presented model having a limited capacity to extrapolate, and learning a poor representation of the vertical component of the potential field, which we further discuss in \Cref{sec:3discussion}
 
 \begin{figure}[hbt]
     \centering{}
@@ -266,7 +266,7 @@ This is interpreted as the presented model having a limited capacity to extrapol
 \end{figure}
 
 \section{Discussion}
-\label{sec:discussion}
+\label{sec:3discussion}
 The proposed method has strong learning capacity for the potential field samples in the horizontal plane near the nominal survey altitude, allowing extraction of level grids which are accurate against the reference grid.
 Level grids can be queried at arbitrary heights and cell sizes, with the highest accuracy achieved at the realised nominal survey altitude.
 Performance decreases within approximately one standard deviation from that height (\qty{35} to \qty{45}{\m}), with gradual failure of the model outside of that range.
@@ -332,7 +332,7 @@ It may be worth investigating other geophysical formulae for PINN implementation
 High-resolution implicit neural representation of potential field geophysics surveys is achieved with the use of coordinate MLP neural networks for INR\@.
 Resolution in the representation is limited by network capacity, rather than initial grid cell size selection during regularisation.
 Level grids can be extracted from these representations, emerging as a novel method for regularising scattered geophysical sample data.
-Gradients calculated using the learnt representation are , and gridded after gradient calculation.
+Gradients calculated using the learnt representation are near-identical to those calculated by existing numerical methods, and benefit from being gridded after gradient calculation.
 
 \section{Acknowledgements}
 This project is funded by a Rio Tinto Iron Ore PhD scholarship.
