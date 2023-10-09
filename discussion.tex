@@ -5,10 +5,10 @@
 % provide a synthesis of the work as a whole presented in the body of the thesis.
 % It is important that this final chapter demonstrates the collective contribution to knowledge provided by the research described in the thesis,
 % and provide overall conclusions that address the research aims.
-% \setcounter{chapter}{1}
+\setcounter{chapter}{4}
 
-\section{Future work}
-\label{sec:futurework}
+\chapter{Future work}
+\label{ch:futurework}
 The outputs of machine learning models are regarded with apprehension in geophysics practice due to the perceived “black box” of these methods \parencite{delaatAlgorithmicDecisionMakingBased2018,rudinStopExplainingBlack2019}, and the impact these models may have on subsequent interpretation.
 As widely accepted by the geoscience community, all models are wrong, but some models are useful, and this extends to machine learning models.
 
@@ -28,7 +28,7 @@ This section proposes four avenues for future research:
     \item{} Investigating the use of a physics informed approach for SR and implicit representation, and,
 \end{enumerate}
 
-\subsection{SR impact on interpretation}
+\section{SR impact on interpretation}
 The super-resolution outputs from the methods presented in this thesis have improved structural accuracy over the low-resolution grids.
 This is likely to have a positive impact on the detection of features such as lineaments and unit boundaries for geological interpretation from magnetic data.
 However, despite the reduction of introduced structural inaccuracies with the use of open access training data in Cref{ch:paper2}, it is likely that some features with specific structural geometries will still be incorrectly super-resolved.
@@ -41,7 +41,7 @@ Previously, \textcite{sivarajahIdentifyingEffectiveInterpretation2013} reported 
 A more reliable, repeatable and quantifiable approach would use automated pattern recognition methods developed for geophysical features.
 For example, the automated lineament detection technique of \textcite{holdenAutomaticIdentificationResponses2011,holdenAutomatedAnalysisRegional2008} could be applied to low-resolution and SR grids, to compare their delineated features.
 
-\subsection{SR model construction}
+\section{SR model construction}
 Several models were implemented throughout cref{ch:paper1, ch:paper2}, namely RDN, ESRGAN, and LTE\@.
 % However, the most important choice in developing a performant super-resolution neural network for real-world aeromagnetic survey data was the choice of training data.
 Cref{paper1} was prepared prior the release of a large and varied synthetic geology training dataset \parencite{jessellNoddyverseMassiveData2022}.
@@ -53,8 +53,9 @@ It can be inferred that the challenge of super-resolution for these tasks is pre
 
 \begin{figure}
     \includegraphics[width=\linewidth]{fig/etc/TMI Comparison_23.pdf} % TODO Update for RDN, ESRGAN, LTE, ~3 hours ea.
-
-    \caption{A comparison between all deep learning super-resolution methods presented in cref{paper1} and cref{paper2}, using the realistic low-resolution transform developed in cref{paper2}. The low-resolution input is presented in the top left, the high-resolution target in the top right. From left to right in the lower row; The RDN+ Network, the ESRGAN+ network, and the LTE network.}
+    \caption{
+        A comparison between all deep learning super-resolution methods presented in cref{paper1} and cref{paper2}, using the realistic low-resolution transform developed in cref{paper2}.
+        a) The low-resolution input, b) The high-resolution target, c) The RDN+ Network, d) The ESRGAN+ network, and e) The LTE network.}
     \label{modcomp}
 \end{figure}
 
@@ -62,7 +63,7 @@ Given the similar performance between the three distinct architectures, instead 
 
 Magnetic data in different geological contexts are subject to a mixture of statistical distributions, \parencite{khokhlovCauseNonGaussianDistribution2017}. Investigation is also required to identify a robust normalisation method accounting for dynamic range and the structural significance contained in the long tails of the distributions of magnetic intensities.
 
-\subsection{Image quality assessment for potential field grids}
+\section{Image quality assessment for potential field grids}
 Model performance is quantified using image quality assessments (IQA) such as peak signal-to-noise ratio (PSNR), structural similarity index (SSIM), feature similarity index (FSIM), or many others.
 For supervised tasks, a full reference metric can be calculated between the super-resolution prediction and the high-resolution target.
 In the Cref{ch:paper1,ch:paper2} work, PSNR and SSIM are used to quantify the performance of the proposed methods in transforming low-resolution grids to high resolution.
@@ -72,7 +73,7 @@ Consistently high SSIM scores are assigned to grids that are perceptually poor m
 An investigation to identify a more appropriate IQA for potential field grids is required, which accounts for the distinct nature of these data and reflects the predicted quality of geological interpretation.
 This may be benefit by automated analysis methods described above.
 
-\subsection{Physics informed neural networks}
+\section{Physics informed neural networks}
 Potential fields are constrained by several well understood physical laws, and gridded data ideally conform to these properties for use in inversion applications and further numerical processing.
 Geological interpretation is less reliant on this adherence, however \emph{a priori} information used in physics informed neural networks improve training speed and model performance \parencite{raissiPhysicsinformedNeuralNetworks2019}, and are especially useful in data-constrained domains such as geophysics.
 It is possible to broaden the definition and extend the concept of informed networks to the use of generative adversarial networks in Cref{paper1}.
@@ -91,16 +92,18 @@ The GAN method used in Cref{ch:paper2} enhanced resolution, however it introduce
 Hence, the method based on RDN was preferred.
 We identified the need for sufficient representative training data, and a realistic method to generate low-resolution training data.
 
-The challenge of training data availibility was addressed in Cref{ch:paper2}, where we investigated the use of geologically varied synthetic data to train a baseline model, fine-tuning with real-world data, and simulating realistic line sampling to create low-resolution data.
+The challenge of training data availability was addressed in Cref{ch:paper2}, where we investigated the use of geologically varied synthetic data to train a baseline model, fine-tuning with real-world data, and simulating realistic line sampling to create low-resolution data.
 We implemented the contemporary LTE network to perform this investigation, these data sampled at four times wider line spacing showed increased structural accuracy when fine-tuned with real-world data.
 Additionally, spurious features in the baseline model were correctly resolved when fine-tuned.
-We identified opportunities for more detailed investigations using a filtered approach in selecting training data, and these are outlined in \Cref{sec:futurework}.
+We identified opportunities for more detailed investigations using a filtered approach in selecting training data, and these are outlined in \Cref{ch:futurework}.
 
 The contribution in Cref{ch:paper3} used coordinate multilayer perceptron neural networks to learn a representation of the function that describes a surveyed potential field extent.
 To my knowledge, this is the first time implicit neural representation has been reported for use with aerogeophysical survey data in the literature.
 These networks are highly suited for processing spatial data such as point sampled geophysics surveys.
 The contribution is capable of predicting regularly spaced grids from scattered survey point data, and a novel method using the representation to calculate derivatives of a potential field, both fundamental to interpretation and processing in geophysics.
 By commencing the methods from point sample data, the number of individual processing steps is reduced, and the application is fully trainable.
-Coordinate MLPs for implicit representation are a currently burgeoning field of research in computer science, and we identify opportunities in extending advances in this research to future applications in geophysics, as outlined in \Cref{sec:futurework}.
+Coordinate MLPs for implicit representation are a currently burgeoning field of research in computer science, and we identify opportunities in extending advances in this research to future applications in geophysics, as outlined in \Cref{ch:futurework}.
+
+\printbibliography{}
 
 \end{document}

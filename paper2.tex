@@ -1,6 +1,6 @@
 \documentclass[manuscript.tex]{subfiles}
 \begin{document}
-% \setcounter{chapter}{1}
+\setcounter{chapter}{2}
 \title{Super-resolution of Aeromagnetic Survey Data}
 \author[1*]{Luke Thomas Smith}
 \author[1]{Tom Horrocks}
@@ -36,7 +36,7 @@ These can be interpreted to inform geological mapping, resource modelling, and e
 Depending on the scale of investigation, surveys may be carried out from ground or airborne sensors.
 Detailed ground-based surveys can be sampled at point spacings of tens of metres while avoiding local obstacles, but at a regional scale, aircraft are used to provide rapid and uniform coverage regardless of access constraints.
 These airborne surveys collect data at wide line spacing to minimise cost, with lines in Western Australian low-resolution regional surveys typically \qty{400}{\m} apart, however, open access high-resolution surveys with line spacings of \qty{100}{\m} or closer are increasingly common.
-Sampling along line is typically performed at \qty{10}{\Hz} or faster, which corresponds to several meters between samples at a nominal flight speed of \qty{70}{\m\per\s} \parencite{goodwinAirborneMagneticRadiometric2023}.
+Sampling along line is typically performed at \qty{10}{\Hz} or faster, which corresponds to several metres between samples at a nominal flight speed of \qty{70}{\m\per\s} \parencite{goodwinAirborneMagneticRadiometric2023}.
 Because the power of shorter wavelengths in potential fields diminish with increasing distances from the source, aeromagnetic flights are flown as low as safety and topography permits.
 Despite the use of precise navigation systems and skilled operators, these data are not collected in perfectly uniform lines at constant height, and the samples also contain noise components.
 
@@ -325,7 +325,7 @@ Different geological units present different features in magnetic potential fiel
 These features, such as faulted or folded dykes, tend to show the most perceptual improvement in their structure following super-resolution upscaling.
 This is due to the high performance of the method for reducing aliasing effects from the gridding process, and is apparent in the accurate reconstruction of linear features from discrete “string of beads” aliased features.
 Long-wavelength features and smooth gradients, such as those present in sedimentary units or areas of cover are accurately upscaled in the proposed method, however these are also adequately upscaled with simple cubic spline interpolation of the low-resolution grid because they do not require predicted high frequency components.
-The exception for super-resolution having higher quality is in areas of low magnitude TMI of only a few nanoTesla across the entire extent.
+The exception for super-resolution having higher quality is in areas of low magnitude TMI of only a few nanotesla across the entire extent.
 In these cases, the otherwise minor noise introduced by the super-resolution process dominates the residual.
 
 The synthetic forward models are associated with geological history class labels, providing an opportunity for more targeted fine-tuning by event history.
