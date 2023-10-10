@@ -110,7 +110,7 @@ Without sampling at a smaller separation or closer line spacing, it is still pos
 The rate at which the power of the component frequencies of the potential field diminish with increasing distance is well known.
 Back-calculation can be made to predict the power of these frequencies at a smaller separation, and this is termed downward continuation \textcite{bullardDeterminationMassesNecessary1948,blakelyPotentialTheoryGravity1996}.
 The inverse using a larger distance is termed upward continuation, and is useful for reducing potentially unwanted near-surface magnetic detail, or levelling data to a common datum \parencite[e.g.\ open file magnetic data in Australia is available levelled to the AWAGS datum][]{mintyAirborneGeophysicalMapping2011}.
-Downward continuation offers the benefit of high-resolution data from low-resolution sampling, and is therefore highly studied \parencite{zuoDownwardContinuationTransformation2020,liStableDownwardContinuation2023,fediStableDownwardContinuation2002,yeHighprecisionDownwardContinuation2022,zhangNumericalSolutionsMeanValue2018,guoPotentialFieldContinuation2020,gangImprovedStableDownward2018,pilkingtonPotentialFieldContinuation2017}.
+Downward continuation offers the benefit of high-resolution data from low-resolution sampling, and is therefore highly studied \parencite{zuoDownwardContinuationTransformation2020,fediStableDownwardContinuation2002,zhangNumericalSolutionsMeanValue2018,guoPotentialFieldContinuation2020,gangImprovedStableDownward2018,pilkingtonPotentialFieldContinuation2017}.
 However, due to the inclusion of sensor noise, the practicable limit of numerical methods is six times the low-resolution cell size.
 Recent approaches in machine learning have overcome this limit, alongside alternative methods for enhancing aeromagnetic survey resolution.
 
@@ -183,7 +183,9 @@ These include SRCNN \parencite{dongImageSuperresolutionUsing2016}, RDN \parencit
 % This comprises a set of initial input feature extraction convolutions, a sequence of convolutional blocks with activations (neurons), some number and arrangement of intermediate residual learning pathways (skip connections), and an upsampling block for feature upscaling and convolving latent features back to image space.
 % Once trained, the learnt functions are conditioned to transform low-resolution features into high-resolution features, using the neighbouring input values of the low-resolution grid in the context of filters learnt from the training data.
 
-Recently, CNNs have been surpassed by coordinate multilayer perceptron (CMLP) neural networks in some representation learning tasks \parencite[e.g.][]{chenLearningContinuousImage2021}.
+
+Recently, CNNs have been surpassed by coordinate multilayer perceptron (CMLP) neural networks in some representation learning tasks, including SR \parencite{chenLearningContinuousImage2021}.
+CMLPs specifically use a dataset containing individual input points containing coordinate features, and train to predict individual output feature vectors at those coordinates \parencite[e.g.][]{mildenhallNeRFRepresentingScenes2020}.
 Key to the performance of these networks are implicit functions, which parameterise a function learned from training dataset with a neural network analogue.
 The network analogue can then be queried for information that fits the learnt function but was not included in the training data.
 In this way, CMLP networks learn a signal as a function of its coordinates, and novel signal values can be predicted for coordinates in the continuous domain of the learnt function.
@@ -195,36 +197,40 @@ Because the use of a discriminator allows an independent element for predictive 
 However, it was considerably challenging to achieve a stable Nash equilibrium \parencite{salimansImprovedTechniquesTraining2016}, causing difficulty in training these networks, and to produce a diverse range of outputs.
 Noise injection was later used in this framework as a method to drive diversity \parencite{karrasStylebasedGeneratorArchitecture2018,rakotonirinaESRGANFurtherImproving2020}.
 
-
-%     \item * talk about different superresolution methods that have been effective for some applications with refs*, and introduce learning implicit representation from imagery and their application for improving resolution *** I think it's useful to link this resolution improvement in geophysics as imputation problem.
+%  introduce learning implicit representation from imagery and their application for imputation, I think it's useful to link this resolution improvement in geophysics as imputation problem.
 
 
 \section{Machine learning in geoscience}
 \label{sec:introgeoml}
-%     \item *needs a bit of literature review on what's been done before in this space in geoscience***
-%     \item to the best of my knowledge, this use of super-resolution ***
-% \end{itemize}
 
+Geoscience is a diverse science, with ubiquitous use of raster data.
+Machine learning is not new to geoscience, and work has been performed on applications in the field for many years.
+Recent reviews have highlighted a rapid increase in machine learning research contributions to geophysics.
+The aims of this thesis are related to specific findings in these review articles.
+\textcite{bergenMachineLearningDatadriven2019} recommends the development and use of benchmark datasets and identifies opportunities in the use of transfer learning from synthetic data.
+This is echoed by \textcite{karpatneMachineLearningGeosciences2019}, who also identify prospective research avenues in theory guided science using physics-guided neural networks, the concept of directly leveraging \emph{a priori} domain knowledge within machine learning models.
 
-\section{}
-\label{sec:introgeoml}
-The earliest application of CNN SR was demonstrated by \parencite{dongLearningDeepConvolutional2014}, where convolutional layers are used for low-resolution patch extraction, feature mapping, and reconstruction of high-resolution images.
-The outputs of each convolutional layer are similar to hand-crafted filters or feature dictionaries in earlier example-based super-resolution methods \parencite{freemanExamplebasedSuperresolution2002}, but the learnt filters are more numerous and fully trainable with the deep learning approach.
-Following the success of \parencite{dongLearningDeepConvolutional2014}, many iterative improvements have been made to CNN based SR\@.
-These include SRCNN \parencite{dongImageSuperresolutionUsing2016}, RDN \parencite{zhangResidualDenseNetwork2018}, ESRGAN \parencite{wangESRGANEnhancedSuperresolution2018}, and others \parencite{ledigPhotorealisticSingleImage2017,limEnhancedDeepResidual2017}.
-While each of these works contribute unique features to CNN-based super-resolution, they follow a common stacked block design.
-This comprises a set of initial input feature extraction convolutions, a sequence of convolutional blocks with activations (neurons), some number and arrangement of intermediate residual learning pathways (skip connections), and an upsampling block for feature upscaling and convolving latent features back to image space.
-% One limitation of these CNN-based networks is the challenge of upscaling data at non-integer scales, and scales beyond those in the training dataset.
-% This was achieved by \parencite{huMetaSRMagnificationarbitraryNetwork2019,wangLearningSingleNetwork2021}, however recent approaches using implicit function based networks have improved performance.
+Early adoption of SR was seen in satellite and airborne remote sensing, where the data share image features with natural images \parencite{lanarasSuperresolutionSentinel2Images2018,arunConvolutionalNetworkArchitectures2019,kawulokTrainingDeepNetworks2019}, and others.
+Hyperspectral data SR are commonly investigated \parencite{yangHyperspectralImageClassification2018,arunCNNBasedSuperResolutionHyperspectral2020}. 
+Rock microscopy images have been upsampled with SR \parencite{niuInnovativeApplicationGenerative2020}, and their accuracy compared using domain specific parameter calculation.
+SR with physics informed learning has been performed by \textcite{bodeUsingPhysicsinformedEnhanced2021,jiangMeshfreeFlowNetPhysicsConstrainedDeep2020} in the field of fluid dynamics, \textcite{leongDeepBedMapDeepNeural2020} in the field of basement topography, and \textcite{jungbluthSingleframeSuperresolutionSolar2019} in astrophysics.
+Additionally, physics informed learning has been performed with multi-physics integration in \textcite{degen3DMultiphysicsUncertainty2022}
+Seismic data SR \parencite{liSuperresolutionSeismicVelocity2021}, and with the removal of noise \parencite{liDeepLearningSimultaneous2021}, 
+Various potential field gridding \parencite{naprstekApplicationsMachineLearning2019,wangDeepLearningGravity2019a} and downward continuation methods \parencite{liStableDownwardContinuation2023,yeHighprecisionDownwardContinuation2022} have been proposed leveraging neural networks.
+And in the recent topic of implicit representation, several applications have been proposed in geoscience, including geological modelling \textcite{hillierGeoINRImplicitNeural2023}.
 
+Beyond the applications investigated in this thesis, many other machine learning methods have been investigated in geoscience.
+These include: clustering of geophysical textures \parencite{grujicGeophysicsNeuralNetworks2019}, prediction of geological map event history \parencite{guo3DGeologicalStructure2021}, automated interpretation of geological data \parencite{waldelandConvolutionalNeuralNetworks2018, babakhinSemisupervisedSegmentationSalt2019,dawsonImpactDatasetSize2023}, seismic data interpolation \parencite{wangDeeplearningbasedSeismicData2018}, and 3D structure, joint inversion, or modelling \parencite{guo3DGeologicalStructure2021,zhihouJointGravityGravity2021},
 
-\begin{itemize}
-    \item This thesis, explores the applications of
-    \item And the potential field has frequency based details to interpet sources at varying depth, etc...
-    \item how this is directly relevant to implicit neural representation learning....
-    \item This needs to set the scence of what is to come...
-\end{itemize}    
+Additionally, deep learning methods in medical imaging and other scientific disciplines share challenges and modalities with geoscience raster data, including noise, small sample size, multi-source multi-resolution, and others.
+Advances in these fields can be explored and adapted in conjunction with work in geoscience.
 
+Feature identification is a common theme in all fields, using deep learning to detect, classify, or segment features of interest to geoscience research. 
+
+These works in geoscience machine learning commonly reiterate the challenge of data acquisition.
+One approach to overcoming the challenges faced in real-world geoscience data is to use synthetic data.
+During this thesis, a large collection of synthetic data became available, containing realistic 3D geological voxel models and 2D geophysical forward models \parencite{jessellNoddyverseMassiveData2022}.
+These data present a large amount of uniformly sampled and noise free grids from an unbiased set of geological domains.
 
 \section{Research Contributions and Thesis Structure}
 This thesis is presented as a series of papers which are published or in-preparation for publication.

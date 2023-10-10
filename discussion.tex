@@ -66,10 +66,11 @@ Magnetic data in different geological contexts are subject to a mixture of stati
 \section{Image quality assessment for potential field grids}
 Model performance is quantified using image quality assessments (IQA) such as peak signal-to-noise ratio (PSNR), structural similarity index (SSIM), feature similarity index (FSIM), or many others.
 For supervised tasks, a full reference metric can be calculated between the super-resolution prediction and the high-resolution target.
-In the Cref{ch:paper1,ch:paper2} work, PSNR and SSIM are used to quantify the performance of the proposed methods in transforming low-resolution grids to high resolution.
+In the Cref{ch:paper1,ch:paper2} works, PSNR and SSIM are used to quantify the performance of the proposed methods in transforming low-resolution grids to high resolution.
 However, properties of magnetic grid data are distinct to the images for which these metrics are designed.
 %   While SSIM uses structural information present in the Fourier transformed input in combination with local gradient magnitude for value accuracy,
 Consistently high SSIM scores are assigned to grids that are perceptually poor matches to the target.
+High values are noted in other geophysical grid investigations reporting SSIM metrics \parencite{wangDeeplearningbasedSeismicData2018,bavandsavadkoohiHighresolutionAeromagneticMap2023}
 An investigation to identify a more appropriate IQA for potential field grids is required, which accounts for the distinct nature of these data and reflects the predicted quality of geological interpretation.
 This may be benefit by automated analysis methods described above.
 
