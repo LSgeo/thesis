@@ -106,7 +106,8 @@ I, Luke Thomas Smith, certify that:
 
 \newpage{}
 % \subfile{authorship_declaration}
-\includepdf[pages=-]{authorship_declaration_signed.pdf}
+% Fix incorrect page numbering
+\includepdf[pages=-,templatesize={595.276pt}{841.89pt},nup=1x1,scale=1,clip,trim=5mm 36.5mm 5mm 20mm,fitpaper=true,pagecommand={\pagestyle{plain}}]{authorship_declaration_signed.pdf}
 
 \pagenumbering{arabic}
 \setcounter{page}{1}
