@@ -216,10 +216,9 @@ The high frequencies required to define the second feature are not captured by t
 Insufficient sampling in the LR grid causes the spatial relation to be incorrectly interpreted as converging in the centre of the figure, which may be interpreted differently than in the target high-resolution grid.
 
 \begin{figure}[hbt!]
-    \begin{center}
-        \includegraphics[width=0.75\linewidth]{fig/p2/temp_lr1.png}
-        \includegraphics[width=0.75\linewidth]{fig/p2/temp_lr2.png}
-    \end{center}
+    \centering
+    \includegraphics[width=0.75\linewidth]{fig/p2/temp_lr1.png}
+    \includegraphics[width=0.75\linewidth]{fig/p2/temp_lr2.png}
     \caption[Low-resolution geophysics grids]{
         The result of the proposed sampling and gridding on a selection of synthetic tiles loaded from the collection of \parencite{jessellNoddyverseMassiveData2022} at 4x scale.
         Note the coloured lines and accompanying tick marks in the ground-truth grid (GT, left) indicate cells which are sampled and used for gridding in the low-resolution grid (LR, right).
@@ -275,20 +274,20 @@ FSIM is a full reference image similarity metric that quantifies structural simi
 
 \section{Results}
 \label{sec:2results}
-Model performance is quantified using FSIM, and it is seen that fine-tune training increases FSIM score for the task of super-resolution for aeromagnetic grids over the baseline model.
+Model performance is quantified using FSIMi in Cref{tab:2metrics}, and it is seen that fine-tune training increases FSIM score for the task of super-resolution for aeromagnetic grids over the baseline model.
 
-\begin{table}[hbt]
-    \includegraphics[width=\linewidth]{fig/p2/temp_tbl.png}
-    \begin{tabular}{ll}
-                   & Reserved Synthetic Dataset & Reserved Aeromagnetic Dataset \\
-                   & Mean / Standard Dev.       & Mean / Standard Dev.          \\
-        \hline{}
-        Baseline   & 0                          & 0                             \\
-        Fine-Tuned & 0                          & 0                             \\
-    \end{tabular}
-    \caption[Accuracy Metrics]{Accuracy metrics for each upsampling method. The best performing method for each metric is bolded.}
-    \label{tab:3metrics}
-\end{table}
+% \begin{table}[hbt]
+% %     % \includegraphics[width=\linewidth]{fig/p2/temp_tbl.png}
+% % \begin{tblr}{ll}
+% %                 & Reserved Synthetic Dataset & Reserved Aeromagnetic Dataset \\
+% %                 & Mean / Standard Dev.       & Mean / Standard Dev.          \\
+% %     \hline{}
+% %     Baseline   & 0                          & 0                             \\
+% %     Fine-Tuned & 0                          & 0                             \\
+% % \end{tblr}
+%     \caption[Accuracy Metrics]{Accuracy metrics for each upsampling method. The best performing method for each metric is bolded.}
+%     \label{tab:2metrics}
+% \end{table}
 
 
 Qualitative results are shown to compare the outputs from the two models, the baseline model that is trained with synthetic data and the fine-tuned model trained with open access survey data.
