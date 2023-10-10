@@ -1,9 +1,10 @@
-\documentclass[manuscript.tex]{subfiles}
-\setcounter{chapter}{0}
-\begin{document}
+% \documentclass[manuscript.tex]{subfiles}
+% \documentclass[12pt,a4paper]{report} %,openright,twoside
+% \usepackage{thesisstyle}
+% \addbibresource{bib/PhD.bib}
+% % \setcounter{chapter}{1}
+% \begin{document}
 
-\chapter{Introduction}
-\label{ch:intro}
 The subsurface continuation of exposed geology can be extrapolated and interpolated using structures mapped in surveys of the Earth's naturally occuring potential fields.
 Potential field surveys offer low-cost investigations over a large spatial extent, and routinely used for geological mapping and interpretation \parencite{nabighian75thAnniversaryHistorical2005}
 For this reason, magnetic field surveys are commonly used by geophysicists for geological mapping and interpretation toward understanding the Earth in three dimensions.
@@ -203,9 +204,9 @@ Noise injection was later used in this framework as a method to drive diversity 
 \section{Machine learning in geoscience}
 \label{sec:introgeoml}
 
-Geoscience is a diverse science, with ubiquitous use of raster data.
+Geoscience is a diverse field, with ubiquitous use of raster data.
 Machine learning is not new to geoscience, and work has been performed on applications in the field for many years.
-Recent reviews have highlighted a rapid increase in machine learning research contributions to geophysics.
+Recent reviews have highlighted a rapid increase in machine learning research contributions to Earth science.
 The aims of this thesis are related to specific findings in these review articles.
 \textcite{bergenMachineLearningDatadriven2019} recommends the development and use of benchmark datasets and identifies opportunities in the use of transfer learning from synthetic data.
 This is echoed by \textcite{karpatneMachineLearningGeosciences2019}, who also identify prospective research avenues in theory guided science using physics-guided neural networks, the concept of directly leveraging \emph{a priori} domain knowledge within machine learning models.
@@ -214,23 +215,23 @@ Early adoption of SR was seen in satellite and airborne remote sensing, where th
 Hyperspectral data SR are commonly investigated \parencite{yangHyperspectralImageClassification2018,arunCNNBasedSuperResolutionHyperspectral2020}. 
 Rock microscopy images have been upsampled with SR \parencite{niuInnovativeApplicationGenerative2020}, and their accuracy compared using domain specific parameter calculation.
 SR with physics informed learning has been performed by \textcite{bodeUsingPhysicsinformedEnhanced2021,jiangMeshfreeFlowNetPhysicsConstrainedDeep2020} in the field of fluid dynamics, \textcite{leongDeepBedMapDeepNeural2020} in the field of basement topography, and \textcite{jungbluthSingleframeSuperresolutionSolar2019} in astrophysics.
-Additionally, physics informed learning has been performed with multi-physics integration in \textcite{degen3DMultiphysicsUncertainty2022}
-Seismic data SR \parencite{liSuperresolutionSeismicVelocity2021}, and with the removal of noise \parencite{liDeepLearningSimultaneous2021}, 
+Additionally, physics informed learning has been performed with multi-physics integration in \textcite{degen3DMultiphysicsUncertainty2022}.
+Seismic data has been investigated with SR \parencite{liSuperresolutionSeismicVelocity2021}, and with the removal of noise \parencite{liDeepLearningSimultaneous2021}.
+
 Various potential field gridding \parencite{naprstekApplicationsMachineLearning2019,wangDeepLearningGravity2019a} and downward continuation methods \parencite{liStableDownwardContinuation2023,yeHighprecisionDownwardContinuation2022} have been proposed leveraging neural networks.
-And in the recent topic of implicit representation, several applications have been proposed in geoscience, including geological modelling \textcite{hillierGeoINRImplicitNeural2023}.
+Finally, in the recent topic of implicit representation there have been several applications proposed, including geological modelling \textcite{hillierGeoINRImplicitNeural2023}.
 
 Beyond the applications investigated in this thesis, many other machine learning methods have been investigated in geoscience.
 These include: clustering of geophysical textures \parencite{grujicGeophysicsNeuralNetworks2019}, prediction of geological map event history \parencite{guo3DGeologicalStructure2021}, automated interpretation of geological data \parencite{waldelandConvolutionalNeuralNetworks2018, babakhinSemisupervisedSegmentationSalt2019,dawsonImpactDatasetSize2023}, seismic data interpolation \parencite{wangDeeplearningbasedSeismicData2018}, and 3D structure, joint inversion, or modelling \parencite{guo3DGeologicalStructure2021,zhihouJointGravityGravity2021},
 
-Additionally, deep learning methods in medical imaging and other scientific disciplines share challenges and modalities with geoscience raster data, including noise, small sample size, multi-source multi-resolution, and others.
+Additionally, deep learning methods in medical imaging and other scientific disciplines share challenges and modalities with geoscience raster data, including noise, small sample size, multi-source and multi-resolution, and other properties.
 Advances in these fields can be explored and adapted in conjunction with work in geoscience.
-
 Feature identification is a common theme in all fields, using deep learning to detect, classify, or segment features of interest to geoscience research. 
 
 These works in geoscience machine learning commonly reiterate the challenge of data acquisition.
-One approach to overcoming the challenges faced in real-world geoscience data is to use synthetic data.
+One approach to overcoming this and other challenges faced in real-world geoscience data is to use synthetic data.
 During this thesis, a large collection of synthetic data became available, containing realistic 3D geological voxel models and 2D geophysical forward models \parencite{jessellNoddyverseMassiveData2022}.
-These data present a large amount of uniformly sampled and noise free grids from an unbiased set of geological domains.
+These data present a large amount of uniformly sampled and noise free grids from an unbiased set of geological domains, and may offer a solution to some of these data challenges.
 
 \section{Research Contributions and Thesis Structure}
 This thesis is presented as a series of papers which are published or in-preparation for publication.
@@ -270,4 +271,4 @@ Finally, overall conclusions are presented in Cref{ch:conclusion}.
 
 \printbibliography{}
 
-\end{document}
+% \end{document}

@@ -86,7 +86,7 @@ This research was supported by a Rio Tinto Iron Ore PhD Scholarship.
 \newpage{}
 \tableofcontents{}
 \listoffigures{}
-\listoftables{}
+% \listoftables{}
 
 \newpage{}
 \addsec{Thesis Declaration}
@@ -115,27 +115,36 @@ I, Luke Thomas Smith, certify that:
 \setcounter{section}{0}
 \renewcommand{\thesection}{\arabic{section}}
 
-\subfile{intro}
+\chapter{Introduction}
+% \subfile{intro}
+% \includepdf[pages=-]{intro.pdf}
+\include{intro}
 
 \chapter{Magnetic Grid Resolution Enhancement using Machine Learning}
-\label{ch:paper1}
-
+\label{paper1}
 This chapter has been reproduced from the following peer reviewed publication. Formatting has been adjusted for consistency.
 
 Smith, L., Horrocks, T., Holden, E.-J., Wedge, D., Akhtar, N., 2022. Magnetic grid resolution enhancement using machine learning: A case study from the Eastern Goldfields Superterrane. Ore Geology Reviews 150, 105119.
 https://doi.org/10.1016/j.oregeorev.2022.105119
 % \subfile{paper1}
+% \includepdf[pages=-]{paper1.pdf}
+\include{paper1}
 
 \chapter{Super-resolution of Aeromagnetic Survey Data}
-\label{ch:paper2}
+\label{paper2}
+% \includepdf[pages=-]{paper2.pdf}
 % \subfile{paper2}
+\include{paper2}
 
 \chapter{Implicit Neural Representation for Potential Field Geophysics}
-\label{ch:paper3}
+\label{paper3}
+% \includepdf[pages=-]{paper3.pdf}
 % \subfile{paper3}
+\include{paper3}
 
-\chapter{Discussion}
-\label{ch:discussion}
-\subfile{discussion}
+% \includepdf[pages=-]{discussion.pdf}
+% \subfile{discussion}
+\include{discussion}
+
 
 \end{document}
