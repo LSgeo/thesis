@@ -1,36 +1,38 @@
-\documentclass[12pt,a4paper]{report} %,openright,twoside
+\directlua{pdf.setminorversion(6)}
+\documentclass[12pt,a4paper,notitlepage]{report} %,openright,twoside scrbook
 % \includeonly{}
 \usepackage{thesisstyle}
 \addbibresource{bib/PhD.bib}
 \begin{document}
 
+\pagenumbering{Alph}
 \begin{titlepage}
     \centering
-        
-        \vspace*{48 pt}
-        {\large\textbf{Potential Field Geophysics Enhancement Using Contemporary Deep Learning Approaches}}
 
-        \vspace{48 pt}
-        {\itshape{{\Large Luke Thomas Smith}, BSc, MRes}}
+    \vspace*{48 pt}
+    {\large\textbf{Potential Field Geophysics Enhancement Using Contemporary Deep Learning Approaches}}
 
-        \vspace{48 pt}
-        This thesis is presented for the degree of
+    \vspace{48 pt}
+    {\itshape{{\Large Luke Thomas Smith}, BSc, MRes}}
 
-        \vspace{14 pt}
-        \textbf{Doctor of Philosophy}
+    \vspace{48 pt}
+    This thesis is presented for the degree of
 
-        of
+    \vspace{14 pt}
+    \textbf{Doctor of Philosophy}
 
-        \textbf{The University of Western Australia}
-        
-        \vspace{14 pt}
-        School of Earth Sciences
-        
-        \vspace{72 pt}
-        \includegraphics[scale=0.35]{fig/etc/UWA_FORMAL_PORTRAIT_CMYK}
+    of
 
-        \vspace*{\fill}
-        2023
+    \textbf{The University of Western Australia}
+
+    \vspace{14 pt}
+    School of Earth Sciences
+
+    \vspace{72 pt}
+    \includegraphics[scale=0.35]{fig/etc/UWA_FORMAL_PORTRAIT_CMYK}
+
+    \vspace*{\fill}
+    2023
 \end{titlepage}
 
 \shipout\null
@@ -119,6 +121,7 @@ I, Luke Thomas Smith, certify that:
 % \subfile{intro}
 % \includepdf[pages=-]{intro.pdf}
 \include{intro}
+\newrefsection{}
 
 \chapter{Magnetic Grid Resolution Enhancement using Machine Learning}
 \label{ch:paper1}
@@ -129,21 +132,24 @@ https://doi.org/10.1016/j.oregeorev.2022.105119
 % \subfile{paper1}
 % \includepdf[pages=-]{paper1.pdf}
 \include{paper1}
+\newrefsection{}
 
 \chapter{Super-resolution of Aeromagnetic Survey Data}
 \label{ch:paper2}
-% \includepdf[pages=-]{paper2.pdf}
-% \subfile{paper2}
+% % \subfile{paper2}
+% % \includepdf[pages=-]{paper2.pdf}
 \include{paper2}
+\newrefsection{}
 
 \chapter{Implicit Neural Representation for Potential Field Geophysics}
 \label{ch:paper3}
-% \includepdf[pages=-]{paper3.pdf}
-% \subfile{paper3}
+% % \subfile{paper3}
+% % \includepdf[pages=-]{paper3.pdf}
 \include{paper3}
+\newrefsection{}
 
-% \includepdf[pages=-]{discussion.pdf}
 % \subfile{discussion}
+% \includepdf[pages=-]{discussion.pdf}
 \include{discussion}
 
 
