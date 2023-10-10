@@ -60,7 +60,7 @@ Because this regularisation is one of the earliest steps in preparing data for s
 % Subsequent processes such as frequency filtering or directional gradients are similary constrained by the parameters of the regularisation.
 % Additionally, storing the grid product requires amount of memory, to represent the value with adequate precision at each cell in the resulting grid.
 
-\label{sec:geo_physics}
+% \label{sec:geo_physics}
 Magnetic and gravitational fields in geophysics are conservative vector fields but are typically sampled as a scalar potential field in a single direction.
 Representing a vector field requires three orthogonal components at each spatial coordinate, while a scalar field can be parameterised with a single component \parencite{blakelyPotentialTheoryGravity1996}.
 A potential field survey can be parameterised as
@@ -126,7 +126,6 @@ These are compared against a case study reference grid from Geoscience Australia
 % \end{figure}
 
 \section{Method}
-
 \subsection{Data}
 The case study is performed using data from the 2002 Wolfe Creek meteorite impact magnetic survey \parencite{wolfecreek2019}.
 This high-resolution survey contains \qty{402}{line-kilometres} of data at \qty{50}{\m} line spacing with a nominal terrain clearance of \qty{40}{\m}, with line data collected on North-South transects.
@@ -188,7 +187,7 @@ Convergence of the network is shown in \Cref{fig:convergence}.
 
 
 \begin{figure}[hbt]
-    \centering{}
+    \centering
     \includegraphics[width=0.5\linewidth]{fig/p3/loss_plot.pdf}
     \caption[Training convergence]{Train and validation loss for the duration of the experiment.}
     \label{fig:convergence}
@@ -213,7 +212,7 @@ This high performance is quantified by the residuals and peak signal to noise ra
 % Further level grids from other survey extents are included in Appendix A.
 
 \begin{figure}[hbt]
-    \centering{}
+    \centering
     \includegraphics[width=1.0\linewidth]{fig/p3/P864_grid_comparison_40m.pdf}
     \caption[Grid prediction at the nominal altitude]{Comparison between the reference grid processed by Geoscience Australia (left) and the constant level grid queried from the INR at \qty{40}{\m} (middle). The residuals are shown for areas containing reference data (right), with a range of ±2 standard deviations of values in the reference grid.}
     \label{fig:grid40}
@@ -229,7 +228,7 @@ While the rim feature can still be interpreted within this lower level grid, the
 % It is conjectured that successfully training a PINN criterion such as Laplace’s equation loss (equation 1.3) would improve the accuracy of these upward or downward extracted slices. 
 
 \begin{figure}[hbt]
-    \centering{}
+    \centering
     \includegraphics[width=1.0\linewidth]{fig/p3/35_level_grid.pdf}
     \caption[Grid prediction outside the nominal altitude]{A constant level grid queried from the INR at the height of \qty{35}{\m}.}
     % AWAGS is 80 m, but we see nothing useful at 80m
@@ -249,24 +248,24 @@ While the rim feature can still be interpreted within this lower level grid, the
 \subsection{Spatial derivatives}
 Using AD, derivatives can be calculated between the input spatial coordinates and the output potential field representation.
 For comparison, the derivatives calculated with AD are compared with numerical derivatives calculated on the level grid queried from the same INR model.
-While horizontal derivatives queried from the INR correspond well to numerical derivatives calculated on the \qty{40}{\m} level grid in \Cref{fig:hori_grad}, the vertical derivative suffers poor performance (\Cref{fig:vert_grad}).
+While horizontal derivatives queried from the INR correspond well to numerical derivatives calculated on the \qty{40}{\m} level grid in \Cref{fig:horigrad}, the vertical derivative suffers poor performance (\Cref{fig:vertgrad}).
 This correlates with the poor continuation performance of model when predicting level grids several metres or more beyond the nominal sample height.
 This is interpreted as the presented model having a limited capacity to extrapolate, and learning a poor representation of the vertical component of the potential field, which we further discuss in \Cref{sec:3discussion}
-
 \begin{figure}[hbt]
     \centering{}
     \includegraphics[width=1.0\linewidth]{fig/p3/P864_dh_comparison.pdf}
     \caption[Horizontal derivatives]{Horizontal gradients calculated using the proposed method and the reference numerical method.
         Both numerical differentiaion (left column) and AD INR (middle column) are calculated on the INR level grid or INR respectively.
         Residuals are calculated between the numerical and AD gradient grids (right column).}
-    \label{fig:hori_grad}
+    \label{fig:horigrad}
 \end{figure}
 
 \begin{figure}[hbt]
     \centering{}
     \includegraphics[width=1.0\linewidth]{fig/p3/P864_dv_comparison.pdf}
-    \caption[Vertical derivative]{Vertical derivative grids queried from AD differentiated INR (left) and calculated numerically (right) on the \qty{40}{\m} level grid queried from the INR\@. The proposed method has poor vertical gradient representation, possibly due to the nature of aeromagnetic survey design.}
-    \label{fig:vert_grad}
+    \caption[Vertical derivative]{Vertical derivative grids queried from AD differentiated INR (left) and calculated numerically (right) on the \qty{40}{\m} level grid queried from the INR\@.
+     The proposed method has poor vertical gradient representation, possibly due to the nature of aeromagnetic survey design.}
+    \label{fig:vertgrad}
 \end{figure}
 
 \section{Discussion}
@@ -314,7 +313,7 @@ or denoted in three dimensions,
 
 Inspired by the approach of \textcite{raissiPhysicsinformedNeuralNetworks2019}, a geophysics-informed network could include a Laplace criterion,
 \begin{equation}
-    \label{eqn:cri_laplace}
+    \label{eqn:crilaplace}
     \mathcal{L}_{PDE} = \frac{1}{S_i}\sum_{i=1}^{S_i} \left(\frac{\partial{}^2f}{\partial{}x^2} + \frac{\partial{}^2f}{\partial{}y^2} + \frac{\partial{}^2f}{\partial{}z^2}\right)^2,
 \end{equation}
 where \(S_i\) indicates the \(i^{th}\) sample point of the field survey \(\phi(x, y, z)\).
@@ -352,7 +351,7 @@ This project is funded by a Rio Tinto Iron Ore PhD scholarship.
 % \begin{figure}[hbt]
 %     % \includegraphics[width=\textwidth]{fig/p3/menzies.pdf}    
 %     \caption[Menzies INR]{Level grid representation using minibatch gradient descent.}
-%     \label{fig:vert_grad}
+%     \label{fig:vertgrad}
 % \end{figure}
 
 
