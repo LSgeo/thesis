@@ -100,7 +100,7 @@ Resolution can be increased by:
 % modelling
 %
 
-\section{Traditional methods for enhancing resolution}
+\subsection{Traditional methods for enhancing resolution}
 As outlined in \Cref{sec:introgrids}, resolution is a product of sample distance and density, and gridded rasters have a specific number of cells in each axis depending on the spatial extent.
 Upsampling raster data to larger height and width dimensions is commonplace, and generally performed by numerical image filters such as the cubic spline \parencite{keysCubicConvolutionInterpolation1981} or Lanczos filter \parencite{lanczos1988applied}.
 Some of these interpolation methods are the basis of the gridding methods previously outlined, and simply selecting a smaller cell size during gridding is sufficient to achieve a larger image raster.
@@ -115,7 +115,7 @@ Downward continuation offers the benefit of high-resolution data from low-resolu
 However, due to the inclusion of sensor noise, the practicable limit of numerical methods is six times the low-resolution cell size.
 Recent approaches in machine learning have overcome this limit, alongside alternative methods for enhancing aeromagnetic survey resolution.
 
-\section{Geophysical data in machine learning}
+\section{Geophysics and machine learning}
 \label{sec:introdata}
 % e.g. limited training data to deal with diverse geological features, geology various regionally - different potential fields features and range, etc....
 Natural image raster data are ubiquitous in computer vision machine learning.
@@ -201,7 +201,7 @@ Noise injection was later used in this framework as a method to drive diversity 
 %  introduce learning implicit representation from imagery and their application for imputation, I think it's useful to link this resolution improvement in geophysics as imputation problem.
 
 
-\section{Machine learning in geoscience}
+\subsection{Machine learning in geoscience}
 \label{sec:introgeoml}
 
 Geoscience is a diverse field, with ubiquitous use of raster data.

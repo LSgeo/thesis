@@ -266,14 +266,14 @@ Local Texture Estimator \parencite{leeLocalTextureEstimator2022} is implemented 
 Because total magnetic intensity data are single channel, the input and output channel count are set to one.
 The SwinIR feature encoder implementation by is used, and the MLP decoder retains the same configuration as the authors.
 
-\subsection{Quantitative Measure}
+
+\section{Results}
+\label{sec:2results}
+\subsubsection{Quantitative Measure}
 Due to the dynamic range of magnetic anomaly grids and the relative importance of structural accuracy for gridded data, image quality assessment such as peak signal-to-noise ratio or mean-squared error are an inadequate quantitative measure of upscaling performance for geophysics.
 In addition to mean-square error, FSIM \parencite{linzhangFSIMFeatureSimilarity2011} is used to quantify the quality of the super-resolved image.
 FSIM is a full reference image similarity metric that quantifies structural similarity, rather than individual cell values.
 %TODO complain about SSIM Structural Similarity (SIM) \parencite{wangImageQualityAssessment2004}
-
-\section{Results}
-\label{sec:2results}
 Model performance is quantified using FSIMi in Cref{tab:2metrics}, and it is seen that fine-tune training increases FSIM score for the task of super-resolution for aeromagnetic grids over the baseline model.
 
 % \begin{table}[hbt]
@@ -354,7 +354,7 @@ The synthetic forward models are associated with geological history class labels
 It is possible to filter the data to contain only the events of interest, which would prepare a baseline model targeting a single geological domain.
 The baseline model prepared in this work demonstrated good performance across a range of geological domains, but may be improved for targeted domains using the filtered approach.
 
-\section{Conclusion}
+\section{Conclusions}
 \label{sec:2conclusion}
 An approach for upscaling geologically diverse geophysical survey grid data is proposed, which adopts transfer learning from synthetic data to better generalise super-resolution across different geological domains.
 Using the preeminent LTE neural network, synthetic magnetic forward models were used to prepare a baseline model capable of upscaling survey grids at four times scale.

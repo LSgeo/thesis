@@ -101,7 +101,7 @@ While recovery of potential field grids using a compressed sensing approach is o
 Compressed sensing relies on the theory that a signal has a sparse representation in some transform domain, and a deeper exploration of the comparison between INR and compressed sensing remains to be performed.
 Compressed sensing recovers the signal through linear transformations, while neural networks allow convenient modelling of non-linear transformations.
 
-\section{Automatic Differentiation}
+\subsection{Automatic Differentiation}
 Automatic differentiation (AD) refers to one of several methods for computing derivatives, specifically to the method of accumulating derivatives during function evaluation \parencite{baydinAutomaticDifferentiationMachine2018}.
 This method underpins modern machine learning frameworks such as Pytorch \parencite{paszkePyTorchImperativeStyle2019}, which is used to construct the network architecture and perform training in this work.
 In these frameworks, training is performed by evaluating a set of inputs using the current model parameters during a forward pass, while accumulating the partial derivatives of the result with respect to those parameters, to optimise an objective (loss) function.
