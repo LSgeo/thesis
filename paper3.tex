@@ -14,7 +14,7 @@
 \affil{Centre for Data-Driven Geoscience, School of Earth Sciences, The University of Western Australia (M006), 35 Stirling Highway, 6009 Perth, Australia}
 \affil{Department of Computer Science and Software Engineering, The University of Western Australia (M002), 35 Stirling Highway, 6009 Perth, Australia}
 \date{\today}
-\maketitle{}
+% \maketitle{}
 
 \begin{abstract}
     The recent use of spatial coordinate features in multilayer perceptron (MLP) neural networks provides opportunities for novel applications in potential field geophysics.
@@ -230,8 +230,8 @@ While the rim feature can still be interpreted within this lower level grid, the
 
 \begin{figure}[hbt]
     \centering{}
-    \includegraphics[width=1.0\linewidth]{fig/p3/P864_grid_comparison_35m.pdf}
-    \caption[Grid prediction outside the nominal altitude]{A constant level grid queried from the INR at the height of \qty{35}{\m} (middle).}
+    \includegraphics[width=1.0\linewidth]{fig/p3/35_level_grid.pdf}
+    \caption[Grid prediction outside the nominal altitude]{A constant level grid queried from the INR at the height of \qty{35}{\m}.}
     % AWAGS is 80 m, but we see nothing useful at 80m
     \label{fig:grid35}
 \end{figure}
@@ -312,7 +312,7 @@ or denoted in three dimensions,
     \frac{\partial{}^2\phi}{\partial{}x^2} + \frac{\partial{}^2\phi}{\partial{}y^2} + \frac{\partial{}^2\phi}{\partial{}z^2} = 0.
 \end{equation}
 
-Inspired by the approach of \textcite{raissiPhysicsinformedNeuralNetworks2019}, a geophysics informed network could include a Laplace criterion,
+Inspired by the approach of \textcite{raissiPhysicsinformedNeuralNetworks2019}, a geophysics-informed network could include a Laplace criterion,
 \begin{equation}
     \label{eqn:cri_laplace}
     \mathcal{L}_{PDE} = \frac{1}{S_i}\sum_{i=1}^{S_i} \left(\frac{\partial{}^2f}{\partial{}x^2} + \frac{\partial{}^2f}{\partial{}y^2} + \frac{\partial{}^2f}{\partial{}z^2}\right)^2,

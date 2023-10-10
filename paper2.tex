@@ -14,7 +14,7 @@
 \affil{Centre for Data-Driven Geoscience, School of Earth Sciences, The University of Western Australia (M006), 35 Stirling Highway, 6009 Perth, Australia}
 \affil{Department of Computer Science and Software Engineering, The University of Western Australia (M002), 35 Stirling Highway, 6009 Perth, Australia}
 \date{\today}
-\maketitle{}
+% \maketitle{}
 
 \begin{abstract}
     Contemporary super-resolution is a deep learning technique to increase the resolution and high-frequency details of raster data.
@@ -102,7 +102,7 @@ In these rasters, each pixel is regularly distributed, and the resolution is iso
 These data are encoded to regular arrays of pixel values, commonly as three-channel rasters representing the red, green, and blue intensities of each pixel.
 For natural images, a common approach to generating low-resolution data is to interpolate the high-resolution image to a smaller size using a transform such as bicubic downsampling.
 Aerogeophysical grids are distinct from these image rasters due to the potential field sampling and grid interpolation process outlined in \Cref{sec:resinsurveys}, and the extent to which widely spaced low-resolution geophysical line data can be enhanced, and characteristics of the resulting super-resolved grids remain to be fully explored.
-Most critically, aeromagnetic data are highly sampled in the direction of flight lines but are under-sampled in the line perpendicular direction.
+Most critically, aeromagnetic data are highly sampled in the direction of flight lines but are under-sampled in the line-perpendicular direction.
 The resulting grid rasters may have isotropic cell size, but the frequency content in each axis is anisotropic, being a factor of the sampling frequency in the line-perpendicular (low) and line-parallel (high) directions.
 Being sampled as a single component of the vector potential field, these data contain a single channel, and the data contain multiple sources of noise components.
 Furthermore, the features present in these data are dependent on the subsurface geology, varying between smooth domains without significant near-surface magnetisation, through to highly deformed igneous stratigraphic units with complex high-intensity structures.
@@ -146,7 +146,7 @@ To precondition the network toward learning high-resolution features, a long-ran
 Specifics of the LTE implementation to investigate the performance of SR for geophysical grids from a range of geological domains are detailed in \Cref{sec:2lte}.
 
 \begin{figure}[hbt]
-    % \includegraphics[width=\textwidth]{fig/p2/image1.png}
+    \includegraphics[width=\linewidth]{fig/p2/temp_lte.png}
     \caption[The LTE network]{
         A simplified representation of the super-resolution LTE network.
         The encoder is marked as \(E_\phi{}\).
@@ -190,7 +190,7 @@ The line direction is nominally ``North-South'' such that entire array columns a
 The \(n = 1\) case is the high-resolution target (HR) with every fourth line of GT sampled at a nominal line spacing of \qty{80}{\m}, similar to real-world regional high-resolution airborne geophysical surveys.
 These sampled line data are gridded at a cell size of \qty{20}{\m} using the cubic method from Verde \parencite{uieda2018}, which is one quarter of the line spacing, following the convention of \textcite{reidAeromagneticSurveyDesign1980}.
 It is important to note that while the HR grid has a cell size of \qty{20}{\m}, it is not equivalent to the \qty{20}{\m} cell size GT grid, because unsampled cells are interpolated during the gridding process.
-The result is a loss of high frequency detail in the line perpendicular direction, as well as the loss of features present only in the unsampled lines.
+The result is a loss of high frequency detail in the line-perpendicular direction, as well as the loss of features present only in the unsampled lines.
 
 The low-resolution input data (LR) are sampled from GT at \(n = 4\).
 At this scale the LR line spacing is \qty{320}{\m}, the cell size is \qty{80}{\m}, and the array shape is \numproduct{45 x 45} cells, covering the same extent as HR\@.
@@ -215,8 +215,11 @@ The high frequencies required to define the second feature are not captured by t
 \Cref{fig:lrdata}B is recorded with a geological history of ``stratigraphy, tilt, fold, fold, fold'', and presents two folded negative anomalies that converge to the south.
 Insufficient sampling in the LR grid causes the spatial relation to be incorrectly interpreted as converging in the centre of the figure, which may be interpreted differently than in the target high-resolution grid.
 
-\begin{figure}[hbt]
-    % \includegraphics[width=\textwidth]{fig/p2/image1.png}
+\begin{figure}[hbt!]
+    \begin{center}
+        \includegraphics[width=0.75\linewidth]{fig/p2/temp_lr1.png}
+        \includegraphics[width=0.75\linewidth]{fig/p2/temp_lr2.png}
+    \end{center}
     \caption[Low-resolution geophysics grids]{
         The result of the proposed sampling and gridding on a selection of synthetic tiles loaded from the collection of \parencite{jessellNoddyverseMassiveData2022} at 4x scale.
         Note the coloured lines and accompanying tick marks in the ground-truth grid (GT, left) indicate cells which are sampled and used for gridding in the low-resolution grid (LR, right).
@@ -266,12 +269,28 @@ The SwinIR feature encoder implementation by is used, and the MLP decoder retain
 
 \subsection{Quantitative Measure}
 Due to the dynamic range of magnetic anomaly grids and the relative importance of structural accuracy for gridded data, image quality assessment such as peak signal-to-noise ratio or mean-squared error are an inadequate quantitative measure of upscaling performance for geophysics.
-In addition to mean-square error, Feature Similarity (FSIM) \parencite{linzhangFSIMFeatureSimilarity2011} is used to quantify the quality of the super-resolved image, because it is a full reference image similarity metric that quantifies structural similarity using phase and local gradient magnitude components.
-%TODO complain about FSIM
+In addition to mean-square error, FSIM \parencite{linzhangFSIMFeatureSimilarity2011} is used to quantify the quality of the super-resolved image.
+FSIM is a full reference image similarity metric that quantifies structural similarity, rather than individual cell values.
+%TODO complain about SSIM Structural Similarity (SIM) \parencite{wangImageQualityAssessment2004}
 
 \section{Results}
 \label{sec:2results}
-It is seen that fine-tune training increases FSIM score for the task of super-resolution for aeromagnetic grids over the baseline model.
+Model performance is quantified using FSIM, and it is seen that fine-tune training increases FSIM score for the task of super-resolution for aeromagnetic grids over the baseline model.
+
+\begin{table}[hbt]
+    \includegraphics[width=\linewidth]{fig/p2/temp_tbl.png}
+    \begin{tabular}{ll}
+                   & Reserved Synthetic Dataset & Reserved Aeromagnetic Dataset \\
+                   & Mean / Standard Dev.       & Mean / Standard Dev.          \\
+        \hline{}
+        Baseline   & 0                          & 0                             \\
+        Fine-Tuned & 0                          & 0                             \\
+    \end{tabular}
+    \caption[Accuracy Metrics]{Accuracy metrics for each upsampling method. The best performing method for each metric is bolded.}
+    \label{tab:3metrics}
+\end{table}
+
+
 Qualitative results are shown to compare the outputs from the two models, the baseline model that is trained with synthetic data and the fine-tuned model trained with open access survey data.
 
 \Cref{fig:srdata23,fig:srdata14,fig:srdata17,fig:srdata18} contain open access grid data from the Eastern Goldfields Superterrane of Western Australia, prepared using the proposed method.
@@ -287,7 +306,7 @@ The fine-tuned model (\Cref{fig:srdata23} e) resolves the correct strike, and se
 The enhanced structural similarity is reflected by the higher SSIM score in the fine-tuned model.
 
 \begin{figure}[hbt]
-    \includegraphics[width=\textwidth]{fig/p2/srcomp_23.pdf}
+    \includegraphics[width=0.9\linewidth]{fig/p2/srcomp_23.pdf}
     \caption[Super-resolution geophysics grid results]{Super-resolution predictions on open access data, prepared using the proposed method.
         Explanation in-text.
         Grid A is the super-resolution prediction using the baseline model, while grid B is the SR prediction using the fine-tuned model.}
@@ -295,7 +314,7 @@ The enhanced structural similarity is reflected by the higher SSIM score in the 
 \end{figure}
 
 \begin{figure}[hbt]
-    \includegraphics[width=\textwidth]{fig/p2/srcomp_14.pdf}
+    \includegraphics[width=0.9\linewidth]{fig/p2/srcomp_14.pdf}
     \caption[Super-resolution geophysics grid results]{Super-resolution predictions on open access data, prepared using the proposed method.
         Explanation in-text.
         Grid A is the super-resolution prediction using the baseline model, while grid B is the SR prediction using the fine-tuned model.}
@@ -303,7 +322,7 @@ The enhanced structural similarity is reflected by the higher SSIM score in the 
 \end{figure}
 
 \begin{figure}[hbt]
-    \includegraphics[width=\textwidth]{fig/p2/srcomp_17.pdf}
+    \includegraphics[width=0.9\linewidth]{fig/p2/srcomp_17.pdf}
     \caption[Super-resolution geophysics grid results]{Super-resolution predictions on open access data, prepared using the proposed method.
         Explanation in-text.
         Grid A is the super-resolution prediction using the baseline model, while grid B is the SR prediction using the fine-tuned model.}
@@ -311,7 +330,7 @@ The enhanced structural similarity is reflected by the higher SSIM score in the 
 \end{figure}
 
 \begin{figure}[hbt]
-    \includegraphics[width=\textwidth]{fig/p2/srcomp_18.pdf}
+    \includegraphics[width=0.9\linewidth]{fig/p2/srcomp_18.pdf}
     \caption[Super-resolution geophysics grid results]{Super-resolution predictions on open access data, prepared using the proposed method.
         Explanation in-text.
         Grid A is the super-resolution prediction using the baseline model, while grid B is the SR prediction using the fine-tuned model.}
