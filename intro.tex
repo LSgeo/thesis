@@ -236,7 +236,7 @@ These data present a large amount of uniformly sampled and noise free grids from
 \section{Research Contributions and Thesis Structure}
 This thesis is presented as a series of papers which are published or in-preparation for publication.
 These are presented in Cref{ch:paper1,ch:paper2,ch:paper3}, each with a brief contextual introduction.
-Key findings and contributions of the research are discussed in Cref{ch:discussion}, followed by overall thesis conclusions in Cref{ch:conclusion}.
+Key findings and summary conclusions of the research are discussed in \Cref{ch:conclusions}.
 
 Cref{ch:paper1} presents published work on an initial investigation into the technique of deep learning super-resolution for magnetic potential field data.
 To our knowledge, this chapter presents the first investigation of deep learning super-resolution of gridded magnetic potential field data within the literature.
@@ -244,9 +244,9 @@ Two convolutional neural network models namely RDN and ESRGAN from the contempor
 With uncertainty on the amount of data required to train a SR model for magnetic grids, a dataset comprising readily available high- and low-resolution TMI grid pairs is formed using published state magnetic compilation maps of Western Australia \parencite{brett20MagneticMerged2020}.
 These data contain magnetic features and textures from a range of geological domains.
 The chapter concludes by observing the success of SR on magnetic features, characterising the performance of the two adapted networks, and recommending the method based on RDN as being more reliable for the SR task.
-The primary contribution of Cref{ch:paper1} is establishing the capacity of the SR networks developed for natural images in computer vision to extend to the distinctly different data of low-resolution aeromagnetic geophysics.
+The primary contribution of \Cref{ch:paper1} is establishing the capacity of the SR networks developed for natural images in computer vision to extend to the distinctly different data of low-resolution aeromagnetic geophysics.
 
-Following the findings of the previous chapter, Cref{ch:paper2} addresses the need for more generalisable model training for real-world super-resolution.
+Following the findings of the previous chapter, \Cref{ch:paper2} addresses the need for more generalisable model training for real-world super-resolution.
 It undertakes these aims by training a baseline synthetic model with data from a contemporaneously published collection of magnetic grids forward modelled from realistic geology \parencite{jessellNoddyverseMassiveData2022}, on data from over \num{300} distinct geological histories.
 It subsequently fine-tune trains the baseline model on real-world high-resolution state magnetic data.
 Furthermore, it adopts advances in the machine learning literature by implementing the LTE network \parencite{leeLocalTextureEstimator2022}.
@@ -254,7 +254,7 @@ The proposed method simulates aeromagnetic line sampling of a potential field ex
 While the baseline model can generalise to real-world data, some incorrect reconstructions remain.
 By fine-tune training the model with transformed real-world state map data, these errors are rectified, and the structural accuracy is improved.
 
-Cref{ch:paper3} reports the use of coordinate multilayer perceptron (CMLP) neural networks for representation learning of a surveyed potential field extent.
+\Cref{ch:paper3} reports the use of coordinate multilayer perceptron (CMLP) neural networks for representation learning of a surveyed potential field extent.
 With the proposed method, scattered line data can be encoded into the grid, and cells queried at interpolating coordinates to predict regularised grids.
 CMLP networks are highly suited for processing spatial data such as point sampled geophysics surveys.
 Additionally, spatial derivatives are calculated on the learnt function directly.
@@ -262,12 +262,12 @@ Additionally, spatial derivatives are calculated on the learnt function directly
 Both tasks are fundamental to interpretation and processing in geophysics, and by commencing the methods from point sample data, the number of individual processing steps is reduced, and the application is fully trainable.
 To our knowledge, this research is the first description of deep learning implicit neural representation for aeromagnetic potential field data in the literature.
 
-Cref{ch:discussion} presents a synthesis discussion for the prior chapters. Given the recency of deep learning super-resolution and implicit neural representation, multiple avenues of future opportunities are identified.
+\Cref{ch:futurework} presents a synthesis discussion for the prior chapters. Given the recency of deep learning super-resolution and implicit neural representation, multiple avenues of future opportunities are identified.
 These aim to increase the adoption of super-resolution in geophysics by addressing apprehension toward the reliability of interpretation of the outputs.
-A synthesis comparison of the SR networks adapted in Cref{ch:paper1,ch:paper2} is also presented, which prompts questions regarding model and dataset construction.
-The use of a priori information well understood to geophysics is also discussed, with potential application in both super-resolution and implicit neural representation.
+A synthesis comparison of the SR networks adapted in \Cref{ch:paper1,ch:paper2} is also presented, which prompts questions regarding model and dataset construction.
+The use of \emph{a priori} information well understood to geophysics is also discussed, with potential application in both super-resolution and implicit neural representation.
 
-Finally, overall conclusions are presented in Cref{ch:conclusion}.
+Finally, overall conclusions are presented in \Cref{ch:conclusions}.
 
 \printbibliography{}
 
