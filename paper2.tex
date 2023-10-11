@@ -31,7 +31,7 @@
 \section{Introduction}
 We propose a method for super-resolution (SR) upscaling of aeromagnetic geophysics data from diverse geological provenance.
 This method uses transfer learning \parencite{tanSurveyDeepTransfer2018} from magnetic data forward modelled from a collection of synthetic geological models with varied histories \parencite{jessellNoddyverseMassiveData2022}, and fine tuning with real-world data.
-SR employed in this work leverages a contemporary neural network \parencite{leeLocalTextureEstimator2022}, with a realistic method for sampling high-resolution grids and gridding them to low-resolution.
+SR employed in this work leverages a contemporary neural network \parencite{leeLocalTextureEstimator2022}, with a realistic method for sampling and gridding high- and low- resolution data.
 The method is suitable for typical low-resolution regional aeromagnetic surveys in Australia.
 
 \subsection{Resolution in geophysical data}
@@ -160,7 +160,7 @@ The remainder of this paper is structured as follows.
 Results are presented in \Cref{sec:2results} and are discussed in \Cref{sec:2discussion}.
 Conclusions are drawn in \Cref{sec:2conclusion}.
 
-\section{Data and Experimental Methods}
+\section{Data and experimental methods}
 \label{sec:2methods}
 A realistic geophysical low-resolution transform is developed by simulating aeromagnetic sampling of high-resolution survey grid datasets, and re-gridding the resulting samples.
 The proposed dataset methodology uses synthetic forward modelled potential field data to train a selected performant super-resolution network, and the resulting baseline model is subsequently used for transfer learning to fine-tune train the model with real aeromagnetic survey grid data.
@@ -271,7 +271,7 @@ The SwinIR feature encoder implementation by is used, and the MLP decoder retain
 
 \section{Results}
 \label{sec:2results}
-\subsubsection{Quantitative Measure}
+\subsubsection{Quantitative measure}
 Due to the dynamic range of magnetic anomaly grids and the relative importance of structural accuracy for gridded data, image quality assessment methods typically used for RGB images such as peak signal-to-noise ratio or mean-squared error are an inadequate quantitative measure of upscaling performance for geophysics.
 In addition to mean-square error, FSIM \parencite{linzhangFSIMFeatureSimilarity2011} is used to quantify the quality of the super-resolved image.
 FSIM is a full reference image similarity metric that quantifies structural similarity, rather than individual cell values.
@@ -363,7 +363,7 @@ Using the preeminent LTE neural network architecture, synthetic magnetic forward
 Further, this baseline model was fine-tuned with open access survey grid data, prepared with a low-resolution transform appropriate for aeromagnetic geophysics.
 Low-resolution features incorrectly enhanced by the synthetic baseline model were correctly resolved following fine-tune training with these data, and the model is capable of upscaling grids with \qty{320}{\m} line spacing to \qty{80}{\m} line spacing with an average FSIM score of \num{0.9731}.
 
-% \section{Declaration of Competing Interest}
+% \section{Declaration of competing interest}
 % The authors declare the following financial interests / personal relationships which may be considered as potential competing interests: This work was supported by a Rio Tinto Iron Ore PhD scholarship.
 
 \printbibliography{}

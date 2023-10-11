@@ -16,6 +16,7 @@
 \date{2022-09-21}
 % \maketitle{}
 
+\bigskip
 \begin{abstract}
     Densely sampled geophysical surveys are a key driver for mineral exploration, but sample density, and therefore grid resolution, is limited by survey cost.
     Consequently, computational methods are resorted to for upsampling, or `super-resolving', of gridded geophysical survey data.
@@ -179,7 +180,7 @@ The prediction of grid cell values for interpolation is common practice in geoph
 Existing methods, including nearest neighbour and bicubic filtering, have limited capacity to predict high frequency details to incorporate in upsampled grids, limiting the amount of detail these grids can capture and display.
 Recent super-resolution machine learning methods have demonstrated capacity to accurately predict high frequency components in grids from a variety of scientific disciplines, and application of these methods to geophysical potential fields will be investigated here.
 
-\section{Materials and Methods}
+\section{Materials and methods}
 \subsection{Geophysical context}
 The Eastern Goldfields Superterrane of Western Australia is extensively covered by aeromagnetic surveys of \qty{400}{\metre} line spacing or better, especially over its South-Western extent.
 Large survey extents are government sponsored through the Exploration Incentive Scheme \parencite[e.g.][]{griffinStimulatingGreenfieldsExploration2010}, with these low-resolution regional surveys serving to identify prospective areas to undertake surveys at higher resolution.
@@ -233,7 +234,7 @@ Inference is carried out using the frozen weights of the trained upsampling mode
 Inference is performed on a tiled basis due to the size of input grids being too large for GPU RAM, and the results may be patched together for full extent visualisation and analysis, or displayed as single tiles.
 Predicted outputs are inverse normalised to return the cell values to appropriately scaled TMI units.
 
-\subsection{Accuracy Metrics}
+\subsection{Accuracy metrics}
 The functional aim of super-resolution geophysics is to accurately predict realistic high frequency details to add to a low-resolution grid.
 To quantify this, we calculate root mean square error (RMSE) and structural similarity metrics (SSIM and MS-SSIM), on TMI, high pass filtered TMI, and first vertical derivative (1VD) filtered TMI results for each upsampling method across several sample extents.
 Euclidean accuracy measures like RMSE quantify the per-pixel accuracy of a predicted grid compared to its corresponding high-resolution ground truth grid.
@@ -306,7 +307,7 @@ Predictions from ESRGAN+ commonly show a ripple-like texture (\Cref{fig:jhillvis
 The effect of this texture occasionally reveals features matching the high-resolution groundtruth that are not predicted by the bicubic or RDN\textdaggerdbl{} upsampling, but the excess of “noisy” features present in ESRGAN+ predictions will likely limit its applicability when interpreting low-resolution grids with no corresponding groundtruth.
 
 \begin{figure}[hbtp]
-    \includegraphics[width=\linewidth]{fig/p1/filtered.png}
+    \includegraphics[width=\linewidth,trim={0 0 0 -5mm},clip]{fig/p1/hpfilt.jpg}
     \caption[High Pass filtered results]{High pass filtered test tile and its upsampled counterparts.
         The cut-off for the high pass Butterworth filter was selected with wavelength equal to the Nyquist wavelength of the LR grid, i.e.,\ four times the HR Nyquist wavelength.
     }
@@ -349,7 +350,7 @@ This can be seen in the line profile (\Cref{fig:jhilldykes}, f), where a series 
 The ESRGAN+ prediction profile shows two distinct low TMI features, but they are poorly located and incoherent in the TMI grid (\Cref{fig:jhilldykes} e), which shows an example of the ripple-mark artefact previously noted.
 
 \begin{figure}[hbtp]
-    \includegraphics[width=\linewidth,trim={0 0 0 0},clip]{fig/p1/jhillvis.jpg}
+    \includegraphics[width=\linewidth,trim={0 0 0 0},clip]{fig/p1/1vd.jpg}
     \caption[First Vertical Derivative SR TMI over the Mt Mason resource project]{First Vertical Derivative TMI over the Mt Mason resource project, with the super-resolution predictions (d, e) showing a variety of inference artefacts.
     Red asterisks (*) show a vertical tile boundary present as a 3--4 pixel-wide error in predicted TMI value.
     Red caret (\^{ }) indicates a region of subtle ripple-mark textural artefact, only present in ESRGAN+ predictions.
@@ -394,7 +395,7 @@ Convolutional neural network architectures, such as RDN and ESRGAN, are capable 
 These super-resolved grids contain structural features and textural information that are accurate against ground truth high-resolution grids, that were otherwise unrecoverable through existing interpolation methods.
 The method and existing trained models can be applied to other magnetic grid extents, in the Eastern Goldfields Superterrane and beyond.
 
-% \section{Declaration of Competing Interest}
+% \section{Declaration of competing interest}
 % The authors declare the following financial interests / personal relationships which may be considered as potential competing interests: This work was supported by a Rio Tinto Iron Ore PhD scholarship.
 
 \printbibliography{}

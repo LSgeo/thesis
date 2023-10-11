@@ -8,12 +8,12 @@
 The subsurface continuation of exposed geology can be extrapolated and interpolated using structures mapped in surveys of the Earth's naturally occuring potential fields.
 Potential field surveys offer low-cost investigations over a large spatial extent, and are routinely used for geological mapping and interpretation \parencite{nabighian75thAnniversaryHistorical2005}.
 For this reason, magnetic field surveys are commonly used by geophysicists for geological mapping and interpretation toward understanding the Earth in three dimensions.
-Scattered surveys are widely used when interpolated to grid rasters, and interpreted individually or integrated with many other datasets for predicting the subsurface for processes such as numerical modelling and inversion.
+Scattered surveys are commonly interpolated to grid rasters, and interpreted individually or integrated with other datasets for predicting the subsurface for processes such as numerical modelling and inversion.
 In these tasks, the spatial resolution of the grid is a critical factor in their ability to define geological detail \parencite{islesGeologicalInterpretationAeromagnetic2018}.
 The role of high-resolution details in these geophysical methods is becoming more important to exploration as resources are increasingly sought from below sedimentary cover.
-Resolution enhancement for natural images has seen recent success from the use of deep learning \parencite{moserHitchhikerGuideSuperResolution2023}, however, it is not understood if these methods could extend to geophysics data, which differ significantly to the natural images used for training in prior enhancement methods.
+Resolution enhancement for natural images has seen recent success from the use of deep learning \parencite{moserHitchhikerGuideSuperResolution2023}, however, it is not understood if these methods can extend to geophysics data, which differ significantly to the natural images used for training in prior enhancement methods.
 
-\section{Research Aims}
+\section{Research aims}
 The overall aim of this thesis is to adapt and extend the use of deep learning to improve the processing and enhancement of potential field geophysics data. The three aims of this thesis are as follows:
 
 \begin{itemize}
@@ -21,7 +21,7 @@ The overall aim of this thesis is to adapt and extend the use of deep learning t
 
     \item{} Construct a model framework to ensure example-based models can be trained while incorporating diverse types of geological features manifested in magnetic data, and evaluate the effectiveness of the framework with a resolution enhancement technique based on survey line spacing;
 
-    \item{} Evaluate a method for representation learning of potential field survey point data, which can predict a grid directly from point located survey data, as well as grids of the directional derivatives calculated of the learned function using an automatic differentiation framework.
+    \item{} Evaluate a method for representation learning of potential field survey point data, which can predict a grid directly from point located survey data, as well as grids of the directional derivative of the learned function calculated using an automatic differentiation framework.
 \end{itemize}
 
 The above aims are investigated using case studies with open access aeromagnetic data provided by Geoscience Australia.
@@ -32,11 +32,11 @@ Airborne surveys of the Earth's magnetic or gravitational potential fields are r
 Surveys may also be collected on the ground, or less commonly in exploration by ship or satellite, with most processing methods and interpretation shared between all forms of acquisition.
 Aeromagnetic surveys are among the lowest cost geophysical method \parencite{dentithGeophysicsMineralExploration2014}.
 
-There are many aspects of survey design controlling the resolvable detail within the survey data.
+There are many aspects of survey design controlling the resolvable detail within survey data.
 When acquiring data, aircraft fly straight transect lines at a safe elevation above topography, known as the topography drape.
+Higher frequencies within potential field data diminish with increasing source-sensor distance, therefore the lower the height, the more high-frequency components will be captured by the sensor.
 Surveys are flown with a heading in which data will be acquired along line.
 For regional and contemporary surveys this is recommended to be North-South, however, early practice was to survey perpendicular to the dominant geological strike, under the expectation of sampling the greatest frequency of change in magnetic intensity \parencite{islesGeologicalInterpretationAeromagnetic2018}.
-Higher frequencies within these data diminish with increasing source-sensor distance, therefore the lower the height, the more high-frequency components will be captured by the sensor.
 Acquisition along flight lines is sampled at a rate of \qty{10}{\hertz} or greater, which corresponds to an interval of \qty{7}{\m} or shorter at nominal flight speeds of \qty{70}{\m\per\s} \parencite{goodwinAirborneMagneticRadiometric2023}.
 The spacing between lines is a factor of the scale of investigation and the cost of acquisition, and regional pre-competitive data in Australia targets state-wide coverage at \qty{400}{\m}, which is generally regarded as the upper limit of usefulness to exploration \parencite{howardAirborneGeophysicalCoverage2004}.
 These low-resolution surveys, funded by government geoscience agencies, are a key driver in greenfields exploration and are released as open file data.
@@ -47,7 +47,7 @@ The collected data may contain millions of samples scattered in three dimensions
 
 \subsection{Survey data regularisation}
 \label{sec:introgrids}
-Survey data can be interpreted as one dimensional transects, but more commonly they are regularised to a two-dimensional grid raster for interpretation in a process termed gridding.
+Survey data can be interpreted as one-dimensional flight line transects, but more commonly they are regularised to a two-dimensional grid raster for interpretation in a process termed gridding.
 The resulting interpolated array contains uniformly spaced nodes and is referred to as a grid.
 Grids are raster data, where each pixel stores a scalar measurement of a specific property.
 In geophysics and throughout this thesis, these are referred to as cells, and the property is a measure of the strength of the magnetic field at a specific location.
@@ -57,7 +57,7 @@ The location recorded at a sample point is the geographic latitude and longitude
 These data may be transformed to a flat projected system, where spatial dimensions are expressed in metres.
 
 There are numerous conventional gridding methods, and novel methods are frequently proposed in the literature.
-The simplest use surrounding samples for interpolation, such as choosing the closest sample value or applying a transformation function to the neighbouring samples.
+The simplest use the surrounding samples for interpolation, such as choosing the closest sample value or applying a transformation function to the neighbouring samples.
 Of those most commonly used in potential field geophysics, these are minimum curvature \parencite{briggsMachineContouringUsing1974}, splines \parencite{bhattacharyyaBicubicSplineInterpolation1969,shureHarmonicSplinesGeomagnetic1982,smithGriddingContinuousCurvature1990}, and equivalent sources \parencite{dampneyEquivalentSourceTechnique1969, solerBetterStrategyInterpolating2020}.
 Splines are used in bi-directional gridding, which is well-suited for aeromagnetic surveys, where the sample data are first interpolated in the line-parallel direction, and the intermediate product is interpolated in the line-perpendicular direction \parencite{dentithGeophysicsMineralExploration2014}.
 A method known as kriging is used in other areas of geoscience, such as geochemical mapping, and makes use of statistical properties of the known distribution \parencite{hansenInterpretiveGriddingAnisotropic1993,davis1986statistics}.
@@ -68,28 +68,28 @@ A review of spatial interpolation methods is provided in \textcite{liReviewCompa
 \subsection{A definition for geophysical resolution}
 In interpolated grids the spatial dimension of each cell is referred to as the cell size.
 As previously stated, resolvable detail in geophysical surveys is a product of the distance between the causative magnetic body and the sensor, and the line spacing \parencite{islesRelationshipsGeologicalResolution1992,islesGeologicalInterpretationAeromagnetic2018,dentithGeophysicsMineralExploration2014}.
-Height is easily controlled by flying the lowest safe and sufficiently smooth topography drape, and along-line sampling is performed at a constant high rate, so the key factor controlling resolution in aeromagnetic survey design is the line spacing.
+Height is controlled by flying the lowest safe and sufficiently smooth topography drape, and along-line sampling is performed at a constant high rate, so the key factor controlling resolution in aeromagnetic survey design is the line spacing.
 Further survey design considerations for airborne geophysics are outlined in \textcite{goodwinAirborneMagneticRadiometric2023,islesGeologicalInterpretationAeromagnetic2018,reidAeromagneticSurveyDesign1980}.
 Each gridding method includes a final cell size parameter selectable by the geophysicist, with a long-standing guideline of one third to one fifth the line spacing.
 This sufficiently preserves detail in areas of high sampling, while avoiding excessive interpolated cells in areas of low sampling, which may lead to artefacts.
-Because of the sampling frequency of nominally \qty{7}{\m} in the flight line direction, and  up to \qty{400}{\m} in the line-perpendicular direction, the resulting grid resolution will be anisotropic at best, and uniformly low-resolution at worst.
+If the sampling frequency is nominally \qty{7}{\m} in the flight line direction, and up to \qty{400}{\m} in the line-perpendicular direction, the resulting grid resolution will be anisotropic at best, and uniformly low-resolution at worst.
 
 An important property of sampled data is the Nyquist frequency, \[f_{Nyquist} = f_{sampling} / 2.\]
-This is the lowest frequency at which a bandwidth limited signal may be sufficiently sampled, below which higher frequencies will be incorrectly recorded as aliasing.
+This is the lowest frequency \(f\) at which a bandwidth limited signal may be sufficiently sampled, below which higher frequencies will be incorrectly recorded as aliasing.
 An aliased signal contains spurious low-frequency features caused by the sampling, not the underlying signal.
 This limiting frequency applies to each sampling direction in surveys, as well as the cell size of the grid.
 The smallest resolvable feature in each of these can be spatially described by wavelength, as the inverse of Nyquist frequency.
-In low-resolution aeromagnetic surveys of \qty{400}{\m} line spacing, strong variations of magnetic intensity in the line-perpendicular direction  that occur over a distance shorter than \qty{800}{\m} will be aliased.
+For example, in low-resolution aeromagnetic surveys of \qty{400}{\m} line spacing, strong variations of magnetic intensity in the line-perpendicular direction  that occur over a distance shorter than \qty{800}{\m} will be aliased.
 When gridded at \qty{80}{\m} cell size, the corresponding limit on resolvable detail is features as small as \qty{160}{\m}.
 % This choice of cell size will effectively filter out features in the line-parallel direction that vary strongly, from those possibly present at \qty{14}{\m} through to \qty{160}{\m}.
 Depending on the complexity of the geological domain, this may cause spatial aliasing in one direction.
-This is visible in grids where features take on a blocky or stepped appearance, referred to as a beading artefact, or generally in this thesis as a low-resolution artefact.
+This is visible in grids where features take on a blocky or stepped appearance, referred to as  beading, or generally in this thesis, as a low-resolution artefact.
 Low-resolution gridded aeromagnetic data refers to surveys with a wide line spacing causing a lack of high-frequency details in the line-perpendicular direction, resulting in potential artefacts, and overly smooth or missing details in grid data.
 
 The definition of resolution throughout this thesis is:
 
 \bigskip{}
-\noindent{}\emph{Resolution refers to the smallest possible geological detail observable in potential field data. High-resolution refers to high frequencies, caused by geology, being represented.}
+\noindent{}\emph{Resolution refers to the smallest possible geological detail observable in potential field data. High-resolution refers to high frequencies, caused by geology, being represented in the sampled field.}
 
 \bigskip{}
 Resolution in geophysical grids can be increased by:
@@ -105,13 +105,13 @@ Resolution in geophysical grids can be increased by:
 %
 
 \subsection{Traditional methods for enhancing resolution}
-As outlined in \Cref{sec:introgrids}, resolution is a product of sample distance and density, and gridded rasters have a specific number of cells in each axis depending on the spatial extent.
+As outlined in \Cref{sec:introgrids}, resolution is a product of sample distance and sampling density, and gridded rasters have a specific number of cells in each axis depending on the spatial extent.
 Upsampling raster data to larger height and width dimensions is commonplace, and generally performed by numerical image filters such as the cubic spline \parencite{keysCubicConvolutionInterpolation1981} or Lanczos filter \parencite{lanczos1988applied}.
 Some of these interpolation methods are the basis of the gridding methods previously outlined, and simply selecting a smaller cell size during gridding is sufficient to achieve a larger image raster.
 These filters are adept at imputing the required cell values while preserving the frequency content of the original raster.
 However, no attempt is made at accurately increasing the high-frequency components of the raster, which are required by our definition for high-resolution geophysics.
-Without sampling at a smaller separation or closer line spacing, it is still possible to increase the high-frequency content of aeromagnetic grids.
 
+Without sampling at a smaller separation or closer line spacing, it is still possible to increase the high-frequency content of aeromagnetic grids.
 The rate at which the power of the component frequencies of the potential field diminish with increasing source-sensor distance is well known.
 Back-calculation can be made to predict the power of these frequencies at a smaller separation, and this is termed downward continuation \parencite{bullardDeterminationMassesNecessary1948,blakelyPotentialTheoryGravity1996}.
 The inverse calculation at a larger separation is termed upward continuation, and is useful for reducing potentially unwanted near-surface magnetic detail, or levelling data to a common datum (e.g.\ open file magnetic data in Australia are available levelled to the AWAGS datum \parencite{mintyAirborneGeophysicalMapping2011}).
@@ -126,16 +126,16 @@ Natural image raster data are ubiquitous in computer vision machine learning.
 These are most commonly three channel arrays containing normalised brightness values in the red, green and blue channels.
 Resolution in these rasters is typically a product of an imaging system or software defined grid with regular sampling.
 Like in geophysics, these raster data have an array height and width, which is referred to as resolution.
-However, the lack of spatial quantification for the size of natural images confuses the term with its definition for geophysical resolution.
+However, the lack of spatial quantification for the pixel size of natural images confuses the term with its use in geophysical resolution.
 
 Resulting from the processes described in \Cref{sec:introgrids}, geophysical rasters are distinct from the image data used widely in computer vision.
 This includes the number of channels (3 in natural images, 1 in aeromagnetics), range (\qty{255} discrete values compared to \qty{50000} or more), and anisotropy of resolution.
 Additionally, the features present within these data are highly dissimilar.
-While natural images may contain common objects which share high-level features such as eyes, faces, or complex geometry, these data only share low-level features with aeromagnetic data, such as simple line and curve components.
+While natural images may contain common objects which share high-level features such as eyes, faces, or the built environment, these data only share low-level features with aeromagnetic data, such as simple line and curve components.
 This fact limits the applicability of transfer learning from methods in computer vision machine learning \parencite{tanSurveyDeepTransfer2018} to geoscience data.
 These points also raise the uncertainty of methods developed for natural images to be  applicable to geoscience data.
 
-Geoscience data faces a number of challenges distinct from natural images. These have been outlined in \textcite{karpatneMachineLearningGeosciences2019}, and relevant to this work are:
+Geoscience data faces a number of challenges distinct from natural image data. These have been outlined in \textcite{karpatneMachineLearningGeosciences2019}, and relevant to this work are:
 \begin{itemize}
     \item{} Spatio-temporal structure: Aeromagnetic grids are spatially corellated, neighbouring cells contain similar values arising from the same causative volume.
     \item{} Multi-source multi-resolution data: One location may be covered by multiple aeromagnetic surveys with different resolutions, or the same survey may be presented with different levels of processing.
@@ -144,7 +144,7 @@ Geoscience data faces a number of challenges distinct from natural images. These
 \end{itemize}
 
 Inference on real-world data presents many challenges \parencite{nikolenkoSyntheticDataDeep2021,tremblayTrainingDeepNetworks2018}.
-Despite this, case studies are critical in promoting the adoption of applications in geophysics, by demonstrating a methods suitability to the data used within the task of interest.
+Despite this, case studies are critical in promoting the adoption of applications in geophysics, by demonstrating a method's suitability to the data used within the task of interest.
 As such, case studies are investigated for each aim within this thesis.
 
 \subsection{Deep learning context}
@@ -164,7 +164,7 @@ Many activation functions have been proposed, and recent work on periodic activa
 
 The other primary descriptor of a neural network is its architecture, referring to the configuration of its intermediate layers between the input and output.
 Key architectures used in this thesis are described below.
-If the network architecture provides the capacity to store and retrieve learning, the data and training architecture provide the actual instruction and delivery.
+If the network architecture provides the capacity to store and retrieve learning, the data and training architecture provide the actual instruction and mode of delivery.
 There are broadly two classes of training; supervised and unsupervised learning.
 The super-resolution and representation learning tasks in this thesis are both supervised tasks, where a reference is provided for the network to calculate an objective function of its performance on.
 Unsupervised learning does not have a ground truth or target, and instead learns to identify patterns within the data for tasks in clustering, density estimation, and visualisation \parencite{bishopPatternRecognitionMachine2006}.
@@ -210,8 +210,7 @@ Noise injection was later used in this framework as a method to drive diversity 
 
 Geoscience is a diverse field, with ubiquitous use of raster data.
 Machine learning is not new to geoscience, and work has been performed on applications in the field for many years.
-Recent reviews have highlighted a rapid increase in machine learning research contributions to Earth science.
-The aims of this thesis are related to specific findings in these review articles.
+Recent reviews have highlighted a rapid increase in machine learning research contributions to Earth science, and the aims of this thesis are related to specific findings in these review articles.
 \textcite{bergenMachineLearningDatadriven2019} recommends the development and use of benchmark datasets and identifies opportunities in the use of transfer learning from synthetic data.
 This is echoed by \textcite{karpatneMachineLearningGeosciences2019}, who also identify prospective research avenues in theory guided science using physics-guided neural networks, the concept of directly leveraging \emph{a priori} domain knowledge within machine learning models.
 
@@ -220,9 +219,9 @@ Hyperspectral data SR are commonly investigated \parencite{yangHyperspectralImag
 Rock microscopy images have been upsampled with SR \parencite{niuInnovativeApplicationGenerative2020}, and their accuracy compared using domain specific parameter calculation.
 SR with physics-informed learning has been performed by \textcite{bodeUsingPhysicsinformedEnhanced2021,jiangMeshfreeFlowNetPhysicsConstrainedDeep2020} in the field of fluid dynamics, \textcite{leongDeepBedMapDeepNeural2020} in the field of basement topography, and \textcite{jungbluthSingleframeSuperresolutionSolar2019} in astrophysics.
 Additionally, physics-informed learning has been performed with multi-physics integration in \textcite{degen3DMultiphysicsUncertainty2022}.
-Seismic data has been investigated with SR \parencite{liSuperresolutionSeismicVelocity2021}, and with the removal of noise \parencite{liDeepLearningSimultaneous2021}.
+Seismic data has been investigated with SR \parencite{liSuperresolutionSeismicVelocity2021}, and SR with the removal of noise \parencite{liDeepLearningSimultaneous2021}.
 
-Various potential field gridding \parencite{naprstekApplicationsMachineLearning2019,wangDeepLearningGravity2019a} and downward continuation methods \parencite{liStableDownwardContinuation2023,yeHighprecisionDownwardContinuation2022} have been proposed leveraging neural networks.
+Various potential field gridding \parencite{naprstekNewMethodInterpolating2019, wangDeepLearningGravity2019a} and downward continuation methods \parencite{liStableDownwardContinuation2023,yeHighprecisionDownwardContinuation2022} have been proposed leveraging neural networks.
 Finally, in the recent topic of implicit representation there have been several applications proposed, including geological modelling \parencite{hillierGeoINRImplicitNeural2023}.
 
 Beyond the applications investigated in this thesis, many other machine learning methods have been investigated in geoscience.
@@ -237,9 +236,9 @@ One approach to overcoming this and other challenges faced in real-world geoscie
 During this thesis, a large collection of synthetic data became available, containing realistic 3D geological voxel models and 2D geophysical forward models \parencite{jessellNoddyverseMassiveData2022}.
 These data present a large amount of uniformly sampled and noise-free grids from an unbiased set of geological domains, and may offer a solution to some of these data challenges.
 
-\section{Research Contributions and Thesis Structure}
+\section{Research contributions and thesis structure}
 This thesis is presented as a series of papers which are published or in-preparation for publication.
-These are presented in \Cref{ch:paper1,ch:paper2,ch:paper3}, each with a brief contextual introduction.
+These are presented in \Cref{ch:paper1,ch:paper2,ch:paper3}, with identification of opportunities for future work described in \Cref{ch:futurework}.
 Key findings and summary conclusions of the research are discussed in \Cref{ch:conclusions}.
 
 \Cref{ch:paper1} presents published work on an initial investigation into the technique of deep learning super-resolution for magnetic potential field data.
@@ -256,18 +255,19 @@ It subsequently fine-tune trains the baseline model on real-world high-resolutio
 Furthermore, it adopts advances in the machine learning literature by implementing the LTE network \parencite{leeLocalTextureEstimator2022}.
 The proposed method simulates aeromagnetic line sampling of a potential field extent at \qty{320}{\m} and \qty{80}{\m}, which are in the regional and prospect scales respectively.
 While the baseline model can generalise to real-world data, some incorrect reconstructions remain.
-By fine-tune training the model with transformed real-world state map data, these errors are rectified, and the structural accuracy is improved.
+By fine-tune training the model with real-world state map data, these errors are rectified, and the structural accuracy is improved.
 
 \Cref{ch:paper3} reports the use of coordinate multilayer perceptron (CMLP) neural networks for representation learning of a surveyed potential field extent.
 With the proposed method, scattered line data can be encoded into the grid, and cells queried at interpolating coordinates to predict regularised grids.
-CMLP networks are highly suited for processing spatial data such as point sampled geophysics surveys.
+% CMLP networks are highly suited for processing spatial data such as point sampled geophysics surveys.
 Additionally, spatial derivatives are calculated on the learned function directly.
 %TODO ensure refer back to aims
 Both tasks are fundamental to interpretation and processing in geophysics, and by commencing the methods from point sample data, the number of individual processing steps is reduced, and the application is fully trainable.
 To our knowledge, this research is the first description of deep learning implicit neural representation for aeromagnetic potential field data in the literature.
 
-\Cref{ch:futurework} presents a synthesis discussion for the prior chapters. Given the recency of deep learning super-resolution and implicit neural representation, multiple avenues of future opportunities are identified.
-These aim to increase the adoption of super-resolution in geophysics by addressing apprehension toward the reliability of interpretation of the outputs.
+\Cref{ch:futurework} presents a synthesis discussion for the prior chapters. Given the recency of deep learning super-resolution and implicit neural representation for geoscience, multiple avenues of future opportunities are identified.
+These include characterising the practice of super-resolution, and approaches to further enhancement of the methods presented in this thesis.
+% These aim to increase the adoption of super-resolution in geophysics by addressing apprehension toward the reliability of interpretation of the outputs.
 A synthesis comparison of the SR networks adapted in \Cref{ch:paper1,ch:paper2} is also presented, which prompts questions regarding model and dataset construction.
 The use of \emph{a priori} information well understood to geophysics is also discussed, with potential application in both super-resolution and implicit neural representation.
 

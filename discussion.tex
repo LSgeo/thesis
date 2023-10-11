@@ -22,7 +22,7 @@ This was demonstrated to introduce noise or artefacts during SR inference, as we
 However, given the uncertainty of geological interpretation of geophysics data \parencite{sivarajahIdentifyingEffectiveInterpretation2013} SR outputs may be used as an auxiliary data when interpreting low-resolution magnetic features.
 The domain expert can then use the SR grid to reassure or reassess the original low-resolution grid interpretation and improve their confidence accordingly.
 
-Super-resolution for geophysics is still in its infancy and requires further efforts towards improving reliability before wide-spread adoption in practice.
+Super-resolution for geophysics is not yet characterised and requires further efforts towards improving reliability before wide-spread adoption in practice.
 This section proposes four avenues for future research:
 \begin{enumerate}
     \item{} Exploring the impact on geological mapping from the use of SR,
@@ -45,44 +45,45 @@ A more reliable, repeatable and quantifiable approach would use automated patter
 For example, the automated lineament detection technique of \textcite{holdenAutomaticIdentificationResponses2011,holdenAutomatedAnalysisRegional2008} could be applied to low-resolution and SR grids, to compare their delineated features.
 
 \section[Super-resolution for domain specific tasks]{A structured approach to training super-resolution for domain specific tasks}
-Several models were implemented throughout \Cref{ch:paper1,ch:paper2}, namely RDN, ESRGAN+, and LTE\@.
+Several models were implemented throughout \Cref{ch:paper1,ch:paper2}, namely RDN\textdaggerdbl{}, ESRGAN+, and LTE\@.
 % However, the most important choice in developing a performant super-resolution neural network for real-world aeromagnetic survey data was the choice of training data.
 The work in \Cref{ch:paper1} was prepared for publication prior the release of a large and varied synthetic geology training dataset \parencite{jessellNoddyverseMassiveData2022}.
 It was seen in \Cref{ch:paper2} that this data improved model performance for a range of features by using transfer learning for pre-training.
-% This transfer learning approach for training data is also found to be useful for RDN and ESRGAN\@.
-Here, the use of synthetic and real-world line spacing sampled data approach used with LTE in \Cref{ch:paper2} are adopted for the RDN+ and ESRGAN+ models.
-\Cref{fig:modcomp} shows RDN and ESRGAN+ in predicting accurate features when upscaling \qty{320}{\m} data to \qty{80}{\m} line spacing.
+% This transfer learning approach for training data is also found to be useful for RDN\textdaggerdbl{} and ESRGAN\@.
+Here, the use of synthetic and real-world line spacing sampled data approach used with LTE in \Cref{ch:paper2} are adopted for the RDN\textdaggerdbl{} and ESRGAN+ models.
+\Cref{fig:modcomp} shows RDN\textdaggerdbl{} and ESRGAN+ in predicting accurate features when upscaling \qty{320}{\m} data to \qty{80}{\m} line spacing.
 It can be inferred that the challenge of super-resolution for these tasks is predominantly a question of providing suitable and sufficient training data, and is less constrained to neural network choices.
 
 \begin{figure}
-    \includegraphics[width=\linewidth]{fig/etc/TMI Comparison_23.pdf} % TODO Update for RDN, ESRGAN, LTE, ~3 hours ea.
+    \includegraphics[width=\linewidth]{fig/etc/TMI Comparison_23.pdf} % TODO Update for RDN\textdaggerdbl{}, ESRGAN, LTE, ~3 hours ea.
     \caption{
         A comparison between all deep learning super-resolution methods presented in \Cref{ch:paper1} and \Cref{ch:paper2}, using the realistic low-resolution transform developed in \Cref{ch:paper2}.
-        a) The low-resolution input, b) The high-resolution target, c) The RDN+ Network, d) The ESRGAN+ network, and e) The LTE network.}
+        a) The low-resolution input, b) The high-resolution target, c) The RDN\textdaggerdbl{}+ Network, d) The ESRGAN+ network, and e) The LTE network.}
     \label{fig:modcomp}
 \end{figure}
 
 Given the similar performance between the three distinct architectures, instead of investigating novel SR networks for geophysics super-resolution, an important future work would be understanding the data dependencies of a successful model. For example, filtering the synthetic dataset by event history label to prepare bespoke models for specific geological domains to improve performance at the cost of generalisation.
 
-Magnetic data in different geological contexts are subject to a mixture of statistical distributions \parencite{khokhlovCauseNonGaussianDistribution2017}. Investigation is also required to identify a robust normalisation method accounting for dynamic range and the structural significance contained in the long tails of the distributions of magnetic intensities.
+Magnetic data in different geological contexts are subject to a mixture of statistical distributions \parencite{khokhlovCauseNonGaussianDistribution2017}. Investigation is also required to identify a robust normalisation method accounting for high dynamic range and the structural significance contained in the long tails of the distributions of magnetic intensities.
 
 \section{Image quality assessment for potential field grids}
 Model performance is quantified using image quality assessments (IQA) such as peak signal-to-noise ratio (PSNR), structural similarity index (SSIM), feature similarity index (FSIM), or many others.
 For supervised tasks, a full reference metric can be calculated between the super-resolution prediction and the high-resolution target.
-In the \Cref{ch:paper1,ch:paper2} works, PSNR and SSIM are used to quantify the performance of the proposed methods in transforming low-resolution grids to high resolution.
+In the works presented in \Cref{ch:paper1,ch:paper2,ch:paper3}, PSNR and SSIM are used to quantify the performance of the proposed methods in transforming low-resolution grids to high resolution.
 However, properties of magnetic grid data are distinct to the images for which these metrics are designed.
 %   While SSIM uses structural information present in the Fourier transformed input in combination with local gradient magnitude for value accuracy,
 Consistently high SSIM scores are assigned to grids that are perceptually poor matches to the target.
-High values are noted in other geophysical grid investigations reporting SSIM metrics \parencite{wangDeeplearningbasedSeismicData2018,bavandsavadkoohiHighresolutionAeromagneticMap2023}.
-An investigation to identify a more appropriate IQA for potential field grids is required, which accounts for the distinct nature of these data and reflects the predicted quality of geological interpretation.
-This may be benefit by automated analysis methods described above.
+High SSIM values are noted in other geophysical grid investigations which report SSIM metrics \parencite{wangDeeplearningbasedSeismicData2018,bavandsavadkoohiHighresolutionAeromagneticMap2023}.
+An investigation to identify a more appropriate IQA for potential field grids is required, which accounts for the distinct nature of these data and better reflects the predicted quality of geological interpretation.
+This may be benefit by automated analysis methods as mentioned above.
 
 \section{Geophysics-informed neural networks}
 Potential fields are constrained by several well understood physical laws, and gridded data ideally conform to these properties for use in inversion applications and further numerical processing.
 Geological interpretation is less reliant on this adherence, however \emph{a priori} information used in physics-informed neural networks improve training speed and model performance \parencite{raissiPhysicsinformedNeuralNetworks2019}, and are especially useful in data-constrained domains such as geophysics.
+
 It is possible to broaden the definition and extend the concept of informed networks to the use of generative adversarial networks in \Cref{ch:paper1}.
 In these networks, the informing method is termed discriminator loss, and is performed by a classification network conditioned to identify images as `realistic' or `not realistic', depending on features learned to be important within the target data by the discriminator.
-Using crafted or learned criterions to inform a neural network greatly assists with learning high quality models, and either approach may be useful for to geophysics in addressing the paucity of ground truth.
+Using crafted or learned criterions to inform a neural network greatly assists with learning high quality models, and either approach may be useful in geophysics to address the paucity of ground truth.
 In addition, demonstrating the enforcement of physical properties of potential fields for model outputs may address apprehension for machine learning in geophysics practice.
 
 \printbibliography{}
@@ -93,23 +94,25 @@ This thesis presented contemporary methods in deep learning to enhance potential
 By including both synthetic and real survey data for training and case studies, it was established that these methods could generalise to real-world applications.
 
 To the best of my knowledge, \Cref{ch:paper1} presents the first investigation in the literature of the super-resolution enhancement of gridded aerogeophysical data.
-Prior to this work, it was unknown how well SR methods developed for natural images in computer vision research would adapt to the features present within magnetic grids, or the challenges faced in developing a training dataset for these data.
-We established that the CNN SR methods RDN and ESRGAN could be trained to upsample low-resolution textures in magnetic grids by a factor of four, and that the results were more accurate than bicubic upsampling in the real-world case study region.
-The GAN method used in \Cref{ch:paper2} enhanced resolution, however it introduced significant spurious features, masking the enhancement.
-Hence, the method based on RDN was preferred.
+Prior to this work, it was unknown how well SR methods developed for natural images would adapt to the features and high dynamic range present within magnetic grids, or the challenges faced in developing a training dataset for these data.
+We established that the CNN SR methods RDN\textdaggerdbl{} and ESRGAN+ could be trained to upsample low-resolution textures in magnetic grids by a factor of four, and that the results were more accurate than bicubic upsampling in the real-world case study region.
+The ESRGAN+ method used in \Cref{ch:paper2} enhanced resolution, however it introduced significant spurious features, masking the enhancement.
+Hence, the method based on RDN\textdaggerdbl{} was preferred. 
 We identified the need for additional representative training data to investigate transferability of the method to other geological domains, and a realistic method to generate low-resolution training data.
 
 The challenge of training data availability was addressed in \Cref{ch:paper2}, where we investigated the use of geologically varied synthetic data to train a baseline model, fine-tuning with real-world data, and simulating realistic line sampling to create low-resolution data.
-We implemented the contemporary LTE network to perform this investigation, these data sampled at four times wider line spacing showed increased structural accuracy when fine-tuned with real-world data.
+We implemented the contemporary LTE network to perform this investigation.
+Data sampled at four times wider line spacing showed increased structural accuracy when fine-tuned with real-world data.
 Additionally, spurious features in the baseline model were correctly resolved when fine-tuned.
 We identified opportunities for more detailed investigations using a filtered approach in selecting training data, and these were outlined in \Cref{ch:futurework}.
 
 The contribution in \Cref{ch:paper3} used coordinate multilayer perceptron neural networks to learn a representation of the function that describes a surveyed potential field extent.
 To my knowledge, this is the first time implicit neural representation of aerogeophysical survey data has been reported in the literature.
-These networks are highly suited for processing spatial data such as point sampled geophysics surveys.
-The contribution is capable of predicting regularly spaced grids from scattered survey point data, and a novel method using the representation to calculate derivatives of a potential field, both fundamental to interpretation and processing in geophysics.
+It was seen that these networks are highly suited for processing spatial data such as point sampled geophysics surveys.
+The contribution is capable of predicting regularly spaced grids from scattered survey point data, and can be used as a novel method to calculate derivatives of a potential field from the learnt representation, both task which are fundamental to interpretation and processing in geophysics.
 By commencing the methods from point sample data, the number of individual processing steps is reduced, and the application is fully trainable.
-Continued advances in the recent field of Coordinate MLPs will improve the capacity of the method for representing high-resolution aeromagnetic data. 
-We identify opportunities in \Cref{ch:futurework} for future work in super-resolution and implicit representation for enhancing potential field methods in geophysics.
+Continued advances in the recent field of CMLPs will improve the capacity of the method for representing high-resolution aeromagnetic data.
+
+We identify opportunities in \Cref{ch:futurework} for future work stemming from our contribution  of enhancing potential field methods in geophysics.
 
 % \end{document}

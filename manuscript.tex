@@ -59,34 +59,39 @@ This thesis reports on three bodies of work across two topics in geophysics: enh
 The first topic enhances the value of geophysical surveys by predicting high-frequency components in sparsely sampled potential field grids.
 The second presents a straightforward neural network framework for high quality grid regularisation and processing.
 For each body of work in these topics, real-world geophysical case studies are presented in order to demonstrate the effectiveness and challenges of the method with open access data.
-Each body of work extends deep learning methods described in computer science literature the same year as the development of each respective geophysical method, to keep pace with rapid advances in the field of machine learning.
+Each body of work extends deep learning methods described in computer science literature the same year as the development of the body of work, to keep pace with rapid advances in the field of machine learning.
 
-In the topic of super-resolution, the first method uses convolutional neural networks to enhance the resolution of real magnetic textures in state magnetic grids at a fixed four times scale.
-This is further explored in the second body of work, where synthetic potential field line data are used for model pretraining, to address the lack of survey data with sufficient line spacing variability.
-It quantifies the performance of super-resolution upscaling on real-world low-resolution grids with line spacings between \SI{80}{\m} and \SI{480}{\m}, and investigates the useful limits of upscaling using the method.
+In the topic of super-resolution, the first method uses convolutional neural networks to enhance the resolution of real magnetic textures in state magnetic grids at four times scale.
+This is further explored in the second body of work, where a baseline model is trained with synthetic potential field grid data and fine-tuned with real-world data to address the lack of survey data with sufficient geological representation, and uses a line spacing derived low-resolution transform.
+It quantifies the performance of super-resolution upscaling on real-world low-resolution grids with a line spacing from \SI{320}{\m} to \SI{80}{\m}, and investigates the structural accuracy of the result.
 
 The second topic explores a method for learning a representation of a potential field extent from scattered real-world survey data by a contemporary neural network.
-The data-driven approach can extract high-resolution grids from the learned representation, as well as calculate the analytical spatial gradients.
+The data-driven approach can extract high-resolution grids from the learned representation, as well as calculate analytical spatial gradients.
 Grid rasters and horizontal gradients calculated with the method very closely match their numerical counterparts, however, vertical gradients do not.
 
 Individually, the methods developed in this thesis enhance the information extractable from potential field surveys.
-However, in combination, and together they reflect ongoing advances in deep learning and their extension to challenges and opportunities in geophysics.
+However, together they reflect ongoing advances in deep learning and their extension to challenges and opportunities in geophysics.
 
 \newpage{}
 \addsec{Acknowledgements}
 
-I wish to thank a great number of people who have contributed to my ongoing development.
+I wish to thank a great number of people who have contributed to my journey.
+
 First, to my supervisors:
 EJ, for bringing together a team of talented and friendly geodata scientists, and caring deeply for them all.
 Tom, who set a high bar with his PhD and immediately set about raising his students to the same level.
 Daniel, for the meticulous, concise, and actionable reviews and suggestions.
 Naveed, whose perspective was invaluable.
-Andie, Dale, and Robert, and the rest of my family in NSW --- I didn't get to visit as much as I had originally planned in 2019, but we made the most of it! Thanks for the support and encouragement, and imparting all the passions of rocks, computers, and tinkering that I have today.
+
+My family in NSW, Andie, Dale, and Robert --- I didn't get to visit as much as I had originally planned in 2019, but we made the most of it! Thanks for the support and encouragement, and imparting all the passions of rocks, computers, and tinkering that I have today.
+
 Tasman, for being a good friend and inspirational colleague for most of my academic career --- looking forward to sharing a project again sometime, somewhere in the future!
 Lu, for sharing your incredible amount of geophysics knowledge, incredible cooking, and love of tennis with me.
 Matilda, for being a wonderful friend and the best housemate --- Thanks for being silly with me.
-My first floor colleagues and fellow tech geeks, Daniel, David, Chris, Minh, and Peter --- Your friendship and knowledge has been a wonderful environment to grow as a geodata scientist in.
+
+My first floor colleagues and fellow tech geeks, David, Daniel, Chris, Minh, and Peter --- Your friendship and knowledge has been a wonderful environment to grow in as a geodata scientist.
 And all my SES, CET, and friends beyond: Alex, Anne, Ben, France, Jackson, Jules, Kailah, Lauren, Lauri, Liam, Lilly, Maddie, Maria, Malvina, Nicolas, Ravi, Sean, Sumail, Vickie, and Ze --- Thank you for years of lunches, dinners, beaches, rock climbing, yoga, and all the opportunities to talk rocks that I've been missing.
+
 And to all the teachers throughout my life, both professional and incidental: Thank you.
 
 I love you all.
@@ -138,7 +143,7 @@ I, Luke Thomas Smith, certify that:
 \newrefsection{}
 \input{intro}
 
-\chapter[Magnetic Grid Resolution Enhancement using ML]{Magnetic Grid Resolution Enhancement using Machine Learning}
+\chapter[Magnetic Grid Resolution Enhancement Using ML]{Magnetic Grid Resolution Enhancement Using Machine Learning}
 \label{ch:paper1}
 \newrefsection{}
 This chapter has been reproduced from the following peer reviewed publication. Formatting has been adjusted for consistency.
