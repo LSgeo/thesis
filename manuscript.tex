@@ -106,7 +106,7 @@ I, Luke Thomas Smith, certify that:
 \end{tabular}
 
 \newpage{}
-% Fix incorrect page numbering
+% Fix incorrect page numbering on the signed form
 \includepdf[pages=-,templatesize={595.276pt}{841.89pt},nup=1x1,scale=1,clip,trim=5mm 36.5mm 5mm 20mm,fitpaper=true,pagecommand={\pagestyle{plain}}]{authorship_declaration_signed.pdf}
 
 \pagenumbering{arabic}
@@ -117,7 +117,7 @@ I, Luke Thomas Smith, certify that:
 \chapter{Introduction}
 \label{ch:intro}
 \newrefsection{}
-\include{intro}
+\input{intro}
 
 \chapter[Magnetic Grid Resolution Enhancement using ML]{Magnetic Grid Resolution Enhancement using Machine Learning}
 \label{ch:paper1}
@@ -126,19 +126,19 @@ This chapter has been reproduced from the following peer reviewed publication. F
 
 Smith, L., Horrocks, T., Holden, E.-J., Wedge, D., Akhtar, N., 2022. Magnetic grid resolution enhancement using machine learning: A case study from the Eastern Goldfields Superterrane. Ore Geology Reviews 150, 105119.
 https://doi.org/10.1016/j.oregeorev.2022.105119
-\include{paper1}
+\input{paper1}
 
 \chapter{Super-resolution of Aeromagnetic Survey Data}
 \label{ch:paper2}
 \newrefsection{}
-\include{paper2}
+\input{paper2}
 
 \chapter{Implicit Neural Representation for Potential Field Geophysics}
 \label{ch:paper3}
 \newrefsection{}
-\include{paper3}
+\input{paper3}
 
 \newrefsection{}
-\include{discussion}
+\input{discussion}
 
 \end{document}
