@@ -21,8 +21,9 @@
     However, despite the widespread success of super-resolution upscaling of natural photographs, its application to low-resolution geophysical surveys remains to be fully investigated.
     Previous applications to geophysical survey data generate training data pairs of low- and high-resolution grids by downsampling the high-resolution grid with standard image filters, which is a poor approximation to real-world low-resolution aeromagnetic grids constructed from sparsely sampled survey data.
     Moreover, the structural variation within the survey data depends entirely on the geological domain which is surveyed.
-    This paper proposes an approach to super-resolution of aeromagnetic survey data that uses realistic high-resolution and low-resolution pairs of gridded survey data, obtained by densely and sparsely `sampling' forward modelled magnetic grids from a suite of synthetic geological models.
-    The model then incorporates real-world survey data to improve accuracy through a secondary fine-tuning step, using a non-standard low-resolution transform that incorporates the survey line structure of the underlying data.
+    This paper proposes an approach to super-resolution of aeromagnetic survey data using transfer learning from synthetic data that represents a wide range of realistic geological domains, to imrpove the generalisability of the resulting model.
+    The approach uses realistic high-resolution and low-resolution pairs of gridded survey data, obtained by simulating aeromagnetic surveys of the data at close and wide line spacings.
+    Structural accuracy of the method is improved using a secondary fine-tuning stage incorporating real-world survey data.
     The Local Texture Estimator neural network architecture was used, and qualitative and quantitative measures of the super-resolution performance are reported.
     The results demonstrate that the proposed method is capable of transforming regional scale aeromagnetic surveys to high-resolution for a wide range of geological features.
 \end{abstract}
@@ -50,10 +51,10 @@ Minimum Curvature gridding \parencite{briggsMachineContouringUsing1974} is routi
 A comprehensive review of alternative spatial interpolation methods is presented by \textcite{liReviewComparativeStudies2011}.
 Each method of gridding has characteristic interpolation traits (which when undesired are termed artefacts), but irrespective of the gridding process the detail resolvable in the output grid is a product of the sample height, sampling density, and the final cell size at which the grids are rendered.
 Gridding at a finer cell size preserves higher frequencies present in the sampled data, resulting in greater detail.
-This resolvable detail is termed resolution, and high-resoluton details better define structures apparent in the data which are contextually important to interpretation.
+This resolvable detail is termed resolution, and high-resolution details better define structures apparent in the data which are contextually important to interpretation.
 When the cell size covers a quantified distance, the smallest resolvable detail can be expressed in terms of wavelength.
-This is the grids Nyquist wavelength, and is equal to twice the gridded cell size.
-This is also known as the Nyquist frequency, the well-known limit at which bandwidth-limited signals may be incorrectly resolved due to sampling below the Nyquist frequency, at half the sampling frequency.
+This is the grid's Nyquist wavelength, and is equal to twice the gridded cell size.
+This corresponds to the widely known Nyquist frequency, i.e.\ the limit at which bandwidth-limited signals may be incorrectly resolved due to sampling below the Nyquist frequency, at half the sampling frequency.
 For example, a potential field which lacks significant wavelength components shorter than \qty{200}{\m} will be adequately resolved by a grid with a cell size of \qty{100}{\m}, without spurious features known as aliasing.
 Extending this concept, arbitrarily shrinking the cell size will not resolve additional detail unless also predicting features with wavelengths shorter than those present in the sample data.
 These are limited by the sample spacing during acquisition.
@@ -65,11 +66,11 @@ A small number of regions in Western Australia are covered by high-resolution ae
 Therefore, example-based learning methods trained using these aeromagnetic data will be biased for performance in these domains, while lacking in those that have been so far regarded as unprospective.
 Addressing costly data acquisition, common in geoscience \parencite{dawsonImpactDatasetSize2023}, can be done by transfer learning.
 This assists example-based methods by using a larger source dataset which shares properties with the target dataset.
-In order to improve the generalisation of an example-based neural network for regions without high-resolution coverage, we propose transfer learning \parencite{tanSurveyDeepTransfer2018} using a baseline model trained with synthetic data containing a broad set of geological domains, which is then fine-tuned with high-resolution survey grid data.
+In order to improve the generalisation of an example-based neural network for regions without high-resolution coverage, we propose transfer learning \parencite{tanSurveyDeepTransfer2018} by first training a baseline model trained with synthetic data containing a broad set of geological domains, which is then fine-tuned with high-resolution survey grid data.
 The synthetic geophysical data \parencite{jessellNoddyverseMassiveData2022} are forward modelled from 3D petrographic voxel models with varied geological histories.
 These provide a diverse set of features, but these lack truly realistic characteristics, such as high frequency near surface magnetisation, and features from complex geological processes such as metasomatism or remnant magnetisation.
 
-Thus, the approach made in this study to address the challenges of training an example-based model with limited suitable geophysical data is to make use of geologically diverse synthetic data, with a realistic sampling and gridding method to generate low-resolution data.
+Thus, the approach made in this study to address the challenges of training an example-based model with limited suitable geophysical data is to make use of geologically diverse synthetic data, with a realistic sampling and gridding method to generate low-resolution data for training.
 
 \subsection{Prior work}
 Numerically, image interpolation can be done using interpolating functions, such as splines \parencite{keysCubicConvolutionInterpolation1981}, kriging \parencite{hansenInterpretiveGriddingAnisotropic1993} or other methods.
@@ -81,15 +82,16 @@ Instead of increasing the sampling density, the detail in potential field grids 
 At large source-sensor distances, high frequencies are diminished below the noise floor to the point of unobservability, resulting in grids that show only broad scale features, typically representing spatially extensive features deep in the crust.
 It is common for noise in the sampled grid product to be significantly increased in the downward continued product, limiting the useful vertical extent of the method to six times the cell size \parencite{dampneyEquivalentSourceTechnique1969,zuoDownwardContinuationTransformation2020}.
 Downward continuation can be performed with field- or source-based methods \parencite{pilkingtonPotentialFieldContinuation2017}.
-Resolution enhancement through neural network approaches to downward continuation \parencite{liStableDownwardContinuation2023,yeHighprecisionDownwardContinuation2022} is a promising research direction in super-resolution geophysics, but is distinct from the proposed line-spacing based method due to its use of paired vertically continued training data rather than paired line spacing differing data.
+Resolution enhancement through neural network approaches to downward continuation \parencite{liStableDownwardContinuation2023,yeHighprecisionDownwardContinuation2022} is a promising research direction in super-resolution geophysics, but is distinct from the proposed line-spacing based method due to its use of paired vertically continued training data.
 
 Recently, aeromagnetic resolution enhancement has been performed with deep learning SR \parencite{bavandsavadkoohiHighresolutionAeromagneticMap2023,smithMagneticGridResolution2022}.
 Both methods operate on regional aeromagnetic data at four times scale, using variants of the SRGAN convolutional neural network originally by \textcite{ledigPhotorealisticSingleImage2017}.
-The method of \textcite{smithMagneticGridResolution2022} compared SR to numerical upsampling methods such as the bicubic filter, and is capable of accurately upsampling low-resolution magnetic textures by predicting short wavelengths.
-However, the low-resolution data were created using a polynomial filter that supressed high frequencies, rather than a real-world low-resolution geophysical sampling process.
+The method of \textcite{smithMagneticGridResolution2022} demonstated SR methods are capable of upsampling low-resolution magnetic textures and predicting accurate short wavelengths for these data.
+Comparison was made compared with numerical filters such as the bicubic filter.
+However, the low-resolution data were created using a polynomial filter that suppressed high frequencies, rather than a real-world low-resolution geophysical sampling process.
 The method of \textcite{bavandsavadkoohiHighresolutionAeromagneticMap2023} uses low- and high-resolution aeromagnetic data from regional surveys, with a realistic low-resolution transform from line spacing and sample altitude differences.
 The dataset contains \qty{267} sample grids from surveys in Quebec, Canada, prepared from surveys with a low-resolution line spacing of \qty{800}{\m}.
-The proposed method is distinct from these prior works with its use of synthetic data in coordination with real survey data to improve generalisation for regional aeromagnetics in Australia, and the use of a modern MLP-based SR network.
+The proposed method is distinct from these prior works with its use of extensive and geologically varied synthetic data in coordination with real survey data to improve generalisation for regional aeromagnetics in Australia, and the use of a modern MLP-based SR network.
 
 Deep learning techniques for SR typically use paired high- and low-resolution image data, with the objective to learn the transform from low resolution to high.
 This is an ill posed challenge, because many high-resolution images share the same low-resolution representation \parencite{dongImageSuperresolutionUsing2016}.
@@ -109,7 +111,7 @@ Furthermore, the features present in these data are dependent on the subsurface 
 The recorded intensity values have high dynamic range, spanning tens of thousands of nanotesla, while contextually important features may be defined by tens of nanotesla \parencite{kovesiPhasePreservingTone2012}.
 Because of these differences, pre-existing super-resolution models trained on large image corpuses are not suitable for predicting higher frequency signals in geophysical grids.
 
-We propose a method that simulates the line sampling of both synthetic and real data, thereby more closely reflecting a real-world geophysical low-resolution transform, at scales typical of those in exploration in Australia.
+We propose a method that simulates the line sampling of both synthetic and real data, thereby more closely reflecting real-world low-resolution aeromagnetic data, at scales typical of those in exploration in Australia.
 
 \subsection{Neural network super-resolution}
 \label{sec:2nnsr}
@@ -133,19 +135,14 @@ Super-resolution can be achieved by sampling the learnt function at any arbitrar
 While a stand-alone MLP such as SIREN is capable of parameterising a single function, when used in an autoencoder framework (such as with LIIF or LTE), an arbitrary input can be encoded, upscaled, and subsequently reconstructed using fully connected layers \Cref{fig:ltenet}.
 An autoencoder approach generalises MLP based super-resolution to any image or grid not seen in the training set.
 
-LTE \parencite{leeLocalTextureEstimator2022} is implemented in this work for its higher performance in the task of image super-resolution.
+Local texture estimator (LTE) \parencite{leeLocalTextureEstimator2022} is implemented in this work for its higher performance in the task of image super-resolution.
 The encoder in LTE can use the feature extraction capability of traditional SR CNNs such as EDSR \parencite{limEnhancedDeepResidual2017} or RDN \parencite{zhangResidualDenseNetwork2018}, or a SwinIR \parencite{liangSwinIRImageRestoration2021} transformer-based encoder.
 In the original implementation of the CNN SR networks, the extracted image features are upsampled and returned to the image domain by convolutional layers.
 In LTE, the latent extracted features are further processed by the LTE network component before reconstruction to image space by an MLP\@.
 An overview of the structure of the LTE network is shown in \Cref{fig:ltenet}.
-The LTE component of the LTE network transforms the encoded latent features to frequency and amplitude features using trainable convolutions.
-Both the amplitude and frequency features are then upsampled using nearest neighbour filter interpolation.
-The frequency components are combined with phase information, which is extracted from the input by an additional MLP, and the resulting features are passed through a sinusoidal activation function before being combined with the amplitude features.
-Finally, the decoding MLP restores these frequency domain features to the spatial image domain.
-To precondition the network toward learning high-resolution features, a long-range skip connection with bilinear upscaling passes low-resolution content common between the upsampled LR and the HR counterpart to the output of the MLP\@.
 Specifics of the LTE implementation to investigate the performance of SR for geophysical grids from a range of geological domains are detailed in \Cref{sec:2lte}.
 
-\begin{figure}[hbt]
+\begin{figure}[hbtp]
     \includegraphics[width=\linewidth]{fig/p2/temp_lte.png}
     \caption[The LTE network]{
         A simplified representation of the super-resolution LTE network.
@@ -172,7 +169,7 @@ The performance of the method is qualitatively described on real survey grid ext
 \subsection{Synthetic potential fields}
 A novel synthetic dataset is used to train and validate the initial model.
 This is based on the Noddyverse \parencite{jessellNoddyverseMassiveData2022}, a suite of one million geologically realistic petrophysical voxel models with accompanying forward modelled geophysics.
-The block models are constructed as a sequence of realistic geological histories with an initial stratigraphy and tilt, followed by a three randomly selected deformation events of fold, fault, unconformity, dyke, plug, shear-zone, or tilt.
+The block models are constructed as a sequence of realistic geological histories with an initial stratigraphy and tilt, followed by three randomly selected deformation events of fold, fault, unconformity, dyke, plug, shear-zone, or tilt.
 Each model in the suite records the parameters of the deformation history, the complete final 3D subsurface geology voxel model with associated petrophysics, and final forward models of the magnetic and gravity potential fields.
 All data are modelled at \qty{20}{\m} spacing in each direction for \qty{4000}{\m} (\qty{200} cells) in each axis, and the potential field forward models are calculated at \qty{100}{\m} above the flat model surface.
 Only the magnetic forward model is used in this work.
@@ -184,7 +181,7 @@ The \numproduct{200 x 200} cell forward models are cropped to \numproduct{180 x 
 
 \subsection{Simulated surveys}
 \label{sec:simsurveys}
-To simulate the acquisition of aeromagnetic data, the \qtyproduct{20 x 20}{\m} total magnetic intensity (TMI) forward models are line sampled at a factor of \(4n\)  (i.e., \(4n \times 20\) m sampling in x, \(1 \times 20\) m sampling in y).
+To simulate the acquisition of aeromagnetic data, the \qtyproduct{20 x 20}{\m} total magnetic intensity (TMI) forward models are line sampled at a factor of \(4n\)  (i.e., \(4n \times 20\) m sampling in \(x\), \(1 \times 20\) m sampling in \(y\)).
 The line direction is nominally ``North-South'' such that entire array columns are sampled or unsampled.
 
 The \(n = 1\) case is the high-resolution target (HR) with every fourth line of GT sampled at a nominal line spacing of \qty{80}{\m}, similar to real-world regional high-resolution airborne geophysical surveys.
@@ -200,7 +197,7 @@ This type of gridding is common for regularising geophysical data and creates a 
 \Cref{fig:lrdata} shows an example of the resulting high- and low-resolution grids for the proposed line sampling and gridding process.
 
 This method of generating low-resolution training data is distinct from computer-vision image super-resolution, where a three-channel colour image is downsampled using an interpolating filter such as nearest neighbour or cubic splines operating on all pixels in the original image.
-It is also distinct from previous geophysical deep-learning super-resolution work \textcite{smithMagneticGridResolution2022} where the raster data used are extracts from regional compilation TMI maps, created using a third order Newton polynomial filter, similar in effect to cubic spline interpolation.
+It is also distinct from previous geophysical deep-learning super-resolution work \parencite{smithMagneticGridResolution2022} where the raster data used are extracts from regional compilation TMI maps, created using a third order Newton polynomial filter, similar in effect to cubic spline interpolation.
 The downsampling method used here is representative of low-resolution airborne sampling and subsequent gridding processes in real world geophysics.
 
 The distribution of magnetic anomaly values within both the magnetic merged grid of Western Australia and the Noddyverse dataset is unimodal and centred near \qty{0}{\nano\tesla}, with a standard deviation of approximately \qty{500}{\nano\tesla}.
@@ -215,7 +212,7 @@ The high frequencies required to define the second feature are not captured by t
 \Cref{fig:lrdata}B is recorded with a geological history of ``stratigraphy, tilt, fold, fold, fold'', and presents two folded negative anomalies that converge to the south.
 Insufficient sampling in the LR grid causes the spatial relation to be incorrectly interpreted as converging in the centre of the figure, which may be interpreted differently than in the target high-resolution grid.
 
-\begin{figure}[hbt!]
+\begin{figure}[hbtp!]
     \centering
     \includegraphics[width=0.75\linewidth]{fig/p2/temp_lr1.png}
     \includegraphics[width=0.75\linewidth]{fig/p2/temp_lr2.png}
@@ -229,7 +226,7 @@ Insufficient sampling in the LR grid causes the spatial relation to be incorrect
 \end{figure}
 %TODO
 
-\subsection{Synthetic baseline training setup}
+\subsection{Baseline training with synthetic data}
 \label{sec:baseline}
 While each of the models in the synthetic training dataset have unique petrophysical parameters, there are only \qty{343} distinct sequences of deformation events.
 This leads to feature similarities between many samples within the dataset, varying in rotation, scale, locality, and magnitude.
@@ -263,6 +260,11 @@ Because of the smaller dataset and use of augmentations, \num{10} epochs were us
 \subsection{Network selection}
 \label{sec:2lte}
 Local Texture Estimator \parencite{leeLocalTextureEstimator2022} is implemented to super-resolve synthetic and real potential field geophysical data with low resolution resulting from line spacing.
+The LTE component of the LTE network transforms the encoded latent features to frequency and amplitude features using trainable convolutions.
+Both the amplitude and frequency features are then upsampled using nearest neighbour filter interpolation.
+The frequency components are combined with phase information, which is extracted from the input by an additional MLP, and the resulting features are passed through a sinusoidal activation function before being combined with the amplitude features.
+Finally, the decoding MLP restores these frequency domain features to the spatial image domain.
+To precondition the network toward learning high-resolution features, a long-range skip connection with bilinear upscaling passes low-resolution content common between the upsampled LR and the HR counterpart to the output of the MLP\@.
 Because total magnetic intensity data are single channel, the input and output channel count are set to one.
 The SwinIR feature encoder implementation by is used, and the MLP decoder retains the same configuration as the authors.
 
@@ -270,13 +272,13 @@ The SwinIR feature encoder implementation by is used, and the MLP decoder retain
 \section{Results}
 \label{sec:2results}
 \subsubsection{Quantitative Measure}
-Due to the dynamic range of magnetic anomaly grids and the relative importance of structural accuracy for gridded data, image quality assessment such as peak signal-to-noise ratio or mean-squared error are an inadequate quantitative measure of upscaling performance for geophysics.
+Due to the dynamic range of magnetic anomaly grids and the relative importance of structural accuracy for gridded data, image quality assessment methods typically used for RGB images such as peak signal-to-noise ratio or mean-squared error are an inadequate quantitative measure of upscaling performance for geophysics.
 In addition to mean-square error, FSIM \parencite{linzhangFSIMFeatureSimilarity2011} is used to quantify the quality of the super-resolved image.
 FSIM is a full reference image similarity metric that quantifies structural similarity, rather than individual cell values.
 %TODO complain about SSIM Structural Similarity (SIM) \parencite{wangImageQualityAssessment2004}
 Model performance is quantified using FSIMi in Cref{tab:2metrics}, and it is seen that fine-tune training increases FSIM score for the task of super-resolution for aeromagnetic grids over the baseline model.
 
-% \begin{table}[hbt]
+% \begin{table}[hbtp]
 % %     % \includegraphics[width=\linewidth]{fig/p2/temp_tbl.png}
 % % \begin{tblr}{ll}
 % %                 & Reserved Synthetic Dataset & Reserved Aeromagnetic Dataset \\
@@ -304,7 +306,7 @@ NW striking features around in HR are aliased in LR and subsequently incorrectly
 The fine-tuned model (\Cref{fig:srdata23} e) resolves the correct strike, and separates the two features present.
 The enhanced structural similarity is reflected by the higher SSIM score in the fine-tuned model.
 
-\begin{figure}[hbt]
+\begin{figure}[hbtp]
     \includegraphics[width=0.9\linewidth]{fig/p2/srcomp_23.pdf}
     \caption[Super-resolution geophysics grid results]{Super-resolution predictions on open access data, prepared using the proposed method.
         Explanation in-text.
@@ -312,7 +314,7 @@ The enhanced structural similarity is reflected by the higher SSIM score in the 
     \label{fig:srdata23}
 \end{figure}
 
-\begin{figure}[hbt]
+\begin{figure}[hbtp]
     \includegraphics[width=0.9\linewidth]{fig/p2/srcomp_14.pdf}
     \caption[Super-resolution geophysics grid results]{Super-resolution predictions on open access data, prepared using the proposed method.
         Explanation in-text.
@@ -320,7 +322,7 @@ The enhanced structural similarity is reflected by the higher SSIM score in the 
     \label{fig:srdata14}
 \end{figure}
 
-\begin{figure}[hbt]
+\begin{figure}[hbtp]
     \includegraphics[width=0.9\linewidth]{fig/p2/srcomp_17.pdf}
     \caption[Super-resolution geophysics grid results]{Super-resolution predictions on open access data, prepared using the proposed method.
         Explanation in-text.
@@ -328,7 +330,7 @@ The enhanced structural similarity is reflected by the higher SSIM score in the 
     \label{fig:srdata17}
 \end{figure}
 
-\begin{figure}[hbt]
+\begin{figure}[hbtp]
     \includegraphics[width=0.9\linewidth]{fig/p2/srcomp_18.pdf}
     \caption[Super-resolution geophysics grid results]{Super-resolution predictions on open access data, prepared using the proposed method.
         Explanation in-text.
@@ -357,7 +359,7 @@ The baseline model prepared in this work demonstrated good performance across a 
 \section{Conclusions}
 \label{sec:2conclusion}
 An approach for upscaling geologically diverse geophysical survey grid data is proposed, which adopts transfer learning from synthetic data to better generalise super-resolution across different geological domains.
-Using the preeminent LTE neural network, synthetic magnetic forward models were used to prepare a baseline model capable of upscaling survey grids at four times scale.
+Using the preeminent LTE neural network architecture, synthetic magnetic forward models were used to prepare a baseline model capable of upscaling survey grids at four times scale.
 Further, this baseline model was fine-tuned with open access survey grid data, prepared with a low-resolution transform appropriate for aeromagnetic geophysics.
 Low-resolution features incorrectly enhanced by the synthetic baseline model were correctly resolved following fine-tune training with these data, and the model is capable of upscaling grids with \qty{320}{\m} line spacing to \qty{80}{\m} line spacing with an average FSIM score of \num{0.9731}.
 
