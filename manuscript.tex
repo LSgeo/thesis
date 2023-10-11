@@ -40,7 +40,7 @@
 \pagenumbering{roman}
 \setcounter{page}{1}
 
-\addsec{\centering{}Abstract}
+\addsec[Abstract]{\centering Abstract}
 Geophysics examines the petrophysical expression of geology within the Earth and is vital for exploring and understanding mineral systems under cover.
 The growing global demand for resources drives new data acquisition, with sensors that return more and higher quality data.
 The challenges and opportunities of big data are not unique to the geosciences, and the development of methods and computing to address these are ubiquitous in the contemporary age of deep learning.
@@ -86,10 +86,9 @@ This research was supported by a Rio Tinto Iron Ore PhD Scholarship.
 \newpage{}
 \tableofcontents{}
 \listoffigures{}
-% \listoftables{}
 
 \newpage{}
-\addsec{Thesis Declaration}
+\addsec[Declarations]{Thesis Declaration}
 I, Luke Thomas Smith, certify that:
 \begin{itemize}
     \item{}This thesis has been substantially accomplished during enrolment in this degree.
@@ -107,7 +106,6 @@ I, Luke Thomas Smith, certify that:
 \end{tabular}
 
 \newpage{}
-% \subfile{authorship_declaration}
 % Fix incorrect page numbering
 \includepdf[pages=-,templatesize={595.276pt}{841.89pt},nup=1x1,scale=1,clip,trim=5mm 36.5mm 5mm 20mm,fitpaper=true,pagecommand={\pagestyle{plain}}]{authorship_declaration_signed.pdf}
 
@@ -118,39 +116,29 @@ I, Luke Thomas Smith, certify that:
 
 \chapter{Introduction}
 \label{ch:intro}
-% \subfile{intro}
-% \includepdf[pages=-]{intro.pdf}
-\include{intro}
 \newrefsection{}
+\include{intro}
 
 \chapter[Magnetic Grid Resolution Enhancement using ML]{Magnetic Grid Resolution Enhancement using Machine Learning}
 \label{ch:paper1}
+\newrefsection{}
 This chapter has been reproduced from the following peer reviewed publication. Formatting has been adjusted for consistency.
 
 Smith, L., Horrocks, T., Holden, E.-J., Wedge, D., Akhtar, N., 2022. Magnetic grid resolution enhancement using machine learning: A case study from the Eastern Goldfields Superterrane. Ore Geology Reviews 150, 105119.
 https://doi.org/10.1016/j.oregeorev.2022.105119
-% \subfile{paper1}
-% \includepdf[pages=-]{paper1.pdf}
 \include{paper1}
-\newrefsection{}
 
 \chapter{Super-resolution of Aeromagnetic Survey Data}
 \label{ch:paper2}
-% % \subfile{paper2}
-% % \includepdf[pages=-]{paper2.pdf}
-\include{paper2}
 \newrefsection{}
+\include{paper2}
 
 \chapter{Implicit Neural Representation for Potential Field Geophysics}
 \label{ch:paper3}
-% % \subfile{paper3}
-% % \includepdf[pages=-]{paper3.pdf}
-\include{paper3}
 \newrefsection{}
+\include{paper3}
 
-% \subfile{discussion}
-% \includepdf[pages=-]{discussion.pdf}
+\newrefsection{}
 \include{discussion}
-
 
 \end{document}
