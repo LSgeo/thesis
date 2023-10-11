@@ -56,11 +56,11 @@ Selecting a cell size finer than one fifth will increase the number of pixels in
 
 \subsection{Resolution and frequency}
 As discussed in \Cref{sec:resingeo}, a finer spatial resolution grid (fewer metres per pixel) can convey higher frequency information, due to the higher spatial sampling rate.
-Indeed, a gridded raster with regularly spaced square cells \(\Delta x\) has an intrinsic Nyquist wavelength \(\lambda _N\), at twice the cell size,
+Indeed, a gridded raster with regularly spaced square cells \(\Delta x\) has an intrinsic Nyquist wavelength \(\lambda_{Nyquist}\), at twice the cell size,
 
 \begin{equation}
     \label{eqn:nyq}
-    \lambda{}N = 2 \Delta{}x.
+    \lambda{}_{Nyquist} = 2 \Delta{}x.
 \end{equation}
 
 This corresponds to the shortest wavelength the grid can adequately display, which can be observed as the finest details resolvable in the grid raster.
@@ -70,7 +70,7 @@ Note the Nyquist wavelength is proportional between different cell size grids ac
 
 \begin{equation}
     \label{eqn:hrn}
-    \lambda{}N_{HR} = \lambda{}N_{LR} \div{}S.
+    \lambda{}_{Nyquist {(HR)}} = \frac{\lambda{}_{Nyquist {(LR)}}}{S}.
 \end{equation}
 
 Because the highest frequency component preserved in a grid is limited by the grid cell size, any operation that coarsens the cell size is a low pass filter.
@@ -82,7 +82,7 @@ However, increasing sampling density increases total sampling cost, and cannot e
 This paper will investigate a new method for enhancing the resolution of grids by predicting high frequency components in geophysics without requiring additional sampling or cost, based on machine learning methods for image super-resolution.
 
 Recent advances in machine learning techniques for image super-resolution (SR) have been shown to successfully increase image resolution for photographs and other image rasters, while also improving perceptual image quality.
-These modern techniques belong to a family of methods known as deep learning, where features learnt early in the network are leveraged to develop a higher understanding of later features.
+These modern techniques belong to a family of methods known as deep learning, where features learned early in the network are leveraged to develop a higher understanding of later features.
 Notable published examples include SRCNN \parencite{dongLearningDeepConvolutional2014}, VDSR \parencite{kimAccurateImageSuperresolution2016}, SRGAN \parencite{ledigPhotorealisticSingleImage2017}, EDSR \parencite{limEnhancedDeepResidual2017}, RDN \parencite{zhangResidualDenseNetwork2018}, and the current state-of-the-art methods, ESRGAN \parencite{wangESRGANEnhancedSuperresolution2018} and ESRGAN+ \parencite{rakotonirinaESRGANFurtherImproving2020}.
 SRGAN and ESRGAN are similar in design to their contemporary counterparts but implement a Generative Adversarial Network (GAN) framework.
 In a GAN framework, the upsampling network (termed generator) is trained in an adversarial manner against another network (termed discriminator).
@@ -97,7 +97,7 @@ These authors typically report a lower error between the super-resolution upsamp
 Critically, super-resolution for these applications was able to create realistic high frequency information during upsampling, which could be validated against existing high-resolution surveys of the same extent.
 While there are pre-trained models to super-resolve image data (such as ImageNet), the smooth and continuously differentiable nature of potential field data makes it difficult to directly apply such pre-trained models.
 For example, it may enhance the appearance of gridding artefacts, instead of supressing them.
-While several of the aforementioned works investigate deep learning super-resolution for geospatial data, low resolution in potential field geophysics is a result of under sampling and naïve best-effort interpolation of the potential field, distinct from low-resolution data previously studied in those works.
+While several of the aforementioned works investigate deep learning super-resolution for geospatial data, low resolution in potential field geophysics is a result of under sampling and naive best-effort interpolation of the potential field, distinct from low-resolution data previously studied in those works.
 
 \begin{figure}[hbtp]
     \includegraphics[width=\linewidth]{fig/p1/rdn.png}
@@ -154,7 +154,7 @@ Hence, for each network it was necessary to change the input array channel count
 We compare these methods to bicubic interpolation to demonstrate the predictive power of the deep learning approaches.
 
 Residual Dense Network (RDN) \parencite{zhangResidualDenseNetwork2018} is a deep learning super-resolution method which consists of a series of residual dense blocks (\Cref{fig:rdb,fig:convs}), which combine the performant residual connections and dense connections (\Cref{fig:convs}) of earlier architectures for state-of-the-art performance.
-Residual and dense connections provide additional learning capacity to a CNN, where features learnt in early layers can be fully utilised in later layers.
+Residual and dense connections provide additional learning capacity to a CNN, where features learned in early layers can be fully utilised in later layers.
 Following a series of these residual dense blocks, image enlargement is achieved using a simple nearest neighbour interpolation process followed by additional convolution operations.
 In this case, enlargement is performed on an intermediate representation of the input, which has gained information during the main network path.
 RDN is trained to reduce the Mean Absolute Error L1-norm loss, which corresponds to minimising the absolute difference between the super-resolution prediction and the high-resolution ground truth grid.
@@ -307,8 +307,8 @@ The effect of this texture occasionally reveals features matching the high-resol
 
 \begin{figure}[hbtp]
     \includegraphics[width=\linewidth]{fig/p1/filtered.png}
-    \caption[High Pass filtered results]{High Pass filtered test tile and its upsampled counterparts.
-        The cut-off for the high pass Butterworth filter was selected with wavelength equal to the Nyquist wavelength of the LR grid, i.e.,\ four times the HR Nyquist wavelength
+    \caption[High Pass filtered results]{High pass filtered test tile and its upsampled counterparts.
+        The cut-off for the high pass Butterworth filter was selected with wavelength equal to the Nyquist wavelength of the LR grid, i.e.,\ four times the HR Nyquist wavelength.
     }
     \label{fig:filtered}
 \end{figure}
@@ -382,14 +382,14 @@ An example use case for either the method or trained models is super-resolving t
 The trained \qty{80}{\metre} models in this work could be applied to the \qty{80}{\metre} TMI grid, or the method used with existing state map data to train a two times scale model to super-resolve the \qty{40}{\metre} grid to \qty{20}{\metre}.
 Transferability of the model used in this study to other geological settings and magnetic inclinations requires further investigation, with the aim of developing a single multi-domain potential field upscaling model.
 
-The use of the state magnetic map at \qty{80}{\metre} and \qty{20}{\metre} for training data serves as a ready-made analogue for a low pass filter process, which the super-resolution networks successfully learnt to reverse.
+The use of the state magnetic map at \qty{80}{\metre} and \qty{20}{\metre} for training data serves as a ready-made analogue for a low pass filter process, which the super-resolution networks successfully learned to reverse.
 While the result presented here demonstrates the strong applicability of performing super-resolution with grids containing magnetic textures and features, it does not yet demonstrate a capability to super-resolve widely spaced line surveys as if they had been surveyed at closer line spacing.
 Such grids include artefacts from the gridding process that do not occur in low pass filtered or interpolated high-resolution grids, and will present an additional challenge to super-resolve.
 These challenges remain for future work.
 Finally, the current models show good performance at a scale factor of \num{4}, which is a typically investigated scale factor in super-resolution research.
 Provided with sufficient training data, super-resolution geophysics at other factors would be beneficial, especially targeting typical scale factors between regional and district-scale exploration surveys.
 
-\section{Conclusions}
+\section{Conclusion}
 Convolutional neural network architectures, such as RDN and ESRGAN, are capable of super-resolution upsampling low-resolution magnetic grids into realistic high-resolution grids.
 These super-resolved grids contain structural features and textural information that are accurate against ground truth high-resolution grids, that were otherwise unrecoverable through existing interpolation methods.
 The method and existing trained models can be applied to other magnetic grid extents, in the Eastern Goldfields Superterrane and beyond.

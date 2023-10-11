@@ -130,8 +130,8 @@ Implicit functions aim to learn a specific function parameterised entirely by th
 In an image or geophysical grid context, the function may map grid coordinates to the value at those coordinates.
 While extensively developed for point cloud and other 3D data \parencite[e.g.][]{jiangLocalImplicitGrid2020} there have been numerous examples for super-resolution.
 These include SIREN \parencite{sitzmann2019siren}, LIIF \parencite{chenLearningContinuousImage2021}, and LTE \parencite{leeLocalTextureEstimator2022}.
-Notably in these networks, the learnt function has continuous domain, despite the discretised grid input.
-Super-resolution can be achieved by sampling the learnt function at any arbitrary grid cell size smaller than the original input \parencite{chenLearningContinuousImage2021}.
+Notably in these networks, the learned function has continuous domain, despite the discretised grid input.
+Super-resolution can be achieved by sampling the learned function at any arbitrary grid cell size smaller than the original input \parencite{chenLearningContinuousImage2021}.
 While a stand-alone MLP such as SIREN is capable of parameterising a single function, when used in an autoencoder framework (such as with LIIF or LTE), an arbitrary input can be encoded, upscaled, and subsequently reconstructed using fully connected layers \Cref{fig:ltenet}.
 An autoencoder approach generalises MLP based super-resolution to any image or grid not seen in the training set.
 
@@ -356,7 +356,7 @@ The synthetic forward models are associated with geological history class labels
 It is possible to filter the data to contain only the events of interest, which would prepare a baseline model targeting a single geological domain.
 The baseline model prepared in this work demonstrated good performance across a range of geological domains, but may be improved for targeted domains using the filtered approach.
 
-\section{Conclusions}
+\section{Conclusion}
 \label{sec:2conclusion}
 An approach for upscaling geologically diverse geophysical survey grid data is proposed, which adopts transfer learning from synthetic data to better generalise super-resolution across different geological domains.
 Using the preeminent LTE neural network architecture, synthetic magnetic forward models were used to prepare a baseline model capable of upscaling survey grids at four times scale.

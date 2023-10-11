@@ -81,8 +81,8 @@ This may be benefit by automated analysis methods described above.
 Potential fields are constrained by several well understood physical laws, and gridded data ideally conform to these properties for use in inversion applications and further numerical processing.
 Geological interpretation is less reliant on this adherence, however \emph{a priori} information used in physics-informed neural networks improve training speed and model performance \parencite{raissiPhysicsinformedNeuralNetworks2019}, and are especially useful in data-constrained domains such as geophysics.
 It is possible to broaden the definition and extend the concept of informed networks to the use of generative adversarial networks in \Cref{ch:paper1}.
-In these networks, the informing method is termed discriminator loss, and is performed by a classification network conditioned to identify images as `realistic' or `not realistic', depending on features learnt to be important within the target data by the discriminator.
-Using crafted or learnt criterions to inform a neural network greatly assists with learning high quality models, and either approach may be useful for to geophysics in addressing the paucity of ground truth.
+In these networks, the informing method is termed discriminator loss, and is performed by a classification network conditioned to identify images as `realistic' or `not realistic', depending on features learned to be important within the target data by the discriminator.
+Using crafted or learned criterions to inform a neural network greatly assists with learning high quality models, and either approach may be useful for to geophysics in addressing the paucity of ground truth.
 In addition, demonstrating the enforcement of physical properties of potential fields for model outputs may address apprehension for machine learning in geophysics practice.
 
 \printbibliography{}
@@ -94,7 +94,7 @@ By including both synthetic and real survey data for training and case studies, 
 
 To the best of my knowledge, \Cref{ch:paper1} presents the first investigation in the literature of the super-resolution enhancement of gridded aerogeophysical data.
 Prior to this work, it was unknown how well SR methods developed for natural images in computer vision research would adapt to the features present within magnetic grids, or the challenges faced in developing a training dataset for these data.
-We established that the CNN SR methods RDN and ESRGAN could be trained to upsample low-resolution textures in magnetic grids by four times scale, and that the results were more accurate than bicubic upsampling in the real-world case study region.
+We established that the CNN SR methods RDN and ESRGAN could be trained to upsample low-resolution textures in magnetic grids by a factor of four, and that the results were more accurate than bicubic upsampling in the real-world case study region.
 The GAN method used in \Cref{ch:paper2} enhanced resolution, however it introduced significant spurious features, masking the enhancement.
 Hence, the method based on RDN was preferred.
 We identified the need for additional representative training data to investigate transferability of the method to other geological domains, and a realistic method to generate low-resolution training data.

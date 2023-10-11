@@ -56,7 +56,7 @@ However, sampling density suffers various constraints such as cultural obstructi
 
 This thesis reports on three bodies of work across two topics in geophysics: enhancing the high-frequency content of gridded potential field data using \emph{super-resolution}; and, learning a representative function of a potential field extent using \emph{implicit neural representation}.
 The first topic enhances the value of geophysical surveys by predicting high-frequency components in sparsely sampled potential field grids.
-The second presents a straightforward neural network framework for high quality grid regularisation, processing, and data integration.
+The second presents a straightforward neural network framework for high quality grid regularisation and processing.
 For each body of work in these topics, real-world geophysical case studies are presented in order to demonstrate the effectiveness and challenges of the method with open access data.
 Each body of work extends deep learning methods described in computer science literature the same year as the development of each respective geophysical method, to keep pace with rapid advances in the field of machine learning.
 
@@ -65,14 +65,11 @@ This is further explored in the second body of work, where synthetic potential f
 It quantifies the performance of super-resolution upscaling on real-world low-resolution grids with line spacings between \SI{80}{\m} and \SI{480}{\m}, and investigates the useful limits of upscaling using the method.
 
 The second topic explores a method for learning a representation of a potential field extent from scattered real-world survey data by a contemporary neural network.
-The data-driven approach allows the extraction of high-resolution level grids from the learn representation, as well as the rapid analytical calculation of spatial gradients.
-Grid rasters and horizontal gradients calculated with the method very closely match their numerical counterparts, however vertical gradients are not represented well.
+The data-driven approach can extract high-resolution grids from the learned representation, as well as calculate the analytical spatial gradients.
+Grid rasters and horizontal gradients calculated with the method very closely match their numerical counterparts, however, vertical gradients do not.
 
-Individually the methods developed in this thesis enhance the information extractable from potential field surveys.
-However, in combination they reflect ongoing advances in deep learning and their extension to challenges and opportunities in geophysics.
-
-\vfill{}
-\epigraph{\emph{All collected data had come to a final end. Nothing was left to be collected.} \dots}{}
+Individually, the methods developed in this thesis enhance the information extractable from potential field surveys.
+However, in combination, and together they reflect ongoing advances in deep learning and their extension to challenges and opportunities in geophysics.
 
 \newpage{}
 \addsec{Acknowledgements}

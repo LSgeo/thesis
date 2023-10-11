@@ -20,9 +20,9 @@
     The recent use of spatial coordinate features in multilayer perceptron (MLP) neural networks provides opportunities for novel applications in potential field geophysics.
     So-called coordinate MLP networks allow for learning a representative function of potential fields from their surveyed samples.
     % Using this new paradigm of encoding spatial information within a neural network enables new methods for working with potential field survey data.
-    We present a novel method for implicit neural representation for potential fields, demonstrate the quality of the learnt implicit function by encoding real airborne geophysical survey line data, predict constant level grids, and compare the result to grid data processed with a traditional workflow.
+    We present a novel method for implicit neural representation of potential fields, demonstrate the quality of the learned implicit function by encoding real airborne geophysical survey line data, predict constant level grids, and compare the result to grid data processed with a traditional workflow.
     We further demonstrate the analytical calculation of gradients directly in the continuous domain using automatic differentiation, with the same framework used to train the neural network representation.
-    Level grids queried from the learnt representation closely match the reference grid product, with a peak signal to noise ratio of 40 dB.
+    Level grids queried from the learned representation closely match the reference grid product, with a peak signal to noise ratio of 40 dB.
     Horizontal gradients calculated with this method are accurate against numerically derived gradients, while the vertical gradient is a poor match.
     The training process is rapid, and only requires recorded samples from a single survey extent.
 \end{abstract}
@@ -31,13 +31,13 @@
 
 \section{Introduction}
 Geophysical potential fields are routinely collected and used to assist the understanding of the subsurface for geoscience and mineral exploration.
-When surveying these fields, which are continuous functions in three dimensions, sample locations are scattered in \(x\), \(y\), and \(z\), despite best efforts to conform to a regularly spaced line or grid acquisition plan.
+When surveying these fields, which are continuous functions in three dimensions, sample locations are scattered in 3D space, despite best efforts to conform to a regularly spaced line plan.
 These scattered data are typically regularised to a quantised grid for subsequent interpretation, which imposes a new limit on high frequency content and gives rise to spurious artefacts that are a product of the gridding process, not the surveyed field.
 % The interpolation process may 
 
 Neural networks can be considered as universal function approximators.
-The recent technique of deep learning implicit neural representation (INR) \parencite{mildenhallNeRFRepresentingScenes2020} represents a signal as a function of its coordinates, built on a network architecture known as a coordinate multilayer perceptron (CMLP) (see \textcite{ramasinghePeriodicityUnifyingFramework2022} for a recent introduction).
-By parameterising the function in coordinate space, novel values of the function can be queried at arbitrary coordinates within the learnt continuous spatial domain.
+The recent technique of deep learning implicit neural representation (INR) \parencite{mildenhallNeRFRepresentingScenes2020} represents a signal as a function of its coordinates, built on a network architecture known as a coordinate multilayer perceptron (CMLP;\ see \textcite{ramasinghePeriodicityUnifyingFramework2022} for a recent introduction).
+By parameterising the function in coordinate space, novel values of the function can be queried at arbitrary coordinates within the learned continuous spatial domain.
 Recent advances in CMLPs by using periodic activations such as sinusoids have demonstrated that high frequency information can be modelled well by CMLP networks, while being continuously differentiable throughout the depth of the network.
 
 We present a novel method of encoding a representation of a geophysical potential field using INR\@.
@@ -68,9 +68,9 @@ Representing a vector field requires three orthogonal components at each spatial
 A potential field survey can be parameterised as
 \begin{equation}
     \label{eqn:potential}
-    \phi\left(x,y,z\right),
+    \phi\left(x, y, z\right),
 \end{equation}
-where \(\phi{}\) is the potential, and \({(x,y,z)}\) are the three spatial dimensions.
+where \(\phi{}\) is the potential, and \(x, y, \) and \(z\) are the three spatial dimensions.
 
 \subsection{Implicit neural representation}
 \label{sec:inr}
@@ -81,12 +81,12 @@ The structure of an MLP can be described by the number of neurons in each layer 
 
 A classic example of an MLP is using an input vector of image pixel intensities \(u\), and an output vector of class labels \(l\).
 Training this example network with a large number of different images with class labels produces a model capable of predicting the class of novel input image vectors.
-A CMLP for representing images instead takes an input of explicitly stated pixel coordinates \((x,y)\), and an output vector of image pixel intensities \(u\) at those coordinates.
+A CMLP for representing images instead takes an input of explicitly stated pixel coordinates \((x, y)\), and an output vector of image pixel intensities \(u\) at those coordinates.
 Thus training of a CMLP network requires a set of input coordinates and intensities from a single image, and results in a model capable of predicting the intensity of any arbitrary continuous coordinate within the input domain.
 Both tasks may use similar images and an MLP network structure with the same \(n\) hidden layers and \(m\) features, but the use of coordinates as inputs and intensities as outputs changes the predictive task.
-CMLP networks for predicting 3D scalar fields are a class of neural networks \(f\) which train \(u = f(x,y,z)\), with \(u\in\mathbb{R}^1\) and \((x,y,z)\in\mathbb{R}^3\).
+CMLP networks for predicting 3D scalar fields are a class of neural networks \(f\) which train \(u = f(x, y, z)\), with \(u\in\mathbb{R}^1\) and \((x, y, z)\in\mathbb{R}^3\).
 
-Seminal work by \textcite{mildenhallNeRFRepresentingScenes2020} demonstrated INR of volume density and colour radiance, learnt from five dimensions of spatial coordinates and orientation.
+Seminal work by \textcite{mildenhallNeRFRepresentingScenes2020} demonstrated INR of volume density and colour radiance, learned from five dimensions of spatial coordinates and orientation.
 Their approach uses positional encoding to improve the learning capacity of high-frequency content, addressing the issue of spectral bias in deep learning \parencite{rahamanSpectralBiasNeural2019}.
 When replacing positional encoding and the ReLU activation with periodic activation functions such as the sinusoid \parencite{sitzmann2019siren} the high frequency representation of CMLP networks is significantly enhanced.
 Periodic activation functions differ from typical non-linear activations by comprising the neuron with a function that repeats periodically, which allows for continuous differentiation throughout the depth of the network.
@@ -152,7 +152,7 @@ While this means the axes in the latent spatial domain may be compressed relativ
 The case study data do not span a large or magnetically varying geological extent, hence it is sufficient to use simple min-max normalisation for the magnetic field data within the global extent of the survey samples, here between \num{-1} and \num{1}.
 If extensive or complexly varying magnetic provinces were present within the dataset, a normalisation method more robust to outliers may be required.
 The \num{76420} sample points contained within the case study line data are split, with \qty{70}{\percent} used for training, and a random \qty{20}{\percent} of the remaining points are reserved to validate the model performance during training.
-Inference is performed by querying novel coordinates within the learnt domain, here at regularly spaced grid intervals for comparison with standard grid regularisation methods.
+Inference is performed by querying novel coordinates within the learned domain, here at regularly spaced grid intervals for comparison with standard grid regularisation methods.
 
 \subsection{Network architecture}
 The CMLP architecture comprises a simple fully connected network with \(n\) hidden layers, each with \(m\) neurons. %, presented within \Cref{fig:overview}.
@@ -196,15 +196,15 @@ Convergence of the network is shown in \Cref{fig:convergence}.
 \end{figure}
 
 \subsection{Derivative calculation}
-A naive approach to calculating gradients with the trained INR would be to evaluate the representation \(f(x, y, z)\) at a set of coordinates \({(x, y, z)}_1 \dots {(x,y,z)}_n\), and use numerical differentiation with the output grid to calculate derivatives.
+A naive approach to calculating gradients with the trained INR would be to evaluate the representation \(f(x, y, z)\) at a set of coordinates \({(x, y, z)}_1 \dots {(x, y, z)}_n\), and use numerical differentiation with the output grid to calculate derivatives.
 However, using AD with Pytorch, the implicit representation can be differentiated with respect to its coordinate inputs to provide spatial gradients, prior to being queried at the nodes of a quantised grid.
-That is, to directly sample \(\nabla{}\phi{}_{(x,y,z)}\) at \({(x, y, z)}_1 \dots {(x,y,z)}_n\).
+That is, to directly sample \(\nabla{}\phi{}_{(x, y, z)}\) at \({(x, y, z)}_1 \dots {(x, y, z)}_n\).
 Higher order derivatives can be calculated using AD in the same manner, but are not presented here.
 
 \section{Results}
 \subsection{Level grid prediction from INR}
-Querying a learnt INR using a regularly spaced \(x,y\) grid at a specific \(z\) height is a novel method for producing level grids from geophysical potential field surveys.
-The cell size can be selected using a finer or coarser \(x,y\) spacing, including variable or anisotropic cell sizes.
+Querying a learned INR using a regularly spaced \(x, y\) grid at a specific \(z\) height is a novel method for producing level grids from geophysical potential field surveys.
+The cell size can be selected using a finer or coarser \(x, y\) spacing, including variable or anisotropic cell sizes.
 Contemporary super-resolution research can leverage this continual representation as a framework for high quality arbitrary scale factor high-frequency signal prediction \parencite[e.g][]{chenLearningContinuousImage2021}.
 However, the potential field representation task here does not attempt to predict additional high-frequency information and resolution remains determined by the neural network's capacity to represent high frequencies sampled by the survey line spacing.
 
@@ -317,9 +317,9 @@ or denoted in three dimensions,
 Inspired by the approach of \textcite{raissiPhysicsinformedNeuralNetworks2019}, a geophysics-informed network could include a Laplace criterion,
 \begin{equation}
     \label{eqn:crilaplace}
-    \mathcal{L}_{PDE} = \frac{1}{S_i}\sum_{i=1}^{S_i} \left(\frac{\partial{}^2f}{\partial{}x^2} + \frac{\partial{}^2f}{\partial{}y^2} + \frac{\partial{}^2f}{\partial{}z^2}\right)^2,
+    \mathcal{L}_{PDE} = \frac{1}{S}\sum_{i=1}^{S} \left(\frac{\partial{}^2f}{\partial{}x_{i}^2} + \frac{\partial{}^2f}{\partial{}y_{i}^2} + \frac{\partial{}^2f}{\partial{}z_{i}^2}\right)^2,
 \end{equation}
-where \(S_i\) indicates the \(i^{th}\) sample point of the field survey \(\phi(x, y, z)\).
+where \(S_i\) indicates the \(i^{th}\) sample point of the field survey \(\phi(x, y, z)\), implicitly represented by the model \(f\).
 This criterion penalises outputs where Laplace's equation is not satisfied because the sum of partial second derivatives is not close to zero.
 
 %     \mathcal{L}_{PDE} = \lVert{}\frac{\partial{}^2f}{\partial{}x^2} + \frac{\partial{}^2f}{\partial{}y^2} + \frac{\partial{}^2f}{\partial{}z^2}\rVert{}_{2}
@@ -328,17 +328,17 @@ This criterion penalises outputs where Laplace's equation is not satisfied becau
 % Blakely:
 % A force field \(F\) is the gradient (or negative gradient) of the potential energy.
 % \( F = \nabla\phi \) for the gravity potential, \(F = - \nabla \phi\) for the Magnetic potential.
-% \( \phi(x,y,z) = constant \) is an equipotential surface.
+% \( \phi(x, y, z) = constant \) is an equipotential surface.
 % Numerical methods for potential field continuation are unstable, recognised in the geophysical community by solution divergence and noise in predictions.
 
 Initial attempts using the objective function approach were trialled in this work, but struggled to converge and remain for future work.
 It may be worth investigating other geophysical formulae for PINN implementation, such as vertical continuation described in \textcite{blakelyPotentialTheoryGravity1996}.
 
-\section{Conclusions}
+\section{Conclusion}
 High-resolution implicit neural representation of potential field geophysics surveys is achieved with the use of coordinate MLP neural networks for INR\@.
 Resolution in the representation is limited by network capacity, rather than initial grid cell size selection during regularisation.
 Level grids can be extracted from these representations, emerging as a novel method for regularising scattered geophysical sample data.
-Sptaial gradients can be calculated directly from the learnt representation, and can be queried at arbitrary locations.
+Sptaial gradients can be calculated directly from the learned representation, and can be queried at arbitrary locations.
 Regularly sampled grids of the gradients are near-identical to those calculated by existing numerical methods, and benefit from being gridded after gradient calculation.
 
 \section{Acknowledgements}
