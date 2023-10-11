@@ -9,7 +9,7 @@ The subsurface continuation of exposed geology can be extrapolated and interpola
 Potential field surveys offer low-cost investigations over a large spatial extent, and are routinely used for geological mapping and interpretation \parencite{nabighian75thAnniversaryHistorical2005}.
 For this reason, magnetic field surveys are commonly used by geophysicists for geological mapping and interpretation toward understanding the Earth in three dimensions.
 Scattered surveys are commonly interpolated to grid rasters, and interpreted individually or integrated with other datasets for predicting the subsurface for processes such as numerical modelling and inversion.
-In these tasks, the spatial resolution of the grid is a critical factor in their ability to define geological detail \parencite{islesGeologicalInterpretationAeromagnetic2018}.
+In these tasks, the spatial resolution of the grid is a critical factor in their ability to define geological detail \parencite{islesGeologicalInterpretationAeromagnetic2013}.
 The role of high-resolution details in these geophysical methods is becoming more important to exploration as resources are increasingly sought from below sedimentary cover.
 Resolution enhancement for natural images has seen recent success from the use of deep learning \parencite{moserHitchhikerGuideSuperResolution2023}, however, it is not understood if these methods can extend to geophysics data, which differ significantly to the natural images used for training in prior enhancement methods.
 
@@ -36,7 +36,7 @@ There are many aspects of survey design controlling the resolvable detail within
 When acquiring data, aircraft fly straight transect lines at a safe elevation above topography, known as the topography drape.
 Higher frequencies within potential field data diminish with increasing source-sensor distance, therefore the lower the height, the more high-frequency components will be captured by the sensor.
 Surveys are flown with a heading in which data will be acquired along line.
-For regional and contemporary surveys this is recommended to be North-South, however, early practice was to survey perpendicular to the dominant geological strike, under the expectation of sampling the greatest frequency of change in magnetic intensity \parencite{islesGeologicalInterpretationAeromagnetic2018}.
+For regional and contemporary surveys this is recommended to be North-South, however, early practice was to survey perpendicular to the dominant geological strike, under the expectation of sampling the greatest frequency of change in magnetic intensity \parencite{islesGeologicalInterpretationAeromagnetic2013}.
 Acquisition along flight lines is sampled at a rate of \qty{10}{\hertz} or greater, which corresponds to an interval of \qty{7}{\m} or shorter at nominal flight speeds of \qty{70}{\m\per\s} \parencite{goodwinAirborneMagneticRadiometric2023}.
 The spacing between lines is a factor of the scale of investigation and the cost of acquisition, and regional pre-competitive data in Australia targets state-wide coverage at \qty{400}{\m}, which is generally regarded as the upper limit of usefulness to exploration \parencite{howardAirborneGeophysicalCoverage2004}.
 These low-resolution surveys, funded by government geoscience agencies, are a key driver in greenfields exploration and are released as open file data.
@@ -67,9 +67,9 @@ A review of spatial interpolation methods is provided in \textcite{liReviewCompa
 
 \subsection{A definition for geophysical resolution}
 In interpolated grids the spatial dimension of each cell is referred to as the cell size.
-As previously stated, resolvable detail in geophysical surveys is a product of the distance between the causative magnetic body and the sensor, and the line spacing \parencite{islesRelationshipsGeologicalResolution1992,islesGeologicalInterpretationAeromagnetic2018,dentithGeophysicsMineralExploration2014}.
+As previously stated, resolvable detail in geophysical surveys is a product of the distance between the causative magnetic body and the sensor, and the line spacing \parencite{islesRelationshipsGeologicalResolution1992,islesGeologicalInterpretationAeromagnetic2013,dentithGeophysicsMineralExploration2014}.
 Height is controlled by flying the lowest safe and sufficiently smooth topography drape, and along-line sampling is performed at a constant high rate, so the key factor controlling resolution in aeromagnetic survey design is the line spacing.
-Further survey design considerations for airborne geophysics are outlined in \textcite{goodwinAirborneMagneticRadiometric2023,islesGeologicalInterpretationAeromagnetic2018,reidAeromagneticSurveyDesign1980}.
+Further survey design considerations for airborne geophysics are outlined in \textcite{goodwinAirborneMagneticRadiometric2023,islesGeologicalInterpretationAeromagnetic2013,reidAeromagneticSurveyDesign1980}.
 Each gridding method includes a final cell size parameter selectable by the geophysicist, with a long-standing guideline of one third to one fifth the line spacing.
 This sufficiently preserves detail in areas of high sampling, while avoiding excessive interpolated cells in areas of low sampling, which may lead to artefacts.
 If the sampling frequency is nominally \qty{7}{\m} in the flight line direction, and up to \qty{400}{\m} in the line-perpendicular direction, the resulting grid resolution will be anisotropic at best, and uniformly low-resolution at worst.
@@ -217,7 +217,7 @@ This is echoed by \textcite{karpatneMachineLearningGeosciences2019}, who also id
 Early adoption of SR was seen in satellite and airborne remote sensing, where the data share image features with natural images \parencite{lanarasSuperresolutionSentinel2Images2018,arunConvolutionalNetworkArchitectures2019,kawulokTrainingDeepNetworks2019}, and others.
 Hyperspectral data SR are commonly investigated \parencite{yangHyperspectralImageClassification2018,arunCNNBasedSuperResolutionHyperspectral2020}.
 Rock microscopy images have been upsampled with SR \parencite{niuInnovativeApplicationGenerative2020}, and their accuracy compared using domain specific parameter calculation.
-SR with physics-informed learning has been performed by \textcite{bodeUsingPhysicsinformedEnhanced2021,jiangMeshfreeFlowNetPhysicsConstrainedDeep2020} in the field of fluid dynamics, \textcite{leongDeepBedMapDeepNeural2020} in the field of basement topography, and \textcite{jungbluthSingleframeSuperresolutionSolar2019} in astrophysics.
+SR with physics-informed learning has been performed by \textcite{bodeUsingPhysicsinformedEnhanced2021,jiangMeshfreeFlowNetPhysicsconstrainedDeep2020} in the field of fluid dynamics, \textcite{leongDeepBedMapDeepNeural2020} in the field of basement topography, and \textcite{jungbluthSingleframeSuperresolutionSolar2019} in astrophysics.
 Additionally, physics-informed learning has been performed with multi-physics integration in \textcite{degen3DMultiphysicsUncertainty2022}.
 Seismic data has been investigated with SR \parencite{liSuperresolutionSeismicVelocity2021}, and SR with the removal of noise \parencite{liDeepLearningSimultaneous2021}.
 

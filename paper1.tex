@@ -118,7 +118,7 @@ To the best of our knowledge, detailed studies on applying and comparing deep le
 
 \begin{figure}[hbtp]
     \includegraphics[width=\linewidth]{fig/p1/rdb.png}
-    \caption[Basic Blocks]{Each Basic Block (\Cref{fig:rdn}, orange) comprises three weighted Residual Dense Blocks (\Cref{fig:convs}).
+    \caption[Basic blocks]{Each Basic Block (\Cref{fig:rdn}, orange) comprises three weighted Residual Dense Blocks (\Cref{fig:convs}).
         ESRGAN+ extends ESRGAN with the addition of Gaussian Noise after each basic RDB block (black vectors).
         Weight factors are indicated by \(\beta{}\) and \(\gamma{}\).
         Noise injection is not used in RDN\@.
@@ -236,7 +236,7 @@ Predicted outputs are inverse normalised to return the cell values to appropriat
 
 \subsection{Accuracy metrics}
 The functional aim of super-resolution geophysics is to accurately predict realistic high frequency details to add to a low-resolution grid.
-To quantify this, we calculate root mean square error (RMSE) and structural similarity metrics (SSIM and MS-SSIM), on TMI, high pass filtered TMI, and first vertical derivative (1VD) filtered TMI results for each upsampling method across several sample extents.
+To quantify this, we calculate root mean square error (RMSE) and structural similarity metrics (SSIM and MS-SSIM), on TMI, high-pass filtered TMI, and first vertical derivative (1VD) filtered TMI results for each upsampling method across several sample extents.
 Euclidean accuracy measures like RMSE quantify the per-pixel accuracy of a predicted grid compared to its corresponding high-resolution ground truth grid.
 For this metric, quality improves as the error value approaches \num{0}.
 The Structural Similarity (SSIM) \parencite{wangImageQualityAssessment2004} and Multi-Scale Structural Similarity (MSSSIM) \parencite{wangMultiscaleStructuralSimilarity2003} image quality metrics use sliding windows to quantify image perceptual similarity based on localised structural information.
@@ -246,7 +246,7 @@ A SSIM value of 1 indicates perfect similarity, and values approaching \num{0} i
 
 \section{Results}
 Results are presented to compare the three methods described above, with the metrics of RMSE, SSIM and MS-SSIM, as well as observed perceptual quality.
-In addition to unfiltered TMI comparisons, high pass filtered and first vertical derivative TMI grids are also shown.
+In addition to unfiltered TMI comparisons, high-pass filtered and first vertical derivative TMI grids are also shown.
 These products are commonly used in geophysics to investigate high frequency components in grids.
 
 \subsection{Test dataset}
@@ -285,7 +285,7 @@ The Radially Averaged Power Spectral Density (RAPSD) \parencite{ulichneyDitherin
 
 \begin{figure}[hbtp]
     \includegraphics[width=\linewidth]{fig/p1/rapsd.jpg}
-    \caption[short]{Radially Averaged Power Spectra for the complete test extent shown in \Cref{fig:trainvaldata}.
+    \caption[Power spectra for the test extent]{Radially Averaged Power Spectra for the complete test extent shown in \Cref{fig:trainvaldata}.
         The Nyquist wavelengths for the high-resolution (and upsampled) rasters and low-resolution raster are also shown.
         The frequency axis has been transformed to wavelength, and the spectra have been normalised for direct comparison.
         Note the complete test extent is covered by surveys with a range of line spacings from \qty{100}{\metre} to \qty{20}{\metre}, with \qty{100}{\metre} being the most extensive.
@@ -294,7 +294,7 @@ The Radially Averaged Power Spectral Density (RAPSD) \parencite{ulichneyDitherin
     \label{fig:rapsd}
 \end{figure}
 
-To visualise the contribution of these enhanced high frequencies in the resulting grid, the super-resolved output from each method is high pass filtered, with a cut-off wavelength equivalent to the Nyquist wavelength of the LR grid.
+To visualise the contribution of these enhanced high frequencies in the resulting grid, the super-resolved output from each method is high-pass filtered, with a cut-off wavelength equivalent to the Nyquist wavelength of the LR grid.
 By filtering at this wavelength, only frequencies added by the upsampling process will be shown in the output (\Cref{fig:filtered}). Bicubic interpolation (\Cref{fig:filtered} c) fails to add significant high frequency components.
 RDN\textdaggerdbl{} (\Cref{fig:filtered} d) appears to approximate similar high frequencies to the HR tile (\Cref{fig:filtered} b), while ESRGAN+ (\Cref{fig:filtered} e) shows potentially excessive predicted high frequency components.
 Finally, metrics for the full set of test tiles are reported in \Cref{tab:metrics}.
@@ -308,8 +308,8 @@ The effect of this texture occasionally reveals features matching the high-resol
 
 \begin{figure}[hbtp]
     \includegraphics[width=\linewidth,trim={0 0 0 -5mm},clip]{fig/p1/hpfilt.jpg}
-    \caption[High Pass filtered results]{High pass filtered test tile and its upsampled counterparts.
-        The cut-off for the high pass Butterworth filter was selected with wavelength equal to the Nyquist wavelength of the LR grid, i.e.,\ four times the HR Nyquist wavelength.
+    \caption[High-pass filtered results]{High-pass filtered test tile and its upsampled counterparts.
+        The cut-off for the high-pass Butterworth filter was selected with wavelength equal to the Nyquist wavelength of the LR grid, i.e.,\ four times the HR Nyquist wavelength.
     }
     \label{fig:filtered}
 \end{figure}
@@ -351,7 +351,7 @@ The ESRGAN+ prediction profile shows two distinct low TMI features, but they are
 
 \begin{figure}[hbtp]
     \includegraphics[width=\linewidth,trim={0 0 0 0},clip]{fig/p1/1vd.jpg}
-    \caption[First Vertical Derivative SR TMI over the Mt Mason resource project]{First Vertical Derivative TMI over the Mt Mason resource project, with the super-resolution predictions (d, e) showing a variety of inference artefacts.
+    \caption[First vertical derivative over the case study grid]{First Vertical Derivative TMI over the Mt Mason resource project, with the super-resolution predictions (d, e) showing a variety of inference artefacts.
     Red asterisks (*) show a vertical tile boundary present as a 3--4 pixel-wide error in predicted TMI value.
     Red caret (\^{ }) indicates a region of subtle ripple-mark textural artefact, only present in ESRGAN+ predictions.
     }
@@ -362,7 +362,7 @@ The ESRGAN+ prediction profile shows two distinct low TMI features, but they are
     \includegraphics[width=\linewidth,trim={0 0 0 5mm},clip]{fig/p1/jhilldykes.png}
     \centering
     \includegraphics[width=0.7\linewidth]{fig/p1/transectp.png}
-    \caption[Jasper Hills Project TMI grids and line profile]{Jasper Hills Project TMI grids (a--e) and line profile (f).
+    \caption[Case study TMI grids and line profiles]{Jasper Hills Project TMI grids (a--e) and line profile (f).
         Bicubic interpolation of the low-resolution grid closely matches the low-resolution grid, while both super-resolution methods better approximate the magnitude of the features present in the HR profile, between \qty{650}{\metre} and \qty{1020}{\metre}.
     }
     \label{fig:jhilldykes}
