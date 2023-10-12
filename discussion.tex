@@ -51,16 +51,22 @@ The work in \Cref{ch:paper1} was prepared for publication prior the release of a
 It was seen in \Cref{ch:paper2} that this data improved model performance for a range of features by using transfer learning for pre-training.
 % This transfer learning approach for training data is also found to be useful for RDN\textdaggerdbl{} and ESRGAN\@.
 Here, the use of synthetic and real-world line spacing sampled data approach used with LTE in \Cref{ch:paper2} are adopted for the RDN\textdaggerdbl{} and ESRGAN+ models.
-\Cref{fig:modcomp} shows RDN\textdaggerdbl{} and ESRGAN+ in predicting accurate features when upscaling \qty{320}{\m} data to \qty{80}{\m} line spacing.
-It can be inferred that the challenge of super-resolution for these tasks is predominantly a question of providing suitable and sufficient training data, and is less constrained to neural network choices.
+\Cref{fig:modcomp} shows RDN\textdaggerdbl{}, ESRGAN+, and LTE predicting accurate structural features when upscaling \qty{320}{\m} data to \qty{80}{\m} line spacing.
+While each model has different hyperparameters due to the different architectures in use, the SR prediction converges toward similar structures, with ESRGAN+ containing additional noise.
+It can be interpreted that the challenge of super-resolution for this tasks is predominantly a question of providing suitable and sufficient training data, and is less constrained to neural network choices.
 
-\begin{figure}
-    \includegraphics[width=\linewidth]{fig/etc/TMI Comparison_23.pdf} % TODO Update for RDN\textdaggerdbl{}, ESRGAN, LTE, ~3 hours ea.
-    \caption[Comparison between the three SR architectures]{
-        A comparison between all deep learning super-resolution methods presented in \Cref{ch:paper1} and \Cref{ch:paper2}, using the realistic low-resolution transform developed in \Cref{ch:paper2}.
-        a) The low-resolution input, b) The high-resolution target, c) The RDN\textdaggerdbl{}+ Network, d) The ESRGAN+ network, and e) The LTE network.}
-    \label{fig:modcomp}
-\end{figure}
+\begin{landscape}
+    \begin{figure}[hbtp]
+        \includegraphics[width=\linewidth,trim={0 0 0 5mm},clip]{fig/etc/model_comparison_v2.pdf}
+        \caption[Comparison between the three SR architectures]{
+            A comparison between all deep learning super-resolution methods presented in \Cref{ch:paper1} and \Cref{ch:paper2}, using the realistic low-resolution transform developed in \Cref{ch:paper2}.
+            a) The low-resolution input, b) The high-resolution target, c) The RDN\textdaggerdbl{} SR prediction, d) The ESRGAN+ SR prediction, and e) The LTE SR prediction.}
+        The baseline model for c) and d) was trained for 7 hours on the synthetic dataset described in \Cref{sec:2methods}.
+        c) was fine-tuned for 1.5 hours, while d) was fine-tuned for 4.3 hours.
+        The training of e) is described in \Cref{sec:finetune}.
+        \label{fig:modcomp}
+    \end{figure}
+\end{landscape}
 
 Given the similar performance between the three distinct architectures, instead of investigating novel SR networks for geophysics super-resolution, an important future work would be understanding the data dependencies of a successful model. For example, filtering the synthetic dataset by event history label to prepare bespoke models for specific geological domains to improve performance at the cost of generalisation.
 
@@ -97,7 +103,7 @@ To the best of my knowledge, \Cref{ch:paper1} presents the first investigation i
 Prior to this work, it was unknown how well SR methods developed for natural images would adapt to the features and high dynamic range present within magnetic grids, or the challenges faced in developing a training dataset for these data.
 We established that the CNN SR methods RDN\textdaggerdbl{} and ESRGAN+ could be trained to upsample low-resolution textures in magnetic grids by a factor of four, and that the results were more accurate than bicubic upsampling in the real-world case study region.
 The ESRGAN+ method used in \Cref{ch:paper2} enhanced resolution, however it introduced significant spurious features, masking the enhancement.
-Hence, the method based on RDN\textdaggerdbl{} was preferred. 
+Hence, the method based on RDN\textdaggerdbl{} was preferred.
 We identified the need for additional representative training data to investigate transferability of the method to other geological domains, and a realistic method to generate low-resolution training data.
 
 The challenge of training data availability was addressed in \Cref{ch:paper2}, where we investigated the use of geologically varied synthetic data to train a baseline model, fine-tuning with real-world data, and simulating realistic line sampling to create low-resolution data.
