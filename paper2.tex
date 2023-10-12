@@ -145,14 +145,14 @@ An overview of the structure of the LTE network is shown in \Cref{fig:ltenet}.
 Specifics of the LTE implementation to investigate the performance of SR for geophysical grids from a range of geological domains are detailed in \Cref{sec:2lte}.
 
 \begin{figure}[hbtp]
-    \includegraphics[width=\linewidth]{fig/p2/temp_lte.png}
+    \includegraphics[width=\linewidth]{fig/p2/ltenet.pdf}
     \caption[The LTE architecture]{
-        A simplified representation of the super-resolution LTE network.
-        The encoder is marked as \(E_\phi{}\).
-        \(f_\Theta{}\) is an MLP network used as the decoder for image reconstruction.
-        A long-range skip connection with simple upscaling is marked with an arrow.
+        The LTE super-resolution network is structured as an autoencoder.
+        The encoder can take the form of RDN (prior the upsampling and reconstruction, see \Cref{fig:rdn}), or transformer-based networks.
+        The decoder is an MLP network, and is used for image reconstruction.
+        A long-range skip connection with simple upscaling allows low-resolution features common to both LR and SR to bypass the network.
         The LTE network block performs high-resolution upscaling of extracted features in the Frequency domain.
-        Simplified from \textcite{leeLocalTextureEstimator2022}.
+        Simplified from \textcite{leeLocalTextureEstimator2022}, where the LTE block is further detailed.
     }
     \label{fig:ltenet}
 \end{figure}
