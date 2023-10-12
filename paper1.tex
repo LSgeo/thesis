@@ -118,25 +118,6 @@ While high quality results from under sampled data are attained with the non-equ
 This maintains true for data from published grids, which are regularised onto a uniform grid.
 To the best of our knowledge, detailed studies on applying and comparing deep learning approaches for geophysical potential field super-resolution has not been previously reported.
 
-\begin{figure}[hbtp]
-    \centering
-    \includegraphics[width=\linewidth]{fig/p1/rdb_vec.pdf}
-    \caption[Basic blocks]{Each Basic Block (\Cref{fig:rdn}, orange) comprises three weighted Residual Dense Blocks (\Cref{fig:convs}).
-        ESRGAN+ extends ESRGAN with the addition of Gaussian Noise after each basic RDB block (black vectors).
-        Weight factors are indicated by \(\beta{}\) and \(\gamma{}\).
-        Noise injection is not used in RDN\@.
-        Adapted from \textcite{rakotonirinaESRGANFurtherImproving2020}.
-    }
-    \label{fig:rdb}
-\end{figure}
-
-\begin{figure}[hbtp]
-    \centering
-    \includegraphics[width=0.75\linewidth]{fig/p1/convs_vec.pdf}
-    \caption[RDB convolutional layers]{Each Residual Dense Block (\Cref{fig:rdb}, purple) comprises four convolutional layers, with additional learning pathways present as residual connections (black), and dense connections (green). LReLU refers to the Leaky-ReLU activation function. Adapted from \textcite{rakotonirinaESRGANFurtherImproving2020}.}
-    \label{fig:convs}
-\end{figure}
-
 \subsection{Interpolation}
 Increasing the resolution of an image is achievable through computationally inexpensive interpolating filters, such as nearest neighbour or bicubic interpolation.
 These algorithms increase the number of pixels comprising the image raster and predict values for the interpolated pixels.
@@ -166,12 +147,32 @@ RDN is trained to reduce the Mean Absolute Error L1-norm loss, which corresponds
 RDN was selected as a comparison against ESRGAN+ because RDN is structurally similar to the generator network in ESRGAN, allowing for analysis of the performance of GANs for super-resolution geophysics.
 The RDN implementation used here adopts some improvements from ESRGAN+ and will henceforth be referred to as RDN\textdaggerdbl{}.
 
+\begin{figure}[hbtp]
+    \centering
+    \includegraphics[width=\linewidth]{fig/p1/rdb_vec.pdf}
+    \caption[Basic blocks]{Each Basic Block (\Cref{fig:rdn}, orange) comprises three weighted Residual Dense Blocks (\Cref{fig:convs}).
+        ESRGAN+ extends ESRGAN with the addition of Gaussian Noise after each basic RDB block (black vectors).
+        Weight factors are indicated by \(\beta{}\) and \(\gamma{}\).
+        Noise injection is not used in RDN\@.
+        Adapted from \textcite{rakotonirinaESRGANFurtherImproving2020}.
+    }
+    \label{fig:rdb}
+\end{figure}
+
+\begin{figure}[hbtp]
+    \centering
+    \includegraphics[width=0.75\linewidth]{fig/p1/convs_vec.pdf}
+    \caption[RDB convolutional layers]{Each Residual Dense Block (\Cref{fig:rdb}, purple) comprises four convolutional layers, with additional learning pathways present as residual connections (black), and dense connections (green). LReLU refers to the Leaky-ReLU activation function. Adapted from \textcite{rakotonirinaESRGANFurtherImproving2020}.}
+    \label{fig:convs}
+\end{figure}
+
+
 ESRGAN+, based on ESRGAN \parencite{wangESRGANEnhancedSuperresolution2018}, was chosen as the primary super-resolution CNN architecture for this task due to its reported success in other super-resolution tasks (especially \textcite{bodeUsingPhysicsInformedSuperResolution2019} and \textcite{leongDeepBedMapDeepNeural2020}) and state of the art results for its original application in image super-resolution.
 As a Generative Adversarial Network (GAN), it comprises two iteratively trained neural networks, a Generator (G) used to upscale low-resolution inputs, and Discriminator (D), which is trained to improve the performance of the generator.
 
-G is analogous in design to the RDN architecture described above (\Cref{fig:rdn}), and is trained to upscale a low-resolution input, creating a super-resolution prediction.
-The Discriminator network used in ESRGAN is based on a prevalent image classification architecture known as VGG \parencite{simonyanVeryDeepConvolutional2015}.
-D is trained to classify its inputs as being either an example of the super-resolved G prediction, or high-resolution ground truth data.
+The generator (G) is analogous in design to the RDN architecture described above (\Cref{fig:rdn}), and is trained to upscale a low-resolution input, creating a super-resolution prediction.
+The discriminator network (D) used in ESRGAN is based on a prevalent image classification architecture known as VGG \parencite{simonyanVeryDeepConvolutional2015}.
+The discriminator is trained to classify its inputs as being either an example of the super-resolved G prediction, or high-resolution ground truth data.
 This is used to provide a loss-feedback to G based on G's ability to create realistic SR predictions.
 The two networks are trained concurrently, with the contemporaneous D network being used to calculate an adversarial loss for G at each iteration.
 The adversarial loss calculated by D is incorporated with the generator's L1 loss as used in RDN, and training continues until D stabilises at 50 \% accuracy where the discriminator is unable to distinguish generated images from real images better than random chance.

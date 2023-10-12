@@ -288,8 +288,8 @@ This is conjectured to be caused by aeromagnetic sampling being carried out on a
 
 While quantised grids can be queried at any cell size, short wavelength information beyond the Nyquist limit of the survey line sampling are not predicted with this architecture.
 
-The current method could include additional target dimensions, which would allow representation learning of vector fields \(\mathbb{R}^{3}\) in three dimensions \(\mathbb{R}^{3}\).
-This has applications in tensor fields and data integration tasks, and these remain for future work.
+The current method could include additional target dimensions, which may allow representation learning of vector fields \(\mathbb{R}^{3}\) in three dimensions \(\mathbb{R}^{3}\).
+This has applications in tensor field processing, and data integration tasks, and these remain for future work.
 
 INR is a rapidly evolving field of research, and draws on contemporary established deep learning improvements within related fields.
 In addition to improving the high-frequency learning capacity with novel activation functions and regularisation methods, fundamental neural network research and hardware development is ongoing.
@@ -345,7 +345,7 @@ It may be worth investigating other geophysical formulae for PINN implementation
 \section{Conclusion}
 High-resolution implicit neural representation of potential field geophysics surveys is achieved with the use of coordinate MLP neural networks for INR\@.
 Resolution in the representation is limited by network capacity, rather than initial grid cell size selection during regularisation.
-Level grids can be extracted from these representations, emerging as a novel method for regularising scattered geophysical sample data.
+Regular grids can be extracted from these representations, emerging as a novel method for regularising scattered geophysical sample data.
 Spatial gradients can be calculated directly from the learned representation, and can be queried at arbitrary locations.
 Regularly sampled grids of the gradients are near-identical to those calculated by existing numerical methods, and benefit from being gridded after gradient calculation.
 

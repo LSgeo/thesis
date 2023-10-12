@@ -145,13 +145,14 @@ An overview of the structure of the LTE network is shown in \Cref{fig:ltenet}.
 Specifics of the LTE implementation to investigate the performance of SR for geophysical grids from a range of geological domains are detailed in \Cref{sec:2lte}.
 
 \begin{figure}[hbtp]
-    \includegraphics[width=\linewidth]{fig/p2/ltenet.pdf}
+    \centering
+    \includegraphics[width=0.75\linewidth]{fig/p2/ltenet.pdf}
     \caption[The LTE architecture]{
         The LTE super-resolution network is structured as an autoencoder.
         The encoder can take the form of RDN (prior the upsampling and reconstruction, see \Cref{fig:rdn}), or transformer-based networks.
         The decoder is an MLP network, and is used for image reconstruction.
-        A long-range skip connection with simple upscaling allows low-resolution features common to both LR and SR to bypass the network.
-        The LTE network block performs high-resolution upscaling of extracted features in the Frequency domain.
+        A long-range skip connection with nearest neighbour upsampling allows low-resolution features, common to both LR and the HR target, to bypass the network.
+        The LTE network block performs high-resolution upscaling of extracted features in the frequency domain.
         Simplified from \textcite{leeLocalTextureEstimator2022}, where the LTE block is further detailed.
     }
     \label{fig:ltenet}
@@ -166,7 +167,7 @@ Conclusions are drawn in \Cref{sec:2conclusion}.
 \label{sec:2methods}
 A realistic geophysical low-resolution transform is developed by simulating aeromagnetic sampling of high-resolution survey grid datasets, and re-gridding the resulting samples.
 The proposed dataset methodology uses synthetic forward modelled potential field data to train a selected performant super-resolution network, and the resulting baseline model is subsequently used for transfer learning to fine-tune train the model with real aeromagnetic survey grid data.
-The performance of the method is qualitatively described on real survey grid extents, and quantitatively described with standard image quality metrics.
+The performance of the method is qualitatively described on real survey grid extents, and quantitatively described with image quality metrics.
 
 \subsection{Synthetic potential fields}
 A novel synthetic dataset is used to train and validate the initial model.
@@ -220,8 +221,8 @@ Insufficient sampling in the LR grid causes the spatial relation to be incorrect
     \includegraphics[width=\linewidth,trim={0 0 0 5mm},clip]{fig/p2/inp_data_Noddy_165.pdf}
     \caption[Low-resolution geophysics grids]{
         The result of the proposed sampling and gridding on a two synthetic tiles loaded from the collection of \textcite{jessellNoddyverseMassiveData2022} at 4x scale.
-        Note the coloured lines and accompanying tick marks in the ground-truth grid (GT, a., d.)) indicate cells which are sampled and used for gridding in the low-resolution grid (LR, c., and f.).
-        High-resolution (HR, b., and e.)) is sampled and gridded from GT, with survey lines indicated by minor tick marks.
+        Note the coloured lines and accompanying major tick marks in the ground-truth grid (GT a., d.,) indicate cells which are sampled and used for gridding in the low-resolution grid (LR c., and f.,).
+        High-resolution (HR b., e.,) is sampled and gridded from GT, with survey lines indicated by minor tick marks.
         The minimum curvature gridding process results creates a variety of low-resolution degradations.
     }
     \label{fig:lrdata}
@@ -273,12 +274,12 @@ The SwinIR feature encoder implementation by is used, and the MLP decoder retain
 
 \section{Results}
 \label{sec:2results}
-\subsubsection{Quantitative measure}
 Due to the dynamic range of magnetic anomaly grids and the relative importance of structural accuracy for gridded data, image quality assessment methods typically used for RGB images such as peak signal-to-noise ratio or mean-squared error are an inadequate quantitative measure of upscaling performance for geophysics.
 In addition to mean-square error, FSIM \parencite{linzhangFSIMFeatureSimilarity2011} is used to quantify the quality of the super-resolved image.
 FSIM is a full reference image similarity metric that quantifies structural similarity, rather than individual cell values, with highly similar structural content causing the metric to approach 1.0.
 %TODO complain about SSIM Structural Similarity (SIM) \parencite{wangImageQualityAssessment2004}
-Model performance is quantified using SSIM in Cref{tab:2metrics}, and it is seen that fine-tune training increases FSIM score for the task of super-resolution for aeromagnetic grids over the baseline model.
+Model performance is quantified using SSIM in \Cref{tab:2metrics}.
+It is seen that fine-tune training increases FSIM score for the task of super-resolution for aeromagnetic grids, over the baseline model.
 
 \begin{table}[hbtp]
     \begin{tblr}{
@@ -291,39 +292,50 @@ Model performance is quantified using SSIM in Cref{tab:2metrics}, and it is seen
                 },
             row{1} = {guard}
         }
-                         & \SetCell[c=2]{c} Reserved synthetic test &            & \SetCell[c=2]{c} Aeromagnetic grid dataset              \\
+                         & \SetCell[c=2]{c} Reserved synthetic test &              & \SetCell[c=2]{c} Aeromagnetic grid dataset                \\
         \hline{}
-                         & \(\mu\)                                  & \(\sigma\) & \(\mu\)                                    & \(\sigma\) \\
-        Baseline model   & 0.9844                                   & 0.0296     & 0.9731                                     & 0.0086     \\
-        Fine-tuned model & 0.9838                                   & 0.0329     & 0.9754                                     & 0.0078     \\
+                         & \(\mu{}\)                                & \(\sigma{}\) & \(\mu{}\)                                  & \(\sigma{}\) \\
+        Baseline model   & 0.9844                                   & 0.0296       & 0.9731                                     & 0.0086       \\
+        Fine-tuned model & 0.9838                                   & 0.0329       & 0.9754                                     & 0.0078       \\
     \end{tblr}
 
-    \caption[Accuracy Metrics]{Mean-square error and FSIM for each upsampling method. $\mu$ is given as the mean, and $\sigma$ is given as the standard deviation. Fine-tuned }
+    \caption[Accuracy Metrics]{Mean (\(\mu{}\)) and standard deviation (\(\sigma{}\)) of the FSIM metric for each upsampling method over the test set.}
     \label{tab:2metrics}
 \end{table}
 
 
-Qualitative results are shown to compare the outputs from the two models, the baseline model that is trained with synthetic data and the fine-tuned model trained with open access survey data.
+Qualitative results are shown to compare the outputs from the baseline model that is trained with synthetic data, and the fine-tuned model trained with open access survey data.
 
 \Cref{fig:srdata23,fig:srdata14,fig:srdata17,fig:srdata18} contain open access grid data from the Eastern Goldfields Superterrane of Western Australia, prepared using the proposed method.
-Each figure follows the following layout for the grids; a) the ground truth (GT) \numproduct{200 x 200} cell tile is presented with low-resolution sampled data indicated in colour.
+Each figure follows the following layout for the grids.
+The ground truth (GT) \numproduct{200 x 200} cell tile is presented  in a), with low-resolution data sampling indicated in colour.
 The target high-resolution grid (HR), created from sampling and gridding GT at \qty{80}{\m} line spacing, is shown in b) for comparison.
 The \numproduct{45 x 45} cell low-resolution grid (LR) shows the result of the described sampling and gridding method at \qty{320}{m} line spacing, and is upscaled for display using bicubic interpolation in c).
 The baseline model prediction (Baseline SR), using an input of LR with the proposed method, is shown in d) with the corresponding SSIM metric between HR and SR\@.
-The fine-tuned model prediction is shown in e).
+The fine-tuned model prediction is shown in e), using the same LR input.
 
-Strong line-perpendicular smearing in LR is reduced in both SR predictions, and fine structural divisions are better delineated.
-NW striking features around in HR are aliased in LR and subsequently incorrectly rotated by 90 degrees in the baseline SR prediction (\Cref{fig:srdata23} d).
-The fine-tuned model (\Cref{fig:srdata23} e) resolves the correct strike, and separates the two features present.
-The enhanced structural similarity is reflected by the higher SSIM score in the fine-tuned model.
+In \Cref{fig:srdata23}, strong line-perpendicular artefacts and loss of high-frequency detail in LR is lessened in both SR predictions, and fine structural divisions are better delineated.
+However, northwest striking features in HR are aliased in LR, and here subsequently incorrectly rotated by 90 degrees in the baseline SR prediction (\Cref{fig:srdata23} d).
+The fine-tuned model (\Cref{fig:srdata23} e) resolves the correct strike, and separates the two linear features present.
+The enhanced structural similarity is reflected by the higher FSIM score of in the fine-tuned model. 
+Similar structural inaccuracies are seen in\Cref{fig:srdata17}, where severe aliasing again fails to be corrected using the baseline model, but is resolved by fune-tuning.
+
+In \Cref{fig:srdata14}, the edges of the central feature defined by a magnetic high are poorly defined by the low-resolution grid in \Cref{fig:srdata14} c.
+Both models more clearly define the shape of the feature, however the fine-tuned model additionally separates the adjacent North-South striking feature.
+
+The North-South striking geology in \Cref{fig:srdata18} presents a worst-case scenario for aeromagnetic surveying, where the magnetic intensity varies strongly in the low sampling, line-perpendicular direction.
+The low-resolution sampling completely fails to sample all but the largest features with enough lines to represent them in the resulting grid.
+Despite this, both models refine the width of these features, approaching the true width represented in HR\@.
+The fine structures in HR appear to have limited importance to the SSIM calculation, because the LR and SR grids are reported with a SSIM of 0.9998 or higher.
+This suggests that SSIM may be an innapropriate IQA metric in comparing resolution in potential field grids.
 
 \begin{landscape}
     \begin{figure}[hbtp]
         \centering
         \includegraphics[width=1\linewidth]{fig/p2/srcomp_23.pdf}
         \caption[Super-resolution geophysics grid results I]{Super-resolution predictions on open access data, prepared using the proposed method.
-            a) Ground truth, b) High-resolution, c) Low-resolution, d) Baseline super-resolution, e) Fine-tuned super-resolution, full explanation in-text.
-        }  
+            a) Ground truth, b) High-resolution, c) Low-resolution, d) Baseline super-resolution, e) Fine-tuned super-resolution.
+        }
         \label{fig:srdata23}
     \end{figure}
 \end{landscape}
@@ -331,22 +343,22 @@ The enhanced structural similarity is reflected by the higher SSIM score in the 
 \begin{landscape}
     \begin{figure}[hbtp]
         \centering
-        \includegraphics[width=1\linewidth]{fig/p2/srcomp_14.pdf}
+        \includegraphics[width=1\linewidth]{fig/p2/srcomp_17.pdf}
         \caption[Super-resolution geophysics grid results II]{Super-resolution predictions on open access data, prepared using the proposed method.
-            a) Ground truth, b) High-resolution, c) Low-resolution, d) Baseline super-resolution, e) Fine-tuned super-resolution, full explanation in-text.
-        }  
-        \label{fig:srdata14}
+            a) Ground truth, b) High-resolution, c) Low-resolution, d) Baseline super-resolution, e) Fine-tuned super-resolution.
+        }
+        \label{fig:srdata17}
     \end{figure}
 \end{landscape}
 
 \begin{landscape}
     \begin{figure}[hbtp]
         \centering
-        \includegraphics[width=1\linewidth]{fig/p2/srcomp_17.pdf}
+        \includegraphics[width=1\linewidth]{fig/p2/srcomp_14.pdf}
         \caption[Super-resolution geophysics grid results III]{Super-resolution predictions on open access data, prepared using the proposed method.
-            a) Ground truth, b) High-resolution, c) Low-resolution, d) Baseline super-resolution, e) Fine-tuned super-resolution, full explanation in-text.
-        }  
-        \label{fig:srdata17}
+            a) Ground truth, b) High-resolution, c) Low-resolution, d) Baseline super-resolution, e) Fine-tuned super-resolution.
+        }
+        \label{fig:srdata14}
     \end{figure}
 \end{landscape}
 
@@ -355,8 +367,8 @@ The enhanced structural similarity is reflected by the higher SSIM score in the 
         \centering
         \includegraphics[width=1\linewidth]{fig/p2/srcomp_18.pdf}
         \caption[Super-resolution geophysics grid results IV]{Super-resolution predictions on open access data, prepared using the proposed method.
-            a) Ground truth, b) High-resolution, c) Low-resolution, d) Baseline super-resolution, e) Fine-tuned super-resolution, full explanation in-text.
-        }  
+            a) Ground truth, b) High-resolution, c) Low-resolution, d) Baseline super-resolution, e) Fine-tuned super-resolution.
+        }
         \label{fig:srdata18}
     \end{figure}
 \end{landscape}
