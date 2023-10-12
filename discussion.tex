@@ -92,14 +92,14 @@ In these networks, the informing method is termed discriminator loss, and is per
 Using crafted or learned criterions to inform a neural network greatly assists with learning high quality models, and either approach may be useful in geophysics to address the paucity of ground truth.
 In addition, demonstrating the enforcement of physical properties of potential fields for model outputs may address apprehension for machine learning in geophysics practice.
 
-\printbibliography{}
+% \printbibliography{}
 
 \chapter{Conclusions}
 \label{ch:conclusions}
 This thesis presented contemporary methods in deep learning to enhance potential field methods in geoscience.
 By including both synthetic and real survey data for training and case studies, it was established that these methods could generalise to real-world applications.
 
-To the best of my knowledge, \Cref{ch:paper1} presents the first investigation in the literature of the super-resolution enhancement of gridded aerogeophysical data.
+To the best of the author's knowledge, \Cref{ch:paper1} presents the first investigation in the literature of the super-resolution enhancement of gridded aerogeophysical data.
 Prior to this work, it was unknown how well SR methods developed for natural images would adapt to the features and high dynamic range present within magnetic grids, or the challenges faced in developing a training dataset for these data.
 We established that the CNN SR methods RDN\textdaggerdbl{} and ESRGAN+ could be trained to upsample low-resolution textures in magnetic grids by a factor of four, and that the results were more accurate than bicubic upsampling in the real-world case study region.
 The ESRGAN+ method used in \Cref{ch:paper2} enhanced resolution, however it introduced significant spurious features, masking the enhancement.
@@ -113,7 +113,7 @@ Additionally, spurious features in the baseline model were correctly resolved wh
 We identified opportunities for more detailed investigations using a filtered approach in selecting training data, and these were outlined in \Cref{ch:futurework}.
 
 The contribution in \Cref{ch:paper3} used coordinate multilayer perceptron neural networks to learn a representation of the function that describes a surveyed potential field extent.
-To my knowledge, this is the first time implicit neural representation of aerogeophysical survey data has been reported in the literature.
+To the author's knowledge, this is the first time implicit neural representation of aerogeophysical survey data has been reported in the literature.
 It was seen that these networks are highly suited for processing spatial data such as point sampled geophysics surveys.
 The contribution is capable of predicting regularly spaced grids from scattered survey point data, and can be used as a novel method to calculate derivatives of a potential field from the learnt representation, both task which are fundamental to interpretation and processing in geophysics.
 By commencing the methods from point sample data, the number of individual processing steps is reduced, and the application is fully trainable.
