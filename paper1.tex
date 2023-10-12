@@ -103,7 +103,7 @@ While several of the aforementioned works investigate deep learning super-resolu
 
 \begin{figure}[hbtp]
     \centering
-    \includegraphics[width=\linewidth]{fig/p1/rdn.png}
+    \includegraphics[width=\linewidth]{fig/p1/rdn_vec.pdf}
     \caption[The RDN architecture]{The RDN architecture, which acts as the ESRGAN generator.
         Twenty-three Basic Blocks are stacked sequentially to form the main convolution path.
         Upsampling to the target output size is performed after the main convolution sequence.
@@ -120,7 +120,7 @@ To the best of our knowledge, detailed studies on applying and comparing deep le
 
 \begin{figure}[hbtp]
     \centering
-    \includegraphics[width=\linewidth]{fig/p1/rdb.png}
+    \includegraphics[width=\linewidth]{fig/p1/rdb_vec.pdf}
     \caption[Basic blocks]{Each Basic Block (\Cref{fig:rdn}, orange) comprises three weighted Residual Dense Blocks (\Cref{fig:convs}).
         ESRGAN+ extends ESRGAN with the addition of Gaussian Noise after each basic RDB block (black vectors).
         Weight factors are indicated by \(\beta{}\) and \(\gamma{}\).
@@ -132,7 +132,7 @@ To the best of our knowledge, detailed studies on applying and comparing deep le
 
 \begin{figure}[hbtp]
     \centering
-    \includegraphics[width=0.75\linewidth]{fig/p1/convs.png}
+    \includegraphics[width=0.75\linewidth]{fig/p1/convs_vec.pdf}
     \caption[RDB convolutional layers]{Each Residual Dense Block (\Cref{fig:rdb}, purple) comprises four convolutional layers, with additional learning pathways present as residual connections (black), and dense connections (green). LReLU refers to the Leaky-ReLU activation function. Adapted from \textcite{rakotonirinaESRGANFurtherImproving2020}.}
     \label{fig:convs}
 \end{figure}
@@ -324,7 +324,7 @@ Finally, metrics for the full set of test tiles are reported in \Cref{tab:metric
                     Q[si={table-format=2.3},r]
                     Q[si={table-format=2.3},l] |
                     Q[si={table-format=2.3},r]
-                    Q[si={table-format=2.3},l] |
+                    Q[si={table-format=2.3},l]
                 },
             row{1} = {guard}
         }
