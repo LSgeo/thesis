@@ -41,6 +41,7 @@ The increased density of pixels in the high-resolution \qty{20}{\metre} grid all
 These frequencies are irretrievably lost when the high-resolution grid is downsampled to \qty{80}{\metre}.
 
 \begin{figure}[hbtp]
+    \centering
     \includegraphics[width=\linewidth]{fig/p1/lrandhr.jpg}
     \caption[Comparison of different resolution grids]{Low resolution \qty{80}{\metre} cell size (a), and high-resolution \qty{20}{\metre} cell size (b) TMI grids over the same extent.
         Each tile is \qtyproduct{2560 x 2560}{\metre}.
@@ -101,6 +102,7 @@ For example, it may enhance the appearance of gridding artefacts, instead of sup
 While several of the aforementioned works investigate deep learning super-resolution for geospatial data, low resolution in potential field geophysics is a result of under sampling and naive best-effort interpolation of the potential field, distinct from low-resolution data previously studied in those works.
 
 \begin{figure}[hbtp]
+    \centering
     \includegraphics[width=\linewidth]{fig/p1/rdn.png}
     \caption[The RDN architecture]{The RDN architecture, which acts as the ESRGAN generator.
         Twenty-three Basic Blocks are stacked sequentially to form the main convolution path.
@@ -117,6 +119,7 @@ This maintains true for data from published grids, which are regularised onto a 
 To the best of our knowledge, detailed studies on applying and comparing deep learning approaches for geophysical potential field super-resolution has not been previously reported.
 
 \begin{figure}[hbtp]
+    \centering
     \includegraphics[width=\linewidth]{fig/p1/rdb.png}
     \caption[Basic blocks]{Each Basic Block (\Cref{fig:rdn}, orange) comprises three weighted Residual Dense Blocks (\Cref{fig:convs}).
         ESRGAN+ extends ESRGAN with the addition of Gaussian Noise after each basic RDB block (black vectors).
@@ -128,7 +131,8 @@ To the best of our knowledge, detailed studies on applying and comparing deep le
 \end{figure}
 
 \begin{figure}[hbtp]
-    \includegraphics[width=\linewidth]{fig/p1/convs.png}
+    \centering
+    \includegraphics[width=0.75\linewidth]{fig/p1/convs.png}
     \caption[RDB convolutional layers]{Each Residual Dense Block (\Cref{fig:rdb}, purple) comprises four convolutional layers, with additional learning pathways present as residual connections (black), and dense connections (green). LReLU refers to the Leaky-ReLU activation function. Adapted from \textcite{rakotonirinaESRGANFurtherImproving2020}.}
     \label{fig:convs}
 \end{figure}
@@ -201,16 +205,18 @@ To ensure that the HR ground truth has additional high frequency detail to the L
 Training and validation data were extracted independent to a reserved test area, outlined in \Cref{fig:trainvaldata}.
 By selecting mixed line spacing data in this way, transforms between different scales of frequency loss are captured in the training data.
 That is, the same model can learn from fine optimal cell size extents that lose many component frequencies when interpolated to \qty{80}{\metre}, as well as coarse cell size extents which may only lose few or none.
+
 These data were extracted as square tiles, each covering \qty{2560}{\metre} by \qty{2560}{\metre} at 32 \texttimes{} 32 pixels for LR, and 128 \texttimes{} 128 pixels for HR, with no overlap.
 This resulted in \num{5290} training tile pairs (used to train the model), \num{512} validation tile pairs (used to select the best performing model), and \num{2415} test tile pairs (used to independently verify the performance of the selected model).
 These magnetic grid tiles differ notably from standard colour image tiles, in that they contain 32-bit floating-point values in a single channel, corresponding to the TMI value at each grid cell location.
 These values were min-max scaled to a range of 0 to 1 using the global minimum and maximum values of the HR training data.
+
 In summary, the single channel high- and low-resolution state TMI grids were filtered according to a database of their component surveys to extract areas of \qty{300}{\metre} line spacing or less.
 These data were normalised according to the statistics of the HR training set, and split into small patches suitable for the hardware limitations.
 After application of the architecture under investigation, the data are returned to predicted TMI values, and recompiled into a contiguous spatial extent.
 
 \begin{figure}[hbtp]
-    \centering{}
+    \centering
     \includegraphics[width=0.75\linewidth]{fig/p1/trainvaldata.png}
     \caption[Dataset context]{Reserved training/validation and test areas of Eastern Goldfields Superterrane magnetic grid, and their tectonic context.
         Background: \qty{20}{\metre} merged magnetic grid of Western Australia, \parencite{brett40MagneticMerged2020}.
@@ -223,12 +229,15 @@ Training of the RDN\textdaggerdbl{} and ESRGAN+ networks was performed with Pyto
 Both networks were trained with minibatch size of 64 image patch pairs for \num{602} epochs (\num{17.6} h for RDN\textdaggerdbl{}, \num{21.8} h for ESRGAN+), at which point the PSNR plateaued.
 Training samples were augmented using random 90-degree rotations and flips to encourage a model with rotational and symmetrical invariance to the input images, and their order per epoch was shuffled to improve regularisation and supress overfitting.
 Further measures for the suppression of overfitting inherent to each of the applied architectures are described in their respective manuscripts \parencite{wangESRGANEnhancedSuperresolution2018,zhangResidualDenseNetwork2018}.
+
 The optimiser used was Adam \parencite{kingmaAdamMethodStochastic2015}.
 The learning rate was adjusted over the course of the experiment using the Pytorch implementation of One Cycle Learning Rate scheduler \parencite{smithSuperconvergenceVeryFast2018}, which provides a “warm up” period to stabilise early predictions, and a “cool down” period where the loss minima is fine tuned.
+
 Following the generator implementation from ESRGAN+, twenty-three Residual Dense Blocks were ordered sequentially to form the main network, followed by two nearest neighbour upsampling filters at two times scale each.
 The ESRGAN+ discriminator followed that of \textcite{rakotonirinaESRGANFurtherImproving2020} which is an implementation of a VGG style classification network \parencite{simonyanVeryDeepConvolutional2015}.
 For ESRGAN+ the peak learning rate was \num{6e-4}, and the feature loss, pixel loss (MAE), and adversarial loss parameters were weighted at \num{1}, \num{0.01}, and \num{0.005} respectively.
 RDN\textdaggerdbl{} had a peak learning rate of \num{3e-4} and did not require loss component weighting because only L1 pixel loss is used.
+
 Bicubic interpolation was carried out using the implementation provided in Pillow \parencite{vankemenadePythonpillowPillow2021}, a ubiquitous open source Python imaging library.
 Inference is carried out using the frozen weights of the trained upsampling models, and takes approximately \num{0.1} s per 32 \texttimes{} 32 pixel tile.
 Inference is performed on a tiled basis due to the size of input grids being too large for GPU RAM, and the results may be patched together for full extent visualisation and analysis, or displayed as single tiles.
@@ -250,31 +259,36 @@ In addition to unfiltered TMI comparisons, high-pass filtered and first vertical
 These products are commonly used in geophysics to investigate high frequency components in grids.
 
 \subsection{Test dataset}
-We first present a visual comparison of a selected feature rich \qty{80}{\metre} cell size LR tile, its counterpart \qty{20}{\metre} HR ground truth tile, and the result of; the bicubic upscaling filter, the RDN\textdaggerdbl{} upsampling network, and the ESRGAN+ upsampling network as applied to the LR tile (\Cref{fig:resultsvis}).
+We present a visual comparison of a selected feature rich \qty{80}{\metre} cell size LR tile, its counterpart \qty{20}{\metre} HR ground truth tile, and the result of; the bicubic upscaling filter, the RDN\textdaggerdbl{} upsampling network, and the ESRGAN+ upsampling network as applied to the LR tile (\Cref{fig:resultsvis}).
 This tile was selected from the reserved test region in the Eastern Goldfields Superterrane, and neither of the low- or high-resolution samples were seen during training.
 The result of bicubic interpolation (\Cref{fig:resultsvis} c) demonstrates the smoothing effect of the bicubic filter, while the Residual Dense Network (\Cref{fig:resultsvis} d) and ESRGAN+ network (\Cref{fig:resultsvis} e) show added detail.
 The two neural network methods more closely match the ground truth \qty{20}{\metre} tile than the bicubic upsampled image does, when observing feature edges and textural detail.
-
-
-\begin{figure}[hbtp]
-    \includegraphics[width=\linewidth,trim={0 0 0 5mm},clip]{fig/p1/resultsvis.png}
-    \caption[Visual inference results]{Visual comparisons of a selected tile from the reserved test region.
-        The \qty{80}{\metre} low-resolution input (a) is shown at equivalent size to the \qty{20}{\metre} high-resolution ground truth (b) using nearest neighbour interpolation.
-        The colourmap is shared between subfigures.
-    }
-    \label{fig:resultsvis}
-\end{figure}
 
 \Cref{fig:residuals} demonstrates the error residuals between the predicted TMI grids for each upsampling method and the HR ground truth.
 For the selected tile, the RMSE is best minimised using RDN\textdaggerdbl{}, which also shows the best structural metric performance.
 ESRGAN+ outperforms the bicubic method in RMSE and MSSIM\@.
 
-\begin{figure}[hbtp]
-    \includegraphics[width=\linewidth,trim={0 10mm 0 5mm},clip]{fig/p1/residuals.png}
-    \caption[Error residuals map for a selected tile]{Error residuals map for the selected test tile, for each upsampling method; Bicubic (a), RDN\textdaggerdbl{} (b), and ESRGAN+ (c).
-        Image quality metrics are reported for each upsampled tile, calculated against the groundtruth HR\@.}
-    \label{fig:residuals}
-\end{figure}
+\begin{landscape}
+    \begin{figure}[hbtp]
+        \centering
+        \includegraphics[width=\linewidth,trim={0 0 0 5mm},clip]{fig/p1/resultsvis.png}
+        \caption[Visual inference results]{Visual comparisons of a selected tile from the reserved test region.
+            The \qty{80}{\metre} low-resolution input (a) is shown at equivalent size to the \qty{20}{\metre} high-resolution ground truth (b) using nearest neighbour interpolation.
+            The colourmap is shared between subfigures.
+        }
+        \label{fig:resultsvis}
+    \end{figure}
+\end{landscape}
+
+\begin{landscape}
+    \begin{figure}[hbtp]
+        \centering
+        \includegraphics[width=\linewidth,trim={0 10mm 0 5mm},clip]{fig/p1/residuals.png}
+        \caption[Error residuals map for a selected tile]{Error residuals map for the selected test tile, for each upsampling method; Bicubic (a), RDN\textdaggerdbl{} (b), and ESRGAN+ (c).
+            Image quality metrics are reported for each upsampled tile, calculated against the groundtruth HR\@.}
+        \label{fig:residuals}
+    \end{figure}
+\end{landscape}
 
 The prediction of higher frequencies can be quantified using the Radially Averaged Power Spectral Density.
 In the Fourier domain, the amplitudes of an array's component frequencies are mapped to coordinates representing their orientation.
@@ -284,6 +298,7 @@ The Radially Averaged Power Spectral Density (RAPSD) \parencite{ulichneyDitherin
 % TODO USE REVISED MANUSCRIPT FIGURES 
 
 \begin{figure}[hbtp]
+    \centering
     \includegraphics[width=\linewidth]{fig/p1/rapsd.jpg}
     \caption[Power spectra for the test extent]{Radially Averaged Power Spectra for the complete test extent shown in \Cref{fig:trainvaldata}.
         The Nyquist wavelengths for the high-resolution (and upsampled) rasters and low-resolution raster are also shown.
@@ -298,6 +313,34 @@ To visualise the contribution of these enhanced high frequencies in the resultin
 By filtering at this wavelength, only frequencies added by the upsampling process will be shown in the output (\Cref{fig:filtered}). Bicubic interpolation (\Cref{fig:filtered} c) fails to add significant high frequency components.
 RDN\textdaggerdbl{} (\Cref{fig:filtered} d) appears to approximate similar high frequencies to the HR tile (\Cref{fig:filtered} b), while ESRGAN+ (\Cref{fig:filtered} e) shows potentially excessive predicted high frequency components.
 Finally, metrics for the full set of test tiles are reported in \Cref{tab:metrics}.
+
+\begin{table}[hbtp]
+    \centering
+    \begin{tblr}{
+            colspec={
+                    r |
+                    Q[si={table-format=2.3},r]
+                    Q[si={table-format=2.3},l] |
+                    Q[si={table-format=2.3},r]
+                    Q[si={table-format=2.3},l] |
+                    Q[si={table-format=2.3},r]
+                    Q[si={table-format=2.3},l] |
+                },
+            row{1} = {guard}
+        }
+                & \SetCell[c=2]{c} Bicubic &            & \SetCell[c=2]{c} RDN\textdaggerdbl{} &                 & \SetCell[c=2]{c} ESRGAN+              \\
+        \hline{}
+                & \(\mu\)                  & \(\sigma\) & \(\mu\)                              & \(\sigma\)      & \(\mu\)                  & \(\sigma\) \\
+        RMSE    & 13.545                   & 26.576     & \textbf{7.265}                       & \textbf{13.741} & 11.120                   & 21.670     \\
+        SISM    & 0.924                    & 0.047      & \textbf{0.959}                       & \textbf{0.037}  & 0.922                    & 0.054      \\
+        MS-SSIM & 0.971                    & 0.018      & \textbf{0.988}                       & \textbf{0.012}  & 0.976                    & 0.020      \\
+    \end{tblr}
+
+    \caption[Accuracy Metrics]{Accuracy metrics for each upsampling method. \(\mu\) indicates the mean, \(\sigma\) indicates the standard deviation. The best performing method for each metric is bolded.}
+    \label{tab:metrics}
+\end{table}
+
+
 The non-GAN CNN approach of RDN\textdaggerdbl{} remains the most accurate method for the entire test grid.
 Several routinely occurring artefacts are observed in the two super-resolution products, especially in ESRGAN+ which incorporates details it has learned from the Discriminator network loss.
 The First Vertical Derivative filter is used in \Cref{fig:jhillvis} to demonstrate the ability to perform common geophysical filters on super resolved grids, and to emphasise examples of these artefacts.
@@ -306,41 +349,18 @@ This could be reduced by adjusting the size of inference tiles, or slightly over
 Predictions from ESRGAN+ commonly show a ripple-like texture (\Cref{fig:jhillvis}, \^{ }), especially around pronounced high TMI features.
 The effect of this texture occasionally reveals features matching the high-resolution groundtruth that are not predicted by the bicubic or RDN\textdaggerdbl{} upsampling, but the excess of “noisy” features present in ESRGAN+ predictions will likely limit its applicability when interpreting low-resolution grids with no corresponding groundtruth.
 
-\begin{figure}[hbtp]
-    \includegraphics[width=\linewidth,trim={0 0 0 -5mm},clip]{fig/p1/hpfilt.jpg}
-    \caption[High-pass filtered results]{High-pass filtered test tile and its upsampled counterparts.
-        The cut-off for the high-pass Butterworth filter was selected with wavelength equal to the Nyquist wavelength of the LR grid, i.e.,\ four times the HR Nyquist wavelength.
-    }
-    \label{fig:filtered}
-\end{figure}
-
-\begin{table}
-    \begin{tblr}{
-            colspec={
-                    r
-                    Q[si={table-format=2.3},r]
-                    Q[si={table-format=2.3},l]
-                    Q[si={table-format=2.3},r]
-                    Q[si={table-format=2.3},l]
-                    Q[si={table-format=2.3},r]
-                    Q[si={table-format=2.3},l]
-                },
-            row{1-2} = {guard}
+\begin{landscape}
+    \begin{figure}[hbtp]
+        \centering
+        \includegraphics[width=\linewidth,trim={0 0 0 -5mm},clip]{fig/p1/hpfilt.jpg}
+        \caption[High-pass filtered results]{High-pass filtered test tile and its upsampled counterparts.
+            The cut-off for the high-pass Butterworth filter was selected with wavelength equal to the Nyquist wavelength of the LR grid, i.e.,\ 4 times the HR Nyquist wavelength.
         }
-                & Bicubic &           & RDN\textdaggerdbl{} &                 & ESRGAN+ &        \\
-        \hline{}
-                & Mean    & {Standard                                                            \\Deviation} & Mean & {Standard\\Deviation} & Mean & {Standard\\Deviation}                                                                         \\
-        RMSE    & 13.545  & 26.576    & \textbf{7.265}      & \textbf{13.741} & 11.120  & 21.670 \\
-        SISM    & 0.924   & 0.047     & \textbf{0.959}      & \textbf{0.037}  & 0.922   & 0.054  \\
-        MS-SSIM & 0.971   & 0.018     & \textbf{0.988}      & \textbf{0.012}  & 0.976   & 0.020  \\
-    \end{tblr}
+        \label{fig:filtered}
+    \end{figure}
+\end{landscape}
 
-    \caption[Accuracy Metrics]{Accuracy metrics for each upsampling method. The best performing method for each metric is bolded.}
-    \label{tab:metrics}
-\end{table}
-
-
-\subsection{Jasper Hill / Lord Byron super-resolution}
+\subsection{Case study super-resolution}
 A low-resolution TMI extent from the \qty{80}{\metre} state map over the Jasper Hill major resource project was selected for detailed investigation.
 This extent was surveyed at \qty{50}{\metre} (optimal cell size of \qty{10}{\metre}), and is outside of both the defined training and test extents.
 A zoomed result for each upsampling method is shown in \Cref{fig:jhilldykes}.
@@ -349,18 +369,21 @@ East-West striking features, like those that have been associated with gold mine
 This can be seen in the line profile (\Cref{fig:jhilldykes}, f), where a series of East-West striking features have a total magnitude of approximately \qty{100}nT in the low-resolution and bicubic grids, versus approximately \qty{200}nT in the Residual Dense Network prediction and HR groundtruth.
 The ESRGAN+ prediction profile shows two distinct low TMI features, but they are poorly located and incoherent in the TMI grid (\Cref{fig:jhilldykes} e), which shows an example of the ripple-mark artefact previously noted.
 
-\begin{figure}[hbtp]
-    \includegraphics[width=\linewidth,trim={0 0 0 0},clip]{fig/p1/1vd.jpg}
-    \caption[First vertical derivative over the case study grid]{First Vertical Derivative TMI over the Mt Mason resource project, with the super-resolution predictions (d, e) showing a variety of inference artefacts.
-    Red asterisks (*) show a vertical tile boundary present as a 3--4 pixel-wide error in predicted TMI value.
-    Red caret (\^{ }) indicates a region of subtle ripple-mark textural artefact, only present in ESRGAN+ predictions.
-    }
-    \label{fig:jhillvis}
-\end{figure}
+\begin{landscape}
+    \begin{figure}[hbtp]
+        \centering
+        \includegraphics[width=\linewidth,trim={0 0 0 0},clip]{fig/p1/1vd.jpg}
+        \caption[First vertical derivative over the case study grid]{First Vertical Derivative TMI over the Mt Mason resource project, with the super-resolution predictions (d, e) showing a variety of inference artefacts.
+        Red asterisks (*) show a vertical tile boundary present as a 3--4 pixel-wide error in predicted TMI value.
+        Red caret (\^{ }) indicates a region of subtle ripple-mark textural artefact, only present in ESRGAN+ predictions.
+        }
+        \label{fig:jhillvis}
+    \end{figure}
+\end{landscape}
 
 \begin{figure}[hbtp]
-    \includegraphics[width=\linewidth,trim={0 0 0 5mm},clip]{fig/p1/jhilldykes.png}
     \centering
+    \includegraphics[width=\linewidth,trim={0 0 0 5mm},clip]{fig/p1/jhilldykes.png}
     \includegraphics[width=0.7\linewidth]{fig/p1/transectp.png}
     \caption[Case study TMI grids and line profiles]{Jasper Hills Project TMI grids (a--e) and line profile (f).
         Bicubic interpolation of the low-resolution grid closely matches the low-resolution grid, while both super-resolution methods better approximate the magnitude of the features present in the HR profile, between \qty{650}{\metre} and \qty{1020}{\metre}.
@@ -374,11 +397,13 @@ Importantly, mineralisation controlling structural features that are unresolvabl
 RDN\textdaggerdbl{} outperforms ESRGAN+ in both accuracy and structural metrics, and most closely visually matches the high resolution groundtruth.
 However, ESRGAN+ occasionally appears to better reconstruct features present in the high-resolution ground truth when compared to RDN\textdaggerdbl{}, but at the cost of significant textural noise.
 Based on this, RDN\textdaggerdbl{} shows the best performance for super-resolution CNN upsampling of magnetic grids, to assist in the interpretation of low-resolution grids.
+
 The deep learning methods used here can be trained with data from other geospatial extents, either from scratch or by initialising the training with pre-existing model weights \parencite[e.g.][]{wangMineGANEffectiveKnowledge2020}.
 The existing models can also be applied to other extents of \qty{80}{\metre} TMI grids without further training.
 However, the training data used here are solely \qty{80}{\metre} TMI grids interpolated from high-resolution \qty{20}{\metre} state map extents in the southwest Eastern Goldfields Superterrane.
 Magnetic anomalies and features that are dissimilar from those represented in the Superterrane (for example, different geological settings, or regions with different magnetic inclination) are likely to suffer from reduced performance.
 This applies also to grids that do not have a cell size of \qty{80}{\metre}.
+
 An example use case for either the method or trained models is super-resolving the Total Magnetic Intensity (TMI) Grid of Australia 2019 --- seventh edition which is published by Geoscience Australia in only \qty{80}{\metre} and \qty{40}{\metre} cell size.
 The trained \qty{80}{\metre} models in this work could be applied to the \qty{80}{\metre} TMI grid, or the method used with existing state map data to train a two times scale model to super-resolve the \qty{40}{\metre} grid to \qty{20}{\metre}.
 Transferability of the model used in this study to other geological settings and magnetic inclinations requires further investigation, with the aim of developing a single multi-domain potential field upscaling model.
