@@ -227,7 +227,7 @@ While the rim feature can still be interpreted within this lower level grid, the
     \begin{figure}[hbtp]
         \centering
         \includegraphics[width=1.0\linewidth]{fig/p3/P864_grid_comparison_40m.pdf}
-        \caption[Grid prediction at the nominal altitude]{Comparison between the reference grid processed by Geoscience Australia (left) and the constant level grid queried from the INR at \qty{40}{\m} (middle). The residuals are shown for areas containing reference data (right), with a range of ±2 standard deviations of values in the reference grid.}
+        \caption[Grid prediction at the nominal altitude]{Comparison between the reference grid processed by Geoscience Australia (left) and the constant level grid queried from the INR at \qty{40}{\m} (middle). The residuals are shown (right) for areas containing reference data, with a range of ±2 standard deviations of values in the reference grid.}
         \label{fig:grid40}
     \end{figure}
 \end{landscape}
@@ -273,8 +273,8 @@ This is interpreted as the presented model having a limited capacity to extrapol
 \begin{figure}[hbtp]
     \centering{}
     \includegraphics[width=1\linewidth]{fig/p3/P864_dv_comparison.pdf}
-    \caption[Vertical derivative]{Vertical derivative grids queried from AD differentiated INR (left) and calculated numerically (right) on the \qty{40}{\m} level grid queried from the INR\@.
-        The proposed method has poor vertical gradient representation, possibly due to the single height sampled in aeromagnetic survey design.}
+    \caption[Vertical derivative]{Vertical derivative grids calculated numerically on the \qty{40}{\m} level grid queried from the INR (left) and queried from AD differentiated INR (right).
+        The proposed method has poor vertical gradient representation, possibly due to the low range of altitudes when sampling in aeromagnetic survey design.}
     \label{fig:vertgrad}
 \end{figure}
 
@@ -327,7 +327,7 @@ Inspired by the approach of \textcite{raissiPhysicsinformedNeuralNetworks2019}, 
     \label{eqn:crilaplace}
     \mathcal{L}_{PDE} = \frac{1}{S}\sum_{i=1}^{S} \left(\frac{\partial{}^2f}{\partial{}x_{i}^2} + \frac{\partial{}^2f}{\partial{}y_{i}^2} + \frac{\partial{}^2f}{\partial{}z_{i}^2}\right)^2,
 \end{equation}
-where \(S_i\) indicates the \(i^{th}\) sample point of the field survey \(\phi(x, y, z)\), implicitly represented by the model \(f\).
+where \(S\) indicates the number of sample points in the field survey \(\phi(x, y, z)\), implicitly represented by the model \(f\).
 This criterion penalises outputs where Laplace's equation is not satisfied because the sum of partial second derivatives is not close to zero.
 
 %     \mathcal{L}_{PDE} = \lVert{}\frac{\partial{}^2f}{\partial{}x^2} + \frac{\partial{}^2f}{\partial{}y^2} + \frac{\partial{}^2f}{\partial{}z^2}\rVert{}_{2}

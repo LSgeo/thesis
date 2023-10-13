@@ -162,7 +162,7 @@ The RDN implementation used here adopts some improvements from ESRGAN+ and will 
 \begin{figure}[hbtp]
     \centering
     \includegraphics[width=0.75\linewidth]{fig/p1/convs_vec.pdf}
-    \caption[RDB convolutional layers]{Each Residual Dense Block (\Cref{fig:rdb}, purple) comprises four convolutional layers, with additional learning pathways present as residual connections (black), and dense connections (green). LReLU refers to the Leaky-ReLU activation function. Adapted from \textcite{rakotonirinaESRGANFurtherImproving2020}.}
+    \caption[RDB convolutional layers]{Each Residual Dense Block (\Cref{fig:rdb}, purple) comprises four convolutional layers, with additional learning pathways present as residual connections (black), and dense connections (green). LReLU refers to the Leaky-ReLU activation. Adapted from \textcite{rakotonirinaESRGANFurtherImproving2020}.}
     \label{fig:convs}
 \end{figure}
 
@@ -315,6 +315,17 @@ By filtering at this wavelength, only frequencies added by the upsampling proces
 RDN\textdaggerdbl{} (\Cref{fig:filtered} d) appears to approximate similar high frequencies to the HR tile (\Cref{fig:filtered} b), while ESRGAN+ (\Cref{fig:filtered} e) shows potentially excessive predicted high frequency components.
 Finally, metrics for the full set of test tiles are reported in \Cref{tab:metrics}.
 
+% \begin{landscape}
+    \begin{figure}[hbtp]
+        \centering
+        \includegraphics[width=\linewidth,trim={0 0 0 -5mm},clip]{fig/p1/hpfilt.jpg}
+        \caption[High-pass filtered results]{High-pass filtered test tile and its upsampled counterparts.
+            The cut-off for the high-pass Butterworth filter was selected with wavelength equal to the Nyquist wavelength of the LR grid, i.e.,\ 4 times the HR Nyquist wavelength.
+        }
+        \label{fig:filtered}
+    \end{figure}
+% \end{landscape}
+
 \begin{table}[hbtp]
     \centering
     \begin{tblr}{
@@ -333,7 +344,7 @@ Finally, metrics for the full set of test tiles are reported in \Cref{tab:metric
         \hline{}
                 & \(\mu\)                  & \(\sigma\) & \(\mu\)                              & \(\sigma\)      & \(\mu\)                  & \(\sigma\) \\
         RMSE    & 13.545                   & 26.576     & \textbf{7.265}                       & \textbf{13.741} & 11.120                   & 21.670     \\
-        SISM    & 0.924                    & 0.047      & \textbf{0.959}                       & \textbf{0.037}  & 0.922                    & 0.054      \\
+        SSIM    & 0.924                    & 0.047      & \textbf{0.959}                       & \textbf{0.037}  & 0.922                    & 0.054      \\
         MS-SSIM & 0.971                    & 0.018      & \textbf{0.988}                       & \textbf{0.012}  & 0.976                    & 0.020      \\
     \end{tblr}
 
@@ -350,17 +361,6 @@ This could be reduced by adjusting the size of inference tiles, or slightly over
 Predictions from ESRGAN+ commonly show a ripple-like texture (\Cref{fig:jhillvis}, \^{ }), especially around pronounced high TMI features.
 The effect of this texture occasionally reveals features matching the high-resolution groundtruth that are not predicted by the bicubic or RDN\textdaggerdbl{} upsampling, but the excess of “noisy” features present in ESRGAN+ predictions will likely limit its applicability when interpreting low-resolution grids with no corresponding groundtruth.
 
-\begin{landscape}
-    \begin{figure}[hbtp]
-        \centering
-        \includegraphics[width=\linewidth,trim={0 0 0 -5mm},clip]{fig/p1/hpfilt.jpg}
-        \caption[High-pass filtered results]{High-pass filtered test tile and its upsampled counterparts.
-            The cut-off for the high-pass Butterworth filter was selected with wavelength equal to the Nyquist wavelength of the LR grid, i.e.,\ 4 times the HR Nyquist wavelength.
-        }
-        \label{fig:filtered}
-    \end{figure}
-\end{landscape}
-
 \subsection{Case study super-resolution}
 A low-resolution TMI extent from the \qty{80}{\metre} state map over the Jasper Hill major resource project was selected for detailed investigation.
 This extent was surveyed at \qty{50}{\metre} (optimal cell size of \qty{10}{\metre}), and is outside of both the defined training and test extents.
@@ -369,6 +369,7 @@ The bicubic filter produces a smooth interpolation with limited magnetic intensi
 East-West striking features, like those that have been associated with gold mineralisation in the region \parencite[p.~283]{salierTimingSourceGoldbearing2003} are better delineated when using RDN\textdaggerdbl{} and ESRGAN+, and nearly unobservable with bicubic interpolation.
 This can be seen in the line profile (\Cref{fig:jhilldykes}, f), where a series of East-West striking features have a total magnitude of approximately \qty{100}nT in the low-resolution and bicubic grids, versus approximately \qty{200}nT in the Residual Dense Network prediction and HR groundtruth.
 The ESRGAN+ prediction profile shows two distinct low TMI features, but they are poorly located and incoherent in the TMI grid (\Cref{fig:jhilldykes} e), which shows an example of the ripple-mark artefact previously noted.
+
 
 \begin{landscape}
     \begin{figure}[hbtp]
