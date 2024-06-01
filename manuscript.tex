@@ -11,29 +11,29 @@
 \pagenumbering{Alph}
 \begin{titlepage}
     \centering
-
+    
     \vspace*{48 pt}
     {\large\textbf{Potential Field Geophysics Enhancement Using Contemporary Deep Learning}}
-
+    
     \vspace{48 pt}
     {\itshape{{\Large Luke Thomas Smith}, BSc, MRes}}
-
+    
     \vspace{48 pt}
     This thesis is presented for the degree of
-
+    
     \vspace{14 pt}
     \textbf{Doctor of Philosophy}
-
+    
     of
-
+    
     \textbf{The University of Western Australia}
-
+    
     \vspace{14 pt}
     School of Earth Sciences
-
+    
     \vspace{72 pt}
     \includegraphics[scale=0.35]{fig/etc/UWA_FORMAL_PORTRAIT_CMYK}
-
+    
     \vspace*{\fill}
     2023
 \end{titlepage}
@@ -140,8 +140,15 @@ I, Luke Thomas Smith, certify that:
 \pagenumbering{arabic}
 \setcounter{page}{1}
 \setcounter{section}{0}
-\renewcommand{\thesection}{\arabic{section}}
+% \renewcommand{\thesection}{\arabic{section}}
 
+\newpagestyle{body}{
+    \headrule
+    \sethead[][][]{}{\textsc{\thesection}\ --- \sectiontitle}{}
+    \setfoot[][][]{}{\thepage}{}
+}
+
+\pagestyle{body}
 \chapter{Introduction}
 \label{ch:intro}
 % \newrefsection{}
