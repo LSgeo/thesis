@@ -36,7 +36,7 @@ These scattered data are typically regularised to a quantised grid for subsequen
 % The interpolation process may 
 
 Neural networks can be considered as universal function approximators.
-The recent technique of deep learning implicit neural representation (INR) \parencite{mildenhallNeRFRepresentingScenes2020}, built on a network architecture known as a coordinate multilayer perceptron (CMLP;\ see \textcite{ramasinghePeriodicityUnifyingFramework2022} for a recent introduction), represents a signal as a function of its coordinates.
+The recent technique of deep learning implicit neural representation (INR) \parencite{mildenhallNERFRepresentingScenes2020}, built on a network architecture known as a coordinate multilayer perceptron (CMLP;\ see \textcite{ramasinghePeriodicityUnifyingFramework2022} for a recent introduction), represents a signal as a function of its coordinates.
 By parameterising the function in coordinate space, novel values of the function can be queried at arbitrary coordinates within the learned continuous spatial domain.
 Recent advances in CMLPs using periodic activations such as sinusoids have demonstrated that high frequency information can be modelled well by CMLP networks, while being continuously differentiable throughout the depth of the network.
 
@@ -87,10 +87,10 @@ Training of a CMLP network requires a batch of input coordinates and intensities
 Both tasks may use similar images and an MLP network structure with the same \(n\) hidden layers and \(m\) features, but the size of the input layer, and use of intensities as outputs changes the predictive task.
 CMLP networks for predicting 3D scalar fields are a class of neural networks \(f\) which train \(u = f(x, y, z)\), with \(u\in\mathbb{R}^1\) and \((x, y, z)\in\mathbb{R}^3\).
 
-Seminal work by \textcite{mildenhallNeRFRepresentingScenes2020} demonstrated INR of volume density and colour radiance, learned from five dimensions of spatial coordinates and orientation.
+Seminal work by \textcite{mildenhallNERFRepresentingScenes2020} demonstrated INR of volume density and colour radiance, learned from five dimensions of spatial coordinates and orientation.
 Their approach uses positional encoding to improve the learning capacity of high-frequency content, addressing the issue of spectral bias in deep learning \parencite{rahamanSpectralBiasNeural2019}.
 When replacing positional encoding and the ReLU activation with periodic activation functions such as the sinusoid \parencite{sitzmann2019siren} the high frequency representation of CMLP networks is significantly enhanced.
-Periodic activation functions differ from typical non-linear activations by comprising the neuron with an activation function that repeats periodically, allowing for continuous differentiation throughout the depth of the network.
+Periodic activation functions differ from typical non-linear activations by scaling the response of the neuron with an activation function that repeats periodically, allowing for continuous differentiation throughout the depth of the network.
 Work by \textcite{ramasinghePeriodicityUnifyingFramework2022} revealed that it is the magnitude of the first and second derivatives of the activation that enhanced high-frequency representation learning capacity, rather than the periodicity, leading to Gaussian \parencite{ramasinghePeriodicityUnifyingFramework2022} and wavelet \parencite{saragadamWIREWaveletImplicit2023} activation functions for CMLP\@.
 
 CMLPs can be used for a variety of computer vision tasks, including three-dimensional point cloud representation \parencite{qiPointNetDeepHierarchical2017}, and two-dimensional natural image representation tasks such as super-resolution and infilling \parencite{leeLocalTextureEstimator2022, chenLearningContinuousImage2021}.
