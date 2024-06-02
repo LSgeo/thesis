@@ -11,29 +11,29 @@
 \pagenumbering{Alph}
 \begin{titlepage}
     \centering
-    
+
     \vspace*{48 pt}
     {\large\textbf{Potential Field Geophysics Enhancement Using Contemporary Deep Learning}}
-    
+
     \vspace{48 pt}
     {\itshape{{\Large Luke Thomas Smith}, BSc, MRes}}
-    
+
     \vspace{48 pt}
     This thesis is presented for the degree of
-    
+
     \vspace{14 pt}
     \textbf{Doctor of Philosophy}
-    
+
     of
-    
+
     \textbf{The University of Western Australia}
-    
+
     \vspace{14 pt}
     School of Earth Sciences
-    
+
     \vspace{72 pt}
     \includegraphics[scale=0.35]{fig/etc/UWA_FORMAL_PORTRAIT_CMYK}
-    
+
     \vspace*{\fill}
     2023
 \end{titlepage}
@@ -89,10 +89,10 @@ My family in NSW, Andie, Dale, and Robert --- I didn't get to visit as much as I
 
 Tasman, for being a good friend and inspirational colleague for most of my academic career --- looking forward to sharing a project again sometime, somewhere in the future!
 Lu, for sharing your incredible amount of geophysics knowledge, incredible cooking, and love of tennis with me.
-Matilda, for being a wonderful friend and the best housemate --- Thanks for being silly with me.
+Matilda, for being a wonderful friend and the best housemate --- thanks for being silly with me.
 
 My first floor colleagues and fellow tech geeks, David, Daniel, Chris, Minh, and Peter --- Your friendship and knowledge has been a wonderful environment to grow in as a geodata scientist.
-And all my SES, CET, and friends beyond: Alex, Anne, Ben, France, Jackson, Jess, Jules, Kailah, Lauren, Lauri, Liam, Lilly, Maddie, Maria, Malvina, Nicolas, Ravi, Sean, Sumail, Vickie, and Ze --- Thank you for years of lunches, dinners, beaches, rock climbing, yoga, and all the opportunities to talk rocks that I've been missing.
+And all my SES, CET, and friends beyond: Alex, Anne, Ben, France, Jackson, Jess, Jules, Kailah, Lauren, Lauri, Liam, Lilly, Maddie, Malvina, Maria, Nicolas, Ravi, Sean, Sumail, Vickie, and Ze --- Thank you for years of lunches, dinners, beaches, rock climbing, yoga, and all the opportunities to talk rocks that I've been missing.
 
 And to all the teachers throughout my life, both professional and incidental: Thank you.
 
@@ -137,9 +137,6 @@ I, Luke Thomas Smith, certify that:
 % Fix incorrect page numbering on the signed form:
 % \includepdf[pages=-,templatesize={595.276pt}{841.89pt},nup=1x1,scale=1,clip,trim=5mm 36.5mm 5mm 20mm,fitpaper=true,pagecommand={\pagestyle{plain}}]{authorship_declaration_signed.pdf}
 
-\pagenumbering{arabic}
-\setcounter{page}{1}
-\setcounter{section}{0}
 % \renewcommand{\thesection}{\arabic{section}}
 
 \newpagestyle{body}{
@@ -149,8 +146,13 @@ I, Luke Thomas Smith, certify that:
 }
 
 \pagestyle{body}
+
 \chapter{Introduction}
 \label{ch:intro}
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\setcounter{section}{0}
 % \newrefsection{}
 \input{intro}
 
