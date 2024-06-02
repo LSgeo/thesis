@@ -5,7 +5,7 @@
 % % \setcounter{chapter}{3}
 % \begin{document}
 
-\title{Implicit Neural Representation for Potential Field Geophysics}
+\title{Implicit neural representation of potential fields}
 \author[1*]{Luke Thomas Smith}
 \author[1]{Tom Horrocks}
 \author[2]{Naveed Akhtar}
@@ -20,7 +20,7 @@
     The recent use of spatial coordinate features in multilayer perceptron (MLP) neural networks provides opportunities for novel applications in potential field geophysics.
     So-called coordinate MLP networks allow for learning a representative function of potential fields from their surveyed samples.
     % Using this new paradigm of encoding spatial information within a neural network enables new methods for working with potential field survey data.
-    We present a novel method for implicit neural representation of potential fields, demonstrate the quality of the learned implicit function by encoding real airborne geophysical survey line data, predict constant level grids, and compare the result to grid data processed with a traditional workflow.
+    We present a novel method for implicit neural representation (INR) of potential fields, demonstrate the quality of the learned implicit function by encoding real airborne geophysical survey line data, predict constant level grids, and compare the result to grid data processed with a traditional workflow.
     We further demonstrate the analytical calculation of gradients directly in the continuous domain using automatic differentiation, with the same framework used to train the neural network representation.
     Level grids queried from the learned representation closely match the reference grid product, with a peak signal to noise ratio of 40 dB.
     Horizontal gradients calculated with this method are accurate against numerically derived gradients, while the vertical gradient is a poor match.
