@@ -26,15 +26,33 @@ The overall aim of this thesis is to adapt and extend the use of deep learning t
 
 The above aims are investigated using case studies with open access aeromagnetic data provided by Geoscience Australia.
 
+\section{Magnetic potential fields}
+The Earth has a naturally occuring magnetic force field, approximating a dipole oriented toward the top and bottom of the planet.
+Several properties of the magnetic field are important to the machine learning methods in this thesis.
+First, that a field refers to a set of functions of space and time, and a vector field such as the magnetic field has three orthogonal components, with a function for each component.
+Neural networks with sufficient parameters are recognised as universal function approximators \parencite{hornikMultilayerFeedforwardNetworks1989}, and should therefore be capable of approximating these functions of the magnetic field.
+Second, the magnetic field has a force function with continuous derivatives, and is conservative \parencite{kelloggFoundationsPotentialTheory1967}.
+The force function is known as the potential field, and the magnetic field is the gradient of the potential field.
+This property is important later in this thesis, when calculating spatial derivatives and considering constraining neural networks with physics informed loss functions.
+
+The magnitude of the magnetic field is the total magnetic intensity (TMI) \parencite{blakelyPotentialTheoryGravity1996}, with the unit nanotesla (nT).
+Magnetic surveys in exploration geophysics generally create TMI products, and it may be measured directly or calculated from measurements of each orthogonal component.
+To support various scientific endeavours, a model of this field is periodically constructed --- the International Geomagnetic Reference Field (IGRF).
+The residual between the IGRF and measured TMI at a specific time and location is termed magnetic anomaly.
+It may be negative, and can exceed several thousand nanotesla in the Earth's environment.
+One of the key petrophysical properties influencing the magnetic anomaly is magnetic susceptibility, itself predominantly influenced by magnetite, a mineral commonly present across geological settings \parencite{clarkNotesRockMagnetization1991}.
+Rocks may also be intrinsicly magnetised with remnant magnetisation.
+Because of these known petrophysical variations in rock magnetisation, stratigraphies can be differentiated and delineated in magnetic maps, and their composition interpreted.
+
 \section{Aeromagnetic surveys}
 \label{sec:introgeo}
-Airborne surveys of the Earth's magnetic or gravitational potential fields are routinely acquired at a range of scales at different stages of exploration, from pre-competitive regional data to stimulate exploration \parencite{howardAirborneGeophysicalCoverage2004}, to targeted investigations by the exploration industry at the prospect scale of up to several square kilometres.
+Airborne surveys of the Earth's magnetic or gravitational potential fields are routinely acquired at a range of scales at different stages of exploration, from pre-competitive regional data to stimulate exploration \parencite{howardAirborneGeophysicalCoverage2004}, through to targeted investigations by the exploration industry at the prospect scale of up to several square kilometres.
 Surveys may also be collected on the ground, or less commonly in exploration by ship or satellite, with most processing methods and interpretation shared between all forms of acquisition.
 Aeromagnetic surveys are among the lowest cost geophysical method \parencite{dentithGeophysicsMineralExploration2014}.
-
 There are many aspects of survey design controlling the resolvable detail within survey data.
 When acquiring data, aircraft fly straight transect lines at a safe elevation above topography, known as the topography drape.
-Higher frequencies within potential field data diminish with increasing source-sensor distance, therefore the lower the height, the more high-frequency components will be captured by the sensor.
+The power of higher frequencies in potential fields falls off with increasing source-sensor distance.
+As such the lower the survey elevation, the more high-frequency components present in the potential field will be captured by the sensor.
 Surveys are flown with a heading in which data will be acquired along line.
 For regional and contemporary surveys this is recommended to be North-South, however, early practice was to survey perpendicular to the dominant geological strike, under the expectation of sampling the greatest frequency of change in magnetic intensity \parencite{islesGeologicalInterpretationAeromagnetic2013}.
 Acquisition along flight lines is sampled at a rate of \qty{10}{\hertz} or greater, which corresponds to an interval of \qty{7}{\m} or shorter at nominal flight speeds of \qty{70}{\m\per\s} \parencite{goodwinAirborneMagneticRadiometric2023}.
@@ -47,14 +65,11 @@ The collected data may contain millions of samples scattered in three dimensions
 
 \subsection{Survey data regularisation}
 \label{sec:introgrids}
-Survey data can be interpreted as one-dimensional flight line transects, but more commonly they are regularised to a two-dimensional grid raster for interpretation in a process termed gridding.
-The resulting interpolated array contains uniformly spaced nodes and is referred to as a grid.
+Survey data can be interpreted as one-dimensional flight line transects, but more commonly they are regularised to a two-dimensional raster for interpretation, in a process termed gridding.
+The resulting interpolated array contains uniformly spaced cells and is referred to as a grid.
 Grids are raster data, where each pixel stores a scalar measurement of a specific property.
-In geophysics and throughout this thesis, these are referred to as cells, and the property is a measure of the strength of the magnetic field at a specific location.
-The field strength measured is the total magnetic intensity (TMI), which is the magnitude of vector potential \parencite{blakelyPotentialTheoryGravity1996}, recorded in nanotesla (nT).
-It is useful in exploration geophysics to communicate the magnetic anomaly, which is the residual between the International Geomagnetic Reference Field (IGRF) model of the Earth's magnetic field, and the measured TMI at the location.
-Magnetic anomaly may be negative, and can exceed several thousand nanotesla in the Earth's environment.
-The location recorded at a sample point is the geographic latitude and longitude, and altitude, acquired with high-precision differential GPS, alongside radar altimeter elevation.
+In the case of the aeromagnetic data used in this thesis, the property measured is TMI, and is processed to convey magnetic anomaly.
+The location recorded at a sample point is the geographic latitude, longitude, and altitude, acquired with high-precision differential GPS, alongside radar altimeter elevation.
 These data may be transformed to a projected coordinate system, where spatial dimensions are expressed in metres.
 
 There are numerous conventional gridding methods, and novel methods are frequently proposed in the literature.
@@ -68,7 +83,7 @@ Each interpolation method attempts to predict regularly spaced grids by leveragi
 
 \subsection{A definition for geophysical resolution}
 In interpolated grids the spatial dimension of each cell is referred to as the cell size.
-As previously stated, resolvable detail in geophysical surveys is a product of the distance between the causative magnetic body and the sensor, and the line spacing \parencite{islesRelationshipsGeologicalResolution1992,islesGeologicalInterpretationAeromagnetic2013,dentithGeophysicsMineralExploration2014}.
+As previously stated, resolvable detail in geophysical surveys is a product of the height between the causative magnetic body and the sensor, and the line spacing \parencite{islesRelationshipsGeologicalResolution1992,islesGeologicalInterpretationAeromagnetic2013,dentithGeophysicsMineralExploration2014}.
 Height is controlled by flying the lowest safe and sufficiently smooth topography drape, and along-line sampling is performed at a constant high rate, so the key factor controlling resolution in aeromagnetic survey design is the line spacing.
 Further survey design considerations for airborne geophysics are outlined in \textcite{goodwinAirborneMagneticRadiometric2023,islesGeologicalInterpretationAeromagnetic2013,reidAeromagneticSurveyDesign1980}.
 Each gridding method includes a final cell size parameter selectable by the geophysicist, with a long-standing guideline of being one third to one fifth the line spacing.
