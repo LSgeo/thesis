@@ -285,6 +285,7 @@ Level grids can be queried at arbitrary heights and cell sizes, with the highest
 Performance decreases within approximately one standard deviation from that height (\qty{35} to \qty{45}{\m}), with gradual failure of the model outside of that range.
 It is interpreted from the poor quality of the vertical gradients and out-of-range level grid predictions that the model is learning a function between horizontally coplanar points, and not an accurate vertical continuation function.
 This is conjectured to be caused by aeromagnetic sampling being carried out on a nominally horizontal planar drape surface, without sufficient repeat measurements at other heights to train the network for the vertical field component.
+Initial experiments with synthetic data evenly sampled across the vertical extent learn a vertical gradient with similar performance to the horizontal gradients, supporting this conjecture.
 
 While quantised grids can be queried at any cell size, short wavelength information beyond the Nyquist limit of the survey line sampling are not predicted with this architecture.
 
