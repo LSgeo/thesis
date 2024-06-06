@@ -68,7 +68,7 @@ Therefore, example-based learning methods trained using these aeromagnetic data 
 Addressing costly data acquisition, common in geoscience \parencite{dawsonImpactDatasetSize2023}, can be done by transfer learning.
 This assists example-based methods by initially using a larger source dataset which shares properties with the target dataset.
 
-In order to improve the generalisation of an example-based neural network for regions without high-resolution coverage, we propose using transfer learning \parencite{tanSurveyDeepTransfer2018} to fine-tune a synthetic data baseline model with high-resolution, real-world survey grid data.
+In order to improve the generalisation of an example-based neural network for regions without high-resolution coverage, we propose using transfer learning \parencite{tanSurveyDeepTransfer2018} to fine-tune a synthetic data baseline model with high-resolution real-world survey grid data.
 The synthetic geophysical data \parencite{jessellNoddyverseMassiveData2022} are forward modelled from 3D petrographic voxel models with varied geological histories.
 These provide a diverse set of features, but these lack truly realistic characteristics, such as high frequency near-surface magnetisation, and features from complex geological processes such as metasomatism or remnant magnetisation.
 
@@ -86,8 +86,8 @@ Instead of increasing the sampling density, the detail in potential field grids 
 At large source-sensor distances, high frequencies are diminished below the noise floor to the point of unobservability, resulting in grids that show only broad scale features, typically representing spatially extensive features deep in the crust.
 Downward continuation can be performed with the grid representation of the field, or by modelling causative sources and forward modelling the response at another height \parencite{pilkingtonPotentialFieldContinuation2017}.
 In either approach, it is common for noise in the sampled grid product to be significantly increased in the downward continued product, limiting the useful vertical continuation extent of of the method to six times the cell size \parencite{dampneyEquivalentSourceTechnique1969,zuoDownwardContinuationTransformation2020}.
-Resolution enhancement through neural network approaches to downward continuation \parencite{liStableDownwardContinuation2023,yeHighprecisionDownwardContinuation2022} is a promising research direction in super-resolution geophysics, but the training data are distinct.
-The proposed line-spacing based methods use data prepared using high- and low-resolution survey designs, while neural network continuation approaches prepare data using the above numerical continuation methods.
+Resolution enhancement through neural network approaches to downward continuation \parencite{liStableDownwardContinuation2023,yeHighprecisionDownwardContinuation2022} is a promising research direction in super-resolution geophysics, but the problem formulation is distinct.
+The proposed method attempts to predict missing high frequencies with example based learning from similar geologies, while the prior methods attempt to vertically continue grid data using deep learning methods.
 
 Recently, aeromagnetic resolution enhancement has been performed with deep learning SR \parencite{bavandsavadkoohiHighresolutionAeromagneticMap2023,smithMagneticGridResolution2022}.
 The method of \textcite{smithMagneticGridResolution2022} is presented in \Cref{ch:paper1} of this thesis.
@@ -102,7 +102,7 @@ The proposed method is distinct from these prior works with its use of extensive
 Deep learning techniques for SR typically use paired high- and low-resolution image data, with the objective to learn the transform from low resolution to high.
 This is an ill posed challenge, because many high-resolution images share the same low-resolution representation \parencite{dongImageSuperresolutionUsing2016}.
 For photographs and natural image rasters with large representative training corpuses available, such as ImageNet \parencite{dengImageNetLargescaleHierarchical2009} and DIV2K \parencite{agustssonNTIRE2017Challenge2017}, SR methods have progressed to the point that high quality enhancement at four times scale is readily accessible to end-users \parencite[e.g.][]{wangRealESRGANTrainingRealWorld2021}.
-The performance of SR for photographs and digital images has been intensely explored \parencite[see a review in][]{moserHitchhikerGuideSuperResolution2023}.
+The performance of SR for photographs and digital images has been extensively explored \parencite[see a review in][]{moserHitchhikerGuideSuperResolution2023}.
 Prior work specific to this study are reviewed in \Cref{sec:2nnsr}.
 
 Photographs and other natural images of interest to computer vision are typically created by capturing light from an image sensor or are explicitly mapped on a grid using a raster graphics program.

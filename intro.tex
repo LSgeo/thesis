@@ -27,22 +27,20 @@ The overall aim of this thesis is to adapt and extend the use of deep learning t
 The above aims are investigated using case studies with open access aeromagnetic data provided by Geoscience Australia.
 
 \section{Magnetic potential fields}
-The Earth has a naturally occuring magnetic force field, approximating a dipole oriented toward the top and bottom of the planet.
+The Earth has a naturally occuring magnetic field, approximating a dipole oriented toward the top and bottom of the planet.
 Several properties of the magnetic field are important to the machine learning methods in this thesis.
-First, that a field refers to a set of functions of space and time, and a vector field such as the magnetic field has three orthogonal components, with a function for each component.
-Neural networks with sufficient parameters are recognised as universal function approximators \parencite{hornikMultilayerFeedforwardNetworks1989}, and should therefore be capable of approximating these functions of the magnetic field.
-Second, the magnetic field has a force function with continuous derivatives, and is conservative \parencite{kelloggFoundationsPotentialTheory1967}.
-The force function is known as the potential field, and the magnetic field is the gradient of the potential field.
-This property is important later in this thesis, when calculating spatial derivatives and considering constraining neural networks with physics informed loss functions.
-
-The magnitude of the magnetic field is the total magnetic intensity (TMI) \parencite{blakelyPotentialTheoryGravity1996}, with the unit nanotesla (nT).
-Magnetic surveys in exploration geophysics generally create TMI products, and it may be measured directly or calculated from measurements of each orthogonal component.
+First, that a field refers to a set of functions of space and time.
+The magnetic field is a vector field, with three orthogonal components.
+Neural networks with sufficient parameters are recognised as universal function approximators \parencite{hornikMultilayerFeedforwardNetworks1989}, and should therefore be capable of approximating the functions of the magnetic field.
+Second, the curl of the magnetic vector field is a force function known as the magnetic potential field \parencite{kelloggFoundationsPotentialTheory1967}.
+The magnitude of the magnetic vector field is the total magnetic intensity (TMI) \parencite{blakelyPotentialTheoryGravity1996}, with the unit nanotesla (nT).
+Magnetic surveys in exploration geophysics generally create TMI products, where TMI may be measured directly or calculated from measurements of each vector component.
 To support various scientific endeavours, a model of this field is periodically constructed --- the International Geomagnetic Reference Field (IGRF).
 The residual between the IGRF and measured TMI at a specific time and location is termed magnetic anomaly.
 It may be negative, and can exceed several thousand nanotesla in the Earth's environment.
 One of the key petrophysical properties influencing the magnetic anomaly is magnetic susceptibility, itself predominantly influenced by magnetite, a mineral commonly present across geological settings \parencite{clarkNotesRockMagnetization1991}.
 Rocks may also be intrinsicly magnetised with remnant magnetisation.
-Because of these known petrophysical variations in rock magnetisation, stratigraphies can be differentiated and delineated in magnetic maps, and their composition interpreted.
+Because of these known petrophysical variations in rock magnetisation, surveys of the magnetic field can delineate and differentiate stratigraphic units and infer their composition.
 
 \section{Aeromagnetic surveys}
 \label{sec:introgeo}
@@ -279,7 +277,7 @@ While the baseline model can generalise to real-world data, some incorrect recon
 By fine-tune training the model with real-world state map data, these errors are rectified, and the structural accuracy is improved.
 
 \Cref{ch:paper3} reports the use of coordinate multilayer perceptron (CMLP) neural networks for implicit neural representation (INR) of a surveyed potential field extent.
-With the proposed method, scattered line data can be encoded into a neural network model, and grids created by querying cells at regular coordinates.
+With the proposed method, scattered line data can be encoded into a neural network model, and grids are created by querying cells at regular coordinates.
 % CMLP networks are highly suited for processing spatial data such as point sampled geophysics surveys.
 Additionally, spatial derivatives are calculated on the learned function directly.
 %TODO ensure refer back to aims
