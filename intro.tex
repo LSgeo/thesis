@@ -34,10 +34,12 @@ The magnetic field is a vector field, with three orthogonal components.
 Neural networks with sufficient parameters are recognised as universal function approximators \parencite{hornikMultilayerFeedforwardNetworks1989}, and should therefore be capable of approximating the functions of the magnetic field.
 Second, the curl of the magnetic vector field is a force function known as the magnetic potential field \parencite{kelloggFoundationsPotentialTheory1967}.
 The magnitude of the magnetic vector field is the total magnetic intensity (TMI) \parencite{blakelyPotentialTheoryGravity1996}, with the unit nanotesla (nT).
+
 Magnetic surveys in exploration geophysics generally create TMI products, where TMI may be measured directly or calculated from measurements of each vector component.
 To support various scientific endeavours, a model of this field is periodically constructed --- the International Geomagnetic Reference Field (IGRF).
 The residual between the IGRF and measured TMI at a specific time and location is termed magnetic anomaly.
 It may be negative, and can exceed several thousand nanotesla in the Earth's environment.
+
 One of the key petrophysical properties influencing the magnetic anomaly is magnetic susceptibility, itself predominantly influenced by magnetite, a mineral commonly present across geological settings \parencite{clarkNotesRockMagnetization1991}.
 Rocks may also be intrinsicly magnetised with remnant magnetisation.
 Because of these known petrophysical variations in rock magnetisation, surveys of the magnetic field can delineate and differentiate stratigraphic units and infer their composition.
@@ -47,6 +49,8 @@ Because of these known petrophysical variations in rock magnetisation, surveys o
 Airborne surveys of the Earth's magnetic or gravitational potential fields are routinely acquired at a range of scales at different stages of exploration, from pre-competitive regional data to stimulate exploration \parencite{howardAirborneGeophysicalCoverage2004}, through to targeted investigations by the exploration industry at the prospect scale of up to several square kilometres.
 Surveys may also be collected on the ground, or less commonly in exploration by ship or satellite, with most processing methods and interpretation shared between all forms of acquisition.
 Aeromagnetic surveys are among the lowest cost geophysical method \parencite{dentithGeophysicsMineralExploration2014}.
+Low-resolution regional surveys funded by government geoscience agencies are a key driver in greenfields exploration and are released as open file data.
+
 There are many aspects of survey design controlling the resolvable detail within survey data.
 When acquiring data, aircraft fly straight transect lines at a safe elevation above topography, known as the topography drape.
 The power of higher frequencies in potential fields falls off with increasing source-sensor distance.
@@ -54,8 +58,8 @@ As such the lower the survey elevation, the more high-frequency components prese
 Surveys are flown with a heading in which data will be acquired along line.
 For regional and contemporary surveys this is recommended to be North-South, however, early practice was to survey perpendicular to the dominant geological strike, under the expectation of sampling the greatest frequency of change in magnetic intensity \parencite{islesGeologicalInterpretationAeromagnetic2013}.
 Acquisition along flight lines is sampled at a rate of \qty{10}{\hertz} or greater, which corresponds to an interval of \qty{7}{\m} or shorter at nominal flight speeds of \qty{70}{\m\per\s} \parencite{goodwinAirborneMagneticRadiometric2023}.
+
 The spacing between lines is a factor of the scale of investigation and the cost of acquisition, and regional pre-competitive data in Australia targets state-wide coverage at \qty{400}{\m}, which is generally regarded as the upper limit of usefulness to exploration \parencite{howardAirborneGeophysicalCoverage2004}.
-These low-resolution surveys, funded by government geoscience agencies, are a key driver in greenfields exploration and are released as open file data.
 Survey cost rapidly increases when surveying at higher resolution, due to overheads in flight line sampling.
 Higher-resolution surveys over prospective areas fly lines at closer line spacings, of the order \qty{100}{\m}, in order to resolve greater detail.
 The importance of these parameters in relation to resolvable detail will be outlined shortly.

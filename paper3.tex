@@ -144,10 +144,10 @@ The sample locations and recorded altitudes are shown in \Cref{fig:samples}, whe
     \label{fig:samples}
 \end{figure}
 
-Both the line data and grid raster netCDFs for the Wolfe Creek survey were downloaded from Geoscience Australia (GA) \footnote{https://pid.geoscience.gov.au/dataset/ga/142694} and used without further processing.
+Both the line data and grid raster netCDFs for the Wolfe Creek survey were downloaded from Geoscience Australia (GA)\footnote{https://pid.geoscience.gov.au/dataset/ga/142694} and used without further processing.
 The line data netCDF contains tie-levelled, micro-levelled, and AWAGS levelled magnetic variables, in increasing stages of processing respectively.
 The micro-levelled magnetic data are used in this case study because the originally recorded sample altitude is uncertain in the available levelled data.
-Either a geographic and projected coordinate system can be used, provided for consistency between the query coordinates for inference and those used during training.
+Either a geographic or projected coordinate system can be used, provided for consistency between the query coordinates for inference and those used during training.
 The three spatial coordinate dimensions are independently and linearly min-max normalised between \num{-1} and \num{1}.
 While this means the axes in the latent spatial domain may be compressed relative to each other axis, the inverse normalisation process returns proportionality between axes.
 The case study data do not span a large or magnetically varying geological extent, hence it is sufficient to use simple min-max normalisation for the magnetic field data within the global extent of the survey samples, here between \num{-1} and \num{1}.
