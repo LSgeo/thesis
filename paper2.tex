@@ -85,14 +85,14 @@ In this way, deep learning super-resolution models are supported by latent infor
 Instead of increasing the sampling density, the detail in potential field grids can be enhanced by calculating the potential as if it were sampled at a smaller source-sensor distance, in a process known as downward continuation \parencite{bullardDeterminationMassesNecessary1948}.
 At large source-sensor distances, high frequencies are diminished below the noise floor to the point of unobservability, resulting in grids that show only broad scale features, typically representing spatially extensive features deep in the crust.
 Downward continuation can be performed with the grid representation of the field, or by modelling causative sources and forward modelling the response at another height \parencite{pilkingtonPotentialFieldContinuation2017}.
-In either approach, it is common for noise in the sampled grid product to be significantly increased in the downward continued product, limiting the useful vertical continuation extent of of the method to six times the cell size \parencite{dampneyEquivalentSourceTechnique1969,zuoDownwardContinuationTransformation2020}.
+In either approach, it is common for noise in the sampled grid product to be significantly increased in the downward continued product, limiting the useful vertical continuation extent of the method to six times the cell size \parencite{dampneyEquivalentSourceTechnique1969,zuoDownwardContinuationTransformation2020}.
 Resolution enhancement through neural network approaches to downward continuation \parencite{liStableDownwardContinuation2023,yeHighprecisionDownwardContinuation2022} is a promising research direction in super-resolution geophysics, but the problem formulation is distinct.
 The proposed method attempts to predict missing high frequencies with example based learning from similar geologies, while the prior methods attempt to vertically continue grid data using deep learning methods.
 
 Recently, aeromagnetic resolution enhancement has been performed with deep learning SR \parencite{bavandsavadkoohiHighresolutionAeromagneticMap2023,smithMagneticGridResolution2022}.
 The method of \textcite{smithMagneticGridResolution2022} is presented in \Cref{ch:paper1} of this thesis.
 These two approaches operate on regional aeromagnetic data at four times scale, using variants of the SRGAN convolutional neural network originally by \textcite{ledigPhotorealisticSingleImage2017}.
-The method of \textcite{smithMagneticGridResolution2022} demonstated SR methods are capable of upsampling low-resolution magnetic textures and predicting accurate short wavelengths for these data.
+The method of \textcite{smithMagneticGridResolution2022} demonstrated SR methods are capable of upsampling low-resolution magnetic textures and predicting accurate short wavelengths for these data.
 Comparison was made against numerical filters such as the bicubic filter.
 However, the low-resolution data were created using a polynomial filter that suppressed high frequencies, rather than a real-world low-resolution geophysical sampling process.
 The method of \textcite{bavandsavadkoohiHighresolutionAeromagneticMap2023} uses low- and high-resolution aeromagnetic data from regional surveys in Quebec, Canada, with a realistic low-resolution transform from line spacing and sample altitude differences.
@@ -321,7 +321,7 @@ In \Cref{fig:srdata23}, strong line-perpendicular artefacts and loss of high-fre
 However, northwest striking features in HR are aliased in LR, and here subsequently incorrectly rotated by 90 degrees in the baseline SR prediction (\Cref{fig:srdata23} d).
 The fine-tuned model (\Cref{fig:srdata23} e) resolves the correct strike, and separates the two linear features present.
 The enhanced structural similarity is reflected by the higher FSIM score of in the fine-tuned model. 
-Similar structural inaccuracies are seen in\Cref{fig:srdata17}, where severe aliasing again fails to be corrected using the baseline model, but is resolved by fune-tuning.
+Similar structural inaccuracies are seen in\Cref{fig:srdata17}, where severe aliasing again fails to be corrected using the baseline model, but is resolved by fine-tuning.
 
 In \Cref{fig:srdata14}, the edges of the central feature defined by a magnetic high are poorly defined by the low-resolution grid in \Cref{fig:srdata14} c.
 Both models more clearly define the shape of the feature, however the fine-tuned model additionally separates the adjacent North-South striking feature.
@@ -330,7 +330,7 @@ The North-South striking geology in \Cref{fig:srdata18} presents a worst-case sc
 The low-resolution sampling completely fails to sample all but the largest features with enough lines to represent them in the resulting grid.
 Despite this, both models refine the width of these features, approaching the true width represented in HR\@.
 The fine structures in HR appear to have limited importance to the SSIM calculation, because the LR and SR grids are reported with a SSIM of 0.9998 or higher.
-This suggests that SSIM may be an innapropriate IQA metric in comparing resolution in potential field grids.
+This suggests that SSIM may be an inappropriate IQA metric in comparing resolution in potential field grids.
 
 \begin{landscape}
     \begin{figure}[hbtp]

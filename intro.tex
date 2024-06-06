@@ -5,7 +5,7 @@
 % % \setcounter{chapter}{1}
 % \begin{document}
 
-The subsurface continuation of exposed geology can be extrapolated and interpolated using structures mapped in surveys of the Earth's naturally occuring potential fields.
+The subsurface continuation of exposed geology can be extrapolated and interpolated using structures mapped in surveys of the Earth's naturally occurring potential fields.
 Potential field surveys offer low-cost investigations over a large spatial extent, and are routinely used for geological mapping and interpretation \parencite{nabighian75thAnniversaryHistorical2005}.
 For this reason, magnetic field surveys are commonly used by geophysicists for geological mapping and interpretation toward understanding the Earth in three dimensions.
 Scattered surveys are commonly interpolated to grid rasters, and interpreted individually or integrated with other datasets for predicting the subsurface for processes such as numerical modelling and inversion.
@@ -27,7 +27,7 @@ The overall aim of this thesis is to adapt and extend the use of deep learning t
 The above aims are investigated using case studies with open access aeromagnetic data provided by Geoscience Australia.
 
 \section{Magnetic potential fields}
-The Earth has a naturally occuring magnetic field, approximating a dipole oriented toward the top and bottom of the planet.
+The Earth has a naturally occurring magnetic field, approximating a dipole oriented toward the top and bottom of the planet.
 Several properties of the magnetic field are important to the machine learning methods in this thesis.
 First, that a field refers to a set of functions of space and time.
 The magnetic field is a vector field, with three orthogonal components.
@@ -41,7 +41,7 @@ The residual between the IGRF and measured TMI at a specific time and location i
 It may be negative, and can exceed several thousand nanotesla in the Earth's environment.
 
 One of the key petrophysical properties influencing the magnetic anomaly is magnetic susceptibility, itself predominantly influenced by magnetite, a mineral commonly present across geological settings \parencite{clarkNotesRockMagnetization1991}.
-Rocks may also be intrinsicly magnetised with remnant magnetisation.
+Rocks may also be intrinsically magnetised with remnant magnetisation.
 Because of these known petrophysical variations in rock magnetisation, surveys of the magnetic field can delineate and differentiate stratigraphic units and infer their composition.
 
 \section{Aeromagnetic surveys}
@@ -156,7 +156,7 @@ These points also raise the uncertainty of methods developed for natural images 
 
 Geoscience data faces a number of challenges distinct from natural image data. These have been outlined in \textcite{karpatneMachineLearningGeosciences2019}, and relevant to this work are:
 \begin{itemize}
-    \item{} Spatio-temporal structure: Aeromagnetic grids are spatially corellated, neighbouring cells contain similar values arising from the same causative volume.
+    \item{} Spatio-temporal structure: Aeromagnetic grids are spatially correlated, neighbouring cells contain similar values arising from the same causative volume.
     \item{} Multi-source multi-resolution data: One location may be covered by multiple aeromagnetic surveys with different resolutions, or the same survey may be presented with different levels of processing.
     \item{} Poor quality of data: Sample data are subject to numerous sources of noise, which combine to become a significant fraction of the gridded data value, or be present as aliased frequencies.
     \item{} Small sample size: While total aeromagnetic coverage in Australia is high, the high-resolution extents are spatially limited and biased by geological domain.
@@ -171,7 +171,7 @@ Machine learning (ML) is a broad family of techniques for learning from data.
 Artificial neural networks are a subset of techniques in ML, inspired by a model of the biological neuron \parencite{bishopNeuralNetworksPattern1995}.
 It has been established that if sufficient conditions are met, neural networks can approximate any function \parencite{hornikMultilayerFeedforwardNetworks1989}.
 A mathematical model of a neuron forms the basis of these networks, and the number of neurons within the network and their arrangement are one primary descriptor of a neural network.
-Neurons are paremeterised by a multiplicative weight term, an additive bias term, and an activation function which transforms the result.
+Neurons are parameterised by a multiplicative weight term, an additive bias term, and an activation function which transforms the result.
 Each neuron applies these operations to the input, which may either be the input data, or the output of earlier neurons.
 The objective of training a neural network is to set the parameters for each neuron in the network, such that the trained network (or model) generalises to novel data.
 This is performed by back propagation \parencite{rumelhartLearningRepresentationsBackpropagating1988}, a technique to navigate toward the lowest error solution by calculating the rate of improvement resulting from parameter updates.
