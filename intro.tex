@@ -85,16 +85,16 @@ As previously stated, resolvable detail in geophysical surveys is a product of t
 Height is controlled by flying the lowest safe and sufficiently smooth topography drape, and along-line sampling is performed at a constant high rate, so the key factor controlling resolution in aeromagnetic survey design is the line spacing.
 Further survey design considerations for airborne geophysics are outlined in \textcite{goodwinAirborneMagneticRadiometric2023,islesGeologicalInterpretationAeromagnetic2013,reidAeromagneticSurveyDesign1980}.
 Each gridding method includes a final cell size parameter selectable by the geophysicist, with a long-standing guideline of being one third to one fifth the line spacing.
-This sufficiently preserves detail in areas of high sampling, while avoiding excessive interpolated cells in areas of low sampling, which may lead to artefacts.
-If the sampling frequency is nominally \qty{7}{\m} in the flight line direction, and up to \qty{400}{\m} in the line-perpendicular direction, the resulting grid resolution will be anisotropic at best, and uniformly low-resolution at worst.
+This sufficiently preserves detail in areas of high sampling, while avoiding excessive interpolated cells in areas of low sampling, which may lead to artefacts and misrepresentation of the measured field.
 
+% If the sampling frequency is nominally \qty{7}{\m} in the flight line direction, and up to \qty{400}{\m} in the line-perpendicular direction, the resulting grid resolution will be anisotropic at best, and uniformly low-resolution at worst.
 An important property of sampled data is the Nyquist frequency, \[f_{Nyquist} = f_{sampling} / 2.\]
 This is the lowest frequency \(f\) at which a bandwidth limited signal may be sufficiently sampled, below which higher frequencies will be incorrectly recorded as aliasing.
-An aliased signal contains spurious low-frequency features caused by the sampling, not the underlying signal.
-This limiting frequency applies to each sampling direction in surveys, as well as the cell size of the grid.
+An aliased signal contains spurious features not present in the original signal.
+A Nyquist frequency applies to each sampling axis in surveys, as well as to the spacing of cells in the output grid.
 The smallest resolvable feature in each of these can be spatially described by wavelength, as the inverse of Nyquist frequency.
-For example, in low-resolution aeromagnetic surveys of \qty{400}{\m} line spacing, strong variations of magnetic intensity in the line-perpendicular direction  that occur over a distance shorter than \qty{800}{\m} will be aliased.
-When gridded at \qty{80}{\m} cell size, the corresponding limit on resolvable detail is features as small as \qty{160}{\m}.
+For example, in low-resolution aeromagnetic surveys with \qty{400}{\m} line spacing, rapid variations of magnetic intensity in the line-perpendicular direction that occur over a distance shorter than \qty{800}{\m} will be aliased.
+When gridded at \qty{80}{\m} cell size, the smallest accurately resolvable detail is \qty{160}{\m}.
 % This choice of cell size will effectively filter out features in the line-parallel direction that vary strongly, from those possibly present at \qty{14}{\m} through to \qty{160}{\m}.
 Depending on the complexity of the geological domain, this may cause spatial aliasing in one direction.
 This is visible in grids where features take on a blocky or stepped appearance, referred to as  beading, or generally in this thesis, as a low-resolution artefact.
